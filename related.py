@@ -1,9 +1,9 @@
 from rdflib.store import Store
 from rdflib.plugin import get as plugin
 from rdflib import URIRef
-from rdflib.namespace import RDF
+#from rdflib.namespace import RDF
 from rdflib.term import Literal
-from rdflib.plugins.stores.regexmatching import REGEXTerm
+#from rdflib.plugins.stores.regexmatching import REGEXTerm
 
 import sys
 import logging
