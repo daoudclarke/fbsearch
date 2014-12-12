@@ -9,23 +9,32 @@ import sys
 import logging
 #import virtuoso
 
-logger = logging.getLogger('virtuoso.vstore')
-logger.setLevel(logging.DEBUG)
-
-ch = logging.StreamHandler(sys.stderr)
-ch.setLevel(logging.DEBUG)
-formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-ch.setFormatter(formatter)
-logger.addHandler(ch)
-
-
-Virtuoso = plugin("Virtuoso", Store)
-store = Virtuoso("DSN=VOS;UID=dba;PWD=dba;WideAsUTF16=Y;Host=localhost:13093")
+from log import logger
 
 name_uri = URIRef('http://rdf.freebase.com/ns/type.object.name')
-alias_uri = URIRef('http://rdf.freebase.com/ns/common.topic.alias')
 
-STOPWORDS = {'the', 'of', 'it', 'a', 'and', 'but'}
+class RelatedEntities(object):
+    def __init__(self):
+        Virtuoso = plugin("Virtuoso", Store)
+        self.store = Virtuoso("DSN=VOS;UID=dba;PWD=dba;WideAsUTF16=Y;Host=localhost:13093")
+
+    def search(self, entity):
+        """
+        Find entities related to the given one
+        """
+        uri = entity.replace('fb:', 'http://rdf.freebase.com/ns/')
+        print entity, uri
+        ref = URIRef(uri)
+        related = self.store.triples((ref, None, None))
+        return list(related)
+
+        #uris = [t[0][0] for t in store.triples((None, name_uri, literal))]
+        
+        
+
+# alias_uri = URIRef('http://rdf.freebase.com/ns/common.topic.alias')
+
+# STOPWORDS = {'the', 'of', 'it', 'a', 'and', 'but'}
 
 def capitalise(input_string):
     """
