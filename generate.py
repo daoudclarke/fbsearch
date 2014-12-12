@@ -18,4 +18,8 @@ if __name__ == "__main__":
         #print example, [d['text'] for d in searcher.search(example['utterance'])]
         entities = searcher.search(example['utterance'])
         for entity in entities:
-            print entity['id'], related.search(entity['id'])
+            print "Entity: ", entity
+            triples = related.recurse(entity['id'])
+            for s, r, o in triples:
+                names = related.get_names(o)
+                print s, r, o, names
