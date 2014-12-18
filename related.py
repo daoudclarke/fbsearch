@@ -48,7 +48,9 @@ class RelatedEntities(object):
                 %s fb:type.object.name ?o .
             }
             """ % uri)
-        return names
+        assert len(names) <= 1
+        if len(names) > 0:
+            return names[0][0]
 
     def search(self, entity):
         """
@@ -71,7 +73,9 @@ class RelatedEntities(object):
             {
                 %s ?r ?o .
                 FILTER(isURI(?o)) .
+                FILTER(!regex(?r, ".*type.*")) .
             }
+            LIMIT 150
             """ % uri)
 
         #triples = self.store.triples((ref, None, BNode()))
@@ -89,7 +93,7 @@ class RelatedEntities(object):
         if seen_entities is None:
             seen_entities = set()
         triples = self.search(entity)
-        logger.debug("Related: %r", triples)
+        #logger.debug("Related: %r", triples)
         related_entities = set(unicode(o) for s, r, o in triples)
         #if isinstance(o, URIRef))
         unseen = related_entities - seen_entities
@@ -144,10 +148,12 @@ if __name__ == "__main__":
     #uri = u'http://rdf.freebase.com/ns/m.07y2h64'
     #uri = u'http://rdf.freebase.com/ns/en.creative_commons_by'
     #uri = u'fb:en.creative_commons_by'
-    uri = u'fb:m.07y2h64'
+    #uri = u'fb:m.07y2h64'
+    uri = u'fb:en.justin_bieber'
     related = RelatedEntities()
-    related_triples = related.recurse(uri, depth=1)
+    related_triples = related.recurse(uri, depth=2)
     for triple in related_triples:
-        print "TRIPLE", triple
         s, r, o = triple
-        print related.get_names(s)
+        name = related.get_names(o)
+        print "TRIPLE", triple, repr(name)
+
