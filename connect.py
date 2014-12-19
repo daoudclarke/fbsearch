@@ -11,6 +11,8 @@ from sparql import SPARQLStore
 from log import logger
 
 import sys
+import json
+import sexpdata
 
 class Connector(object):
     def __init__(self):
@@ -41,11 +43,23 @@ class Connector(object):
         return entities
 
 
+def symbol_to_string(symbol):
+    try:
+        return symbol.value()
+    except AttributeError:
+        return symbol
+
 if __name__ == "__main__":
     connector = Connector()
     # justin = 'fb:en.justin_bieber'
     # jaxon = 'fb:m.0gxnnwq'
-    query = sys.argv[1]
-    target = sys.argv[2]
-    print connector.search(query, target)
+
+    data_file = open('/home/dc/Experiments/sempre/lib/data/webquestions/dataset_11/webquestions.examples.train.json')
+    examples = json.load(data_file)
+    for example in examples:
+        query = example['utterance']
+        target_data = sexpdata.loads(example['targetValue'])
+        targets = [symbol_to_string(description[1]) for description in target_data[1:]]
+        print targets
+        #print connector.search(query, target)
     
