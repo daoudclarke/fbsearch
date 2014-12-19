@@ -88,6 +88,36 @@ class RelatedEntities(object):
         #     results.append(t[0])
         # return results
 
+    def connect(self, query_entities, target_entities):
+        all_entities = []
+        for target_entity in target_entities:
+            entities = self.store.query("""
+                prefix fb: <http://rdf.freebase.com/ns/>
+                SELECT ?s, ?r1 
+                WHERE
+                {
+                    ?s ?r1 %s .
+                    FILTER(?s IN (%s)) .
+                }
+                """ % (target_entity, ','.join(query_entities)))
+            if entities:
+                all_entities += entities
+                continue
+
+            entities = self.store.query("""
+                prefix fb: <http://rdf.freebase.com/ns/>
+                SELECT ?s, ?r1, ?o1, ?r2 
+                WHERE
+                {
+                    ?s ?r1 ?o1 .
+                    ?o1 ?r2 %s .
+                    FILTER(?s IN (%s)) .
+                }
+                """ % (target_entity, ','.join(query_entities)))
+            all_entities += entities
+        return all_entities
+
+
     def recurse(self, entity, depth=1, seen_entities=None):
         logger.debug("Recursing at depth %d", depth)
         if seen_entities is None:

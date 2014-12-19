@@ -6,7 +6,7 @@ Attempt to find connections between two freebase entities.
 
 
 from lucenesearch import LuceneSearcher
-from sparql import SPARQLStore
+from related import RelatedEntities
 
 from log import logger
 
@@ -16,31 +16,18 @@ import sexpdata
 
 class Connector(object):
     def __init__(self):
-        self.store = SPARQLStore()
+        self.related = RelatedEntities()
         self.searcher = LuceneSearcher('/home/dc/Experiments/sempre/lib/lucene/4.4/inexact/')
 
     def search(self, query, target):
-        query_entities = [result['id'] for result in self.searcher.search(query)[:10]]
-        logger.debug("Query entities: %r", query_entities)
+        query_entities = [result['id'] for result in self.searcher.search(query)[:30]]
+        query_names = [self.related.get_names(e) for e in query_entities]
+        logger.debug("Query entities: %r", query_names)
 
         target_entities = self.searcher.search(target)
-        target_entities = [entity['id'] for entity in target_entities if entity['text'] == target]
-
-        assert len(target_entities) == 1
-        target_entity = target_entities[0]
+        target_entities = [entity['id'] for entity in target_entities if entity['text'] == target.lower()]
         logger.debug("Target entities: %r", target_entities)
-
-        entities = self.store.query("""
-            prefix fb: <http://rdf.freebase.com/ns/>
-            SELECT ?r1, ?o1, ?r2 
-            WHERE
-            {
-                ?s ?r1 ?o1 .
-                ?o1 ?r2 %s .
-                FILTER(?s IN (%s)) .
-            }
-            """ % (target_entity, ','.join(query_entities)))
-        return entities
+        return self.related.connect(query_entities, target_entities)
 
 
 def symbol_to_string(symbol):
@@ -56,10 +43,18 @@ if __name__ == "__main__":
 
     data_file = open('/home/dc/Experiments/sempre/lib/data/webquestions/dataset_11/webquestions.examples.train.json')
     examples = json.load(data_file)
-    for example in examples:
+    num_found = 0
+    for example in examples[:100]:
         query = example['utterance']
         target_data = sexpdata.loads(example['targetValue'])
         targets = [symbol_to_string(description[1]) for description in target_data[1:]]
-        print targets
-        #print connector.search(query, target)
-    
+        found = False
+        for target in targets:
+            print target
+            results = connector.search(query, target)
+            print results
+            if results:
+                found = True
+        if found:
+            num_found += 1
+        print "Number found: ", num_found

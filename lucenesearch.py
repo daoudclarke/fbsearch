@@ -12,8 +12,13 @@ from org.apache.lucene.search import IndexSearcher
 from org.apache.lucene.util import Version
 
 import sys
+import re
+
+VALID_CHARS_PATTERN = re.compile('[\W_]+')
 
 lucene.initVM(vmargs=['-Djava.awt.headless=true'])
+
+
 
 class LuceneSearcher(object):
     fields = ['id', 'text', 'types']
@@ -27,6 +32,7 @@ class LuceneSearcher(object):
                     db_path, reader.numDocs())
         
     def search(self, query):
+        query = VALID_CHARS_PATTERN.sub(' ', query)
         logger.debug("Searching for %s", query)
         query = QueryParser(Version.LUCENE_CURRENT, "text",
                             self.analyzer).parse(query)
