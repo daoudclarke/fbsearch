@@ -14,3 +14,16 @@ class SPARQLStore(object):
         #logger.debug("Sparql raw result: %r", results)
         return [tuple(result[v]['value'] for v in vars_)
                 for result in results['results']['bindings']]
+
+
+if __name__ == "__main__":
+    store = SPARQLStore()
+    results = store.query("""
+            prefix fb: <http://rdf.freebase.com/ns/>
+            SELECT *
+            WHERE
+            {
+                fb:en.north_american_eastern_time_zone ?r ?o .
+            }
+    """)
+    print results

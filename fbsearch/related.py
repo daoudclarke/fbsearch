@@ -57,10 +57,7 @@ class RelatedEntities(object):
         Find entities related to the given one
         """
         assert type(entity) == unicode, "Expected unicode, got %r" % type(entity)
-        if entity.startswith('http'):
-            uri = entity.replace('http://rdf.freebase.com/ns/', 'fb:')
-        else:
-            uri = entity
+        uri = ensure_prefixed(entity)
         #uri = entity
         #print entity, uri
         #ref = URIRef(uri)
@@ -91,6 +88,8 @@ class RelatedEntities(object):
     def connect(self, query_entities, target_entities):
         all_entities = []
         for target_entity in target_entities:
+            logger.debug("Target entity: %s", target_entity)
+            target_uri = ensure_prefixed(target_entity)
             entities = self.store.query("""
                 prefix fb: <http://rdf.freebase.com/ns/>
                 SELECT ?s, ?r1 
@@ -99,7 +98,7 @@ class RelatedEntities(object):
                     ?s ?r1 %s .
                     FILTER(?s IN (%s)) .
                 }
-                """ % (target_entity, ','.join(query_entities)))
+                """ % (target_uri, ','.join(query_entities)))
             if entities:
                 all_entities += entities
                 continue
@@ -127,7 +126,7 @@ class RelatedEntities(object):
                     ?o1 ?r2 %s .
                     FILTER(?s IN (%s)) .
                 }
-                """ % (target_entity, ','.join(query_entities)))
+                """ % (target_uri, ','.join(query_entities)))
             all_entities += entities
         return all_entities
 
@@ -137,9 +136,13 @@ class RelatedEntities(object):
             SELECT ?e
             WHERE
             {
-                ?e fb:common.topic.alias '%s'@en .
+                {
+                    ?e fb:common.topic.alias "%s"@en .
+                } UNION {
+                    ?e fb:type.object.name "%s"@en .
+                }
             }
-            """ % name)
+            """ % (name, name))
         return [e[0] for e in entities]
 
     def recurse(self, entity, depth=1, seen_entities=None):
@@ -211,3 +214,9 @@ if __name__ == "__main__":
         name = related.get_names(o)
         print "TRIPLE", triple, repr(name)
 
+
+def ensure_prefixed(entity):
+    if entity.startswith('http'):
+        return entity.replace('http://rdf.freebase.com/ns/', 'fb:')
+    return entity
+        
