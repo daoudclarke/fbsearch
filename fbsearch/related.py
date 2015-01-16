@@ -104,6 +104,20 @@ class RelatedEntities(object):
                 all_entities += entities
                 continue
 
+            # # Reverse relationship direction
+            # entities = self.store.query("""
+            #     prefix fb: <http://rdf.freebase.com/ns/>
+            #     SELECT ?s, ?r1 
+            #     WHERE
+            #     {
+            #         %s ?r1 ?s .
+            #         FILTER(?s IN (%s)) .
+            #     }
+            #     """ % (target_entity, ','.join(query_entities)))
+            # if entities:
+            #     all_entities += entities
+            #     continue
+
             entities = self.store.query("""
                 prefix fb: <http://rdf.freebase.com/ns/>
                 SELECT ?s, ?r1, ?o1, ?r2 
@@ -117,6 +131,16 @@ class RelatedEntities(object):
             all_entities += entities
         return all_entities
 
+    def search_exact(self, name):
+        entities = self.store.query("""
+            prefix fb: <http://rdf.freebase.com/ns/>
+            SELECT ?e
+            WHERE
+            {
+                ?e fb:common.topic.alias '%s'@en .
+            }
+            """ % name)
+        return [e[0] for e in entities]
 
     def recurse(self, entity, depth=1, seen_entities=None):
         logger.debug("Recursing at depth %d", depth)

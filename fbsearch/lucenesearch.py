@@ -27,6 +27,16 @@ VALID_CHARS_PATTERN = re.compile('[\W_]+')
 
 lucene.initVM(vmargs=['-Djava.awt.headless=true'])
 
+OP_VALUES = {
+    'delete': 0.2,
+    'insert': 1.0,
+    'replace': 1.2,
+    }
+
+def edit_distance(entity, query):
+    ops = Levenshtein.editops(query, entity)
+    #logger.debug("Entity: %r, ops: %r", entity, ops)
+    return sum(OP_VALUES[operation_type] for operation_type, _, _ in ops)
 
 class LuceneSearcher(object):
     fields = ['id', 'text', 'types']
@@ -48,16 +58,16 @@ class LuceneSearcher(object):
         for i in range(len(query_terms) - 1):
             subquery = ' '.join(query_terms[i:i+2])
             docs = self.search(subquery)
-            distances = [(Levenshtein.distance(doc['text'], unicode(subquery)), doc) for doc in docs]
+            distances = [(edit_distance(doc['text'], unicode(query)), doc) for doc in docs]
             all_entities += distances
         return sorted(all_entities)
         
-    def search(self, query):
+    def search(self, query, max_matches=100):
         query = VALID_CHARS_PATTERN.sub(' ', query)
         logger.debug("Searching for %s", query)
         query = QueryParser(Version.LUCENE_CURRENT, "text",
                             self.analyzer).parse(query)
-        score_docs = self.searcher.search(query, 100).scoreDocs
+        score_docs = self.searcher.search(query, max_matches).scoreDocs
         logger.debug("%s total matching documents.",
                      len(score_docs))
         
@@ -72,7 +82,7 @@ if __name__ == '__main__':
     print 'lucene', lucene.VERSION
     path = '/home/dc/Experiments/sempre/lib/lucene/4.4/inexact/'
     searcher = LuceneSearcher(path)
-    docs = searcher.query_search(sys.argv[1])
+    docs = searcher.search(sys.argv[1], 400)
     for doc in docs:
         print doc
 
