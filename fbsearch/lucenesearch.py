@@ -53,6 +53,7 @@ class LuceneSearcher(object):
         """
         Find entities that are contained as substrings in the query.
         """
+        logger.debug("Getting query entities")
         query_terms = [term for term in query.split() if term not in STOPWORDS]
         all_entities = []
         for i in range(len(query_terms) - 1):

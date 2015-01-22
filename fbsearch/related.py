@@ -147,6 +147,8 @@ class RelatedEntities(object):
         return [e[0] for e in entities]
 
     def apply_connection(self, entities, connection):
+        logger.debug("Applying connection %r to entities %r",
+                     connection, entities)
         connection = [ensure_prefixed(part) for part in connection]
         if len(connection) == 1:
             results = self.store.query("""
@@ -157,6 +159,7 @@ class RelatedEntities(object):
                     ?s %s ?o .
                     FILTER(?s IN (%s)) .
                 }
+                LIMIT 100
                 """ % (connection[0], ','.join(entities)))
         elif len(connection) == 2:
             results = self.store.query("""
@@ -168,6 +171,7 @@ class RelatedEntities(object):
                     ?o1 %s ?o2
                     FILTER(?s IN (%s)) .
                 }
+                LIMIT 100
                 """ % (connection[0], connection[1], ','.join(entities)))
         else:
             raise ValueError("Unexpected number of parts to connection")

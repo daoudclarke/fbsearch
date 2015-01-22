@@ -7,7 +7,7 @@ Attempt to find connections between two freebase entities.
 from fbsearch import settings
 from fbsearch.lucenesearch import LuceneSearcher
 from fbsearch.related import RelatedEntities
-from fbsearch.evaluate import get_f1_score
+from fbsearch.analyse import get_f1_score
 
 from log import logger
 
@@ -37,7 +37,7 @@ class Connector(object):
     def apply_connection(self, query, connection):
         query_entities = self.get_query_entities(query)
         result_ids = self.related.apply_connection(query_entities, connection)
-        return [self.related.get_names(result) for result in result_ids]
+        return set(self.related.get_names(result) for result in result_ids)
 
 def symbol_to_string(symbol):
     try:
