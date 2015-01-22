@@ -35,6 +35,7 @@ class RelatedEntities(object):
         self.store = SPARQLStore()
 
     def get_names(self, entity):
+        entity = ensure_prefixed(entity)
         #return [t[0][2].value for t in self.store.triples((uri, NAME_URI, None))]
         if entity.startswith('http'):
             uri = entity.replace('http://rdf.freebase.com/ns/', 'fb:')
@@ -92,7 +93,7 @@ class RelatedEntities(object):
             target_uri = ensure_prefixed(target_entity)
             entities = self.store.query("""
                 prefix fb: <http://rdf.freebase.com/ns/>
-                SELECT ?s, ?r1 
+                SELECT ?r1 
                 WHERE
                 {
                     ?s ?r1 %s .
@@ -119,7 +120,7 @@ class RelatedEntities(object):
 
             entities = self.store.query("""
                 prefix fb: <http://rdf.freebase.com/ns/>
-                SELECT ?s, ?r1, ?o1, ?r2 
+                SELECT ?r1, ?r2 
                 WHERE
                 {
                     ?s ?r1 ?o1 .
@@ -144,6 +145,33 @@ class RelatedEntities(object):
             }
             """ % (name, name))
         return [e[0] for e in entities]
+
+    def apply_connection(self, entities, connection):
+        connection = [ensure_prefixed(part) for part in connection]
+        if len(connection) == 1:
+            results = self.store.query("""
+                prefix fb: <http://rdf.freebase.com/ns/>
+                SELECT ?o
+                WHERE
+                {
+                    ?s %s ?o .
+                    FILTER(?s IN (%s)) .
+                }
+                """ % (connection[0], ','.join(entities)))
+        elif len(connection) == 2:
+            results = self.store.query("""
+                prefix fb: <http://rdf.freebase.com/ns/>
+                SELECT ?o2
+                WHERE
+                {
+                    ?s %s ?o1 .
+                    ?o1 %s ?o2
+                    FILTER(?s IN (%s)) .
+                }
+                """ % (connection[0], connection[1], ','.join(entities)))
+        else:
+            raise ValueError("Unexpected number of parts to connection")
+        return [result[0] for result in results]
 
     def recurse(self, entity, depth=1, seen_entities=None):
         logger.debug("Recursing at depth %d", depth)

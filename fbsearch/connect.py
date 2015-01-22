@@ -7,7 +7,7 @@ Attempt to find connections between two freebase entities.
 from fbsearch import settings
 from fbsearch.lucenesearch import LuceneSearcher
 from fbsearch.related import RelatedEntities
-from fbsearch.evaluate import f1_score
+from fbsearch.evaluate import get_f1_score
 
 from log import logger
 
@@ -20,8 +20,11 @@ class Connector(object):
         self.related = RelatedEntities()
         self.searcher = LuceneSearcher('/home/dc/Experiments/sempre/lib/lucene/4.4/inexact/')
 
+    def get_query_entities(self, query):
+        return [result[1]['id'] for result in self.searcher.query_search(query)[:50]]
+
     def search(self, query, target):
-        query_entities = [result[1]['id'] for result in self.searcher.query_search(query)[:50]]
+        query_entities = self.get_query_entities(query)
         query_names = [self.related.get_names(e) for e in query_entities]
         logger.debug("Query entities: %r", zip(query_entities, query_names))
 
@@ -31,6 +34,10 @@ class Connector(object):
         logger.debug("Target entities: %r", target_entities)
         return self.related.connect(query_entities, target_entities)
 
+    def apply_connection(self, query, connection):
+        query_entities = self.get_query_entities(query)
+        result_ids = self.related.apply_connection(query_entities, connection)
+        return [self.related.get_names(result) for result in result_ids]
 
 def symbol_to_string(symbol):
     try:
@@ -58,7 +65,7 @@ if __name__ == "__main__":
             print result_ids
             results = [related_entities.get_names(e[0]) for e in result_ids]
             print results
-            score = f1_score(targets, results)
+            score = get_f1_score(targets, results)
             if score > best_score:
                 best_score = score
         f1_scores.append(best_score)
