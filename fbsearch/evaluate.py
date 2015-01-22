@@ -35,12 +35,13 @@ if __name__ == "__main__":
     from fbsearch import settings
     from fbsearch.oracle import OracleSystem
     from fbsearch.dataset import get_dataset
+    from fbsearch import settings
 
     dataset_file = open(settings.DATASET_PATH)
     dataset = get_dataset(dataset_file)[:50]
     system = OracleSystem(dataset)
     results = get_target_and_predicted_values(dataset, system)
-    save(results, 'target_predicted.json')
+    save(results, settings.RESULTS_PATH)
 
     mean, error = analyse_results(results)
     print "F1 average: %f +/- %f" % (mean, error)
