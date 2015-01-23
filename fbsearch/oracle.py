@@ -5,7 +5,7 @@ bound on performance.
 
 from fbsearch.connect import Connector
 from fbsearch.related import RelatedEntities
-from fbsearch.evaluate import get_f1_score
+from fbsearch.analyse import get_f1_score
 from fbsearch.log import logger
 
 class OracleSystem(object):
