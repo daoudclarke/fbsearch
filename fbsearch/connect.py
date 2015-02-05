@@ -34,6 +34,13 @@ class Connector(object):
         logger.debug("Target entities: %r", target_entities)
         return self.related.connect(query_entities, target_entities)
 
+    def search_all(self, query, targets):
+        all_connections = set()
+        for target in targets:
+            connections = self.search(query, target)
+            all_connections |= set(connections)
+        return all_connections
+
     def apply_connection(self, query, connection):
         query_entities = self.get_query_entities(query)
         result_ids = self.related.apply_connection(query_entities, connection)

@@ -19,5 +19,6 @@ EXPECTED_RESULTS = [{'target': ['Barack Obama'], 'predicted': ['Barack Obama']},
                     {'target': ['Three', 'Four'], 'predicted': ['Two', 'Three']}]
 
 def test_evaluation_analysis():
-    mean, error = analyse_results(EXPECTED_RESULTS)
+    analysis = analyse_results(EXPECTED_RESULTS)
+    mean, error = analysis['f1_score']
     assert mean == 0.75

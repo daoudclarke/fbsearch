@@ -15,21 +15,25 @@ class OracleSystem(object):
         self.related = RelatedEntities()
 
     def execute(self, query):
+        results, _ = self.get_best_results_and_connection(
+            query)
+        return results
+
+    def get_best_results_and_connection(self, query):
         targets = self.query_targets[query]
-        all_connections = set()
-        for target in targets:
-            connections = self.connector.search(query, target)
-            all_connections |= set(connections)
+        connections = self.connector.search_all(query, targets)
 
         best_score = 0.0
         best_results = []
+        best_connection = None
         for connection in connections:
             logger.debug("Querying connection: %s", connection)
             results = self.connector.apply_connection(query, connection)
             score = get_f1_score(targets, results)
             logger.debug("Target: %s, connection: %s, score: %f",
-                         target, connection, score)
+                         targets, connection, score)
             if score > best_score:
                 best_score = score
                 best_results = results
-        return best_results
+                best_connection = connection
+        return best_results, best_connection
