@@ -1,9 +1,7 @@
 from fbsearch.analyse import analyse_results
+from fbsearch import convertingjson
 
 import pytest
-import json
-
-
 
 
 def get_target_and_predicted_values(dataset, system):
@@ -15,23 +13,9 @@ def get_target_and_predicted_values(dataset, system):
     return target_predicted_results
 
 
-class ConvertingJSONEncoder(json.JSONEncoder):
-    """
-    Automatically convert sets etc to lists.
-    """
-    def default(self, input_object):
-        if isinstance(input_object, set):
-           return list(input_object)
-        return JSONEncoder.default(self, o)
-
-
 def save(results, path):
-    output_file = open(path, 'w')
-    encoder = ConvertingJSONEncoder()
-    json.dump(results, output_file,
-              cls=ConvertingJSONEncoder,
-              indent=4)
-
+    with open(path, 'w') as output_file:
+        convertingjson.dump(results, output_file, indent=4)
 
 if __name__ == "__main__":
     from fbsearch import settings
