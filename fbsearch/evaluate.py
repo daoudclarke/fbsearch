@@ -49,12 +49,12 @@ if __name__ == "__main__":
     random.shuffle(dataset)
 
     logger.info("Training")
-    train_set = dataset[:10]
+    train_set = dataset[:500]
     system = TensorSystem()
     system.train(train_set)
 
     logger.info("Testing")
-    test_set = dataset[50:100]
+    test_set = dataset[500:1000]
     results = get_target_and_predicted_values(test_set, system)
     save(results, settings.RESULTS_PATH)
 

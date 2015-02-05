@@ -29,8 +29,6 @@ class Connector(object):
         logger.debug("Query entities: %r", zip(query_entities, query_names))
 
         target_entities = self.related.search_exact(target)
-        #target_entities = self.searcher.search(target, 400)
-        #target_entities = [entity['id'] for entity in target_entities if entity['text'] == target.lower()]
         logger.debug("Target entities: %r", target_entities)
         return self.related.connect(query_entities, target_entities)
 
@@ -43,6 +41,8 @@ class Connector(object):
 
     def apply_connection(self, query, connection):
         query_entities = self.get_query_entities(query)
+        if len(query_entities) == 0:
+            return set()
         result_ids = self.related.apply_connection(query_entities, connection)
         return set(self.related.get_names(result) for result in result_ids)
 
