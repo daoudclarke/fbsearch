@@ -34,13 +34,26 @@ def save(results, path):
 if __name__ == "__main__":
     from fbsearch import settings
     from fbsearch.oracle import OracleSystem
+    from fbsearch.tensor import TensorSystem
     from fbsearch.dataset import get_dataset
     from fbsearch import settings
+    from random import Random
+    from log import logger
+
+    random = Random(1)
 
     dataset_file = open(settings.DATASET_PATH)
-    dataset = get_dataset(dataset_file)[:50]
-    system = OracleSystem(dataset)
-    results = get_target_and_predicted_values(dataset, system)
+    dataset = get_dataset(dataset_file)
+    random.shuffle(dataset)
+
+    logger.info("Training")
+    train_set = dataset[:50]
+    system = TensorSystem()
+    system.train(train_set)
+
+    logger.info("Testing")
+    test_set = dataset[50:100]
+    results = get_target_and_predicted_values(test_set, system)
     save(results, settings.RESULTS_PATH)
 
     mean, error = analyse_results(results)
