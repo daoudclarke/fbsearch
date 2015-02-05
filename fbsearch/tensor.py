@@ -13,8 +13,7 @@ from sklearn.grid_search import GridSearchCV
 
 from log import logger
 
-STOPWORDS = {'what', 'is', 'the', 'of'}
-
+STOPWORDS = {'what', 'is', 'the', 'of', 'to'}
     
 
 class TensorSystem(object):
@@ -38,9 +37,8 @@ class TensorSystem(object):
 
             all_connections.append(connection)
             query_tokens = self.get_sentence_features(query)
-            query_features = self.get_tensor_features(query_tokens, connection)
             all_query_tokens.append(query_tokens)
-            features.append(query_features)
+            logger.debug("Query tokens: %r, connection: %r", query_tokens, connection)
 
         self.possible_connections = list(set(all_connections))
 

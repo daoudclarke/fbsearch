@@ -1,3 +1,5 @@
+from fbsearch.analyse import analyse_results
+
 import pytest
 import json
 
@@ -47,7 +49,7 @@ if __name__ == "__main__":
     random.shuffle(dataset)
 
     logger.info("Training")
-    train_set = dataset[:50]
+    train_set = dataset[:10]
     system = TensorSystem()
     system.train(train_set)
 
