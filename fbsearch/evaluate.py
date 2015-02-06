@@ -30,17 +30,27 @@ if __name__ == "__main__":
 
     dataset_file = open(settings.DATASET_PATH)
     dataset = get_dataset(dataset_file)
-    random.shuffle(dataset)
 
-    logger.info("Training")
-    train_set = dataset[:500]
-    system = TensorSystem()
-    system.train(train_set)
+    sempre_oracle_misses = open('sempre-zero-scores.txt').read().split('\n')
+    sempre_oracle_misses = set(unicode(query) for query in sempre_oracle_misses)
+    dataset = [row for row in dataset if row[0] in sempre_oracle_misses][:10]
+    print "Dataset size:", len(dataset)
 
-    logger.info("Testing")
-    test_set = dataset[500:1000]
-    results = get_target_and_predicted_values(test_set, system)
+    system = OracleSystem(dataset)
+    results = get_target_and_predicted_values(dataset, system)
     save(results, settings.RESULTS_PATH)
+
+    # random.shuffle(dataset)
+
+    # logger.info("Training")
+    # train_set = dataset[:500]
+    # system = TensorSystem()
+    # system.train(train_set)
+
+    # logger.info("Testing")
+    # test_set = dataset[500:1000]
+    # results = get_target_and_predicted_values(test_set, system)
+    # save(results, settings.RESULTS_PATH)
 
     mean, error = analyse_results(results)
     print "F1 average: %f +/- %f" % (mean, error)
