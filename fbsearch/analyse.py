@@ -1,6 +1,8 @@
 import numpy as np
 from numpy import mean as get_mean
 from scipy.stats import sem as get_error_in_mean
+from fbsearch import settings
+import json
 
 def get_precision_recall_f1(actual, predicted):
     """
@@ -42,13 +44,13 @@ def analyse_results(results):
         'recall': (mean[1], errors[1]),
         'f1_score': (mean[2], errors[2])
         }
-               
 
-if __name__ == "__main__":
-    from fbsearch import settings
-    import json
-
+def analyse():
     results_file = open(settings.RESULTS_PATH)
     results = json.load(results_file)
     analysis = analyse_results(results)
     print analysis
+               
+
+if __name__ == "__main__":
+    analyse()

@@ -1,5 +1,6 @@
-from fbsearch.analyse import analyse_results
+from fbsearch.analyse import analyse
 from fbsearch import convertingjson
+from fbsearch.cachedoracle import CachedOracleSystem
 
 import pytest
 
@@ -30,17 +31,18 @@ if __name__ == "__main__":
 
     dataset_file = open(settings.DATASET_PATH)
     dataset = get_dataset(dataset_file)
+    cached_oracle = CachedOracleSystem(dataset)
+    dataset = [(query, targets) for query, targets in dataset
+               if query in cached_oracle.queries]
     random.shuffle(dataset)
 
     logger.info("Training")
-    train_set = dataset[:500]
-    system = TensorSystem()
+    train_set = dataset[:1000]
+    system = TensorSystem(CachedOracleSystem)
     system.train(train_set)
 
     logger.info("Testing")
-    test_set = dataset[500:1000]
+    test_set = dataset[1000:]
     results = get_target_and_predicted_values(test_set, system)
-    save(results, settings.RESULTS_PATH)
-
-    mean, error = analyse_results(results)
-    print "F1 average: %f +/- %f" % (mean, error)
+    save(results, settings.RESULTS_PATH)    
+    analyse()

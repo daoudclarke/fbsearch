@@ -17,17 +17,18 @@ STOPWORDS = {'what', 'is', 'the', 'of', 'to'}
     
 
 class TensorSystem(object):
-    def __init__(self):
+    def __init__(self, oracle_class=OracleSystem):
         self.random = random.Random(1)
         self.connector = Connector()
         self.possible_connections = None
+        self.oracle_class = oracle_class
 
     def train(self, train_set):
         logger.info("Converting features to list")
         features = []
         values = []
 
-        oracle = OracleSystem(train_set)
+        oracle = self.oracle_class(train_set)
         all_query_tokens = []
         all_connections = []
         for query, target in train_set:
@@ -63,6 +64,8 @@ class TensorSystem(object):
         self.classifier = GridSearchCV(svm, parameters, scoring='f1')
 
         self.classifier.fit(vectors, values)
+        logger.info("Best score in cross validation: %f", self.classifier.best_score_)
+
         self.classifier = self.classifier.best_estimator_
 
         logger.info("SVM classes: %r", self.classifier.classes_)
