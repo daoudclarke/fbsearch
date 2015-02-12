@@ -6,6 +6,7 @@ from fbsearch.oracle import OracleSystem
 from fbsearch.dataset import get_dataset
 from fbsearch import settings
 from fbsearch import convertingjson
+from fbsearch.log import logger
 
 import json
 
@@ -30,25 +31,29 @@ class CachedOracleSystem(object):
 def get_cache_oracle_data(dataset):
     oracle = OracleSystem(dataset)
 
-    oracle_results = []
+    i = 0
     for query, target_entities in dataset:
         results, connection = oracle.get_best_results_and_connection(query)
-        oracle_results.append({
+        yield {
                 'query': query,
                 'results': results,
                 'connection': connection,
-                })
-    return oracle_results
+                'target': target_entities,
+                }
+        i += 1
+        logger.info("Completed: %d", i)
 
 
 def save_oracle_data(oracle_results):
     with open(settings.ORACLE_CACHE_PATH, 'w') as cache_file:
-        convertingjson.dump(oracle_results, cache_file, indent=4)
-
+        for result in oracle_results:
+            serialised = convertingjson.dumps(result, cache_file)
+            cache_file.write(serialised + '\n')
+            cache_file.flush()
 
 if __name__ == "__main__":
     dataset_file = open(settings.DATASET_PATH)
-    dataset = get_dataset(dataset_file)[:2]
+    dataset = get_dataset(dataset_file)
     oracle_data = get_cache_oracle_data(dataset)
     save_oracle_data(oracle_data)
     

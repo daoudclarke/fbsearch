@@ -1,3 +1,4 @@
+from fbsearch import settings
 from entitysearcher import EntitySearcher
 import lucenesearch
 from lucenesearch import LuceneSearcher
@@ -6,7 +7,7 @@ from related import RelatedEntities
 import json
 
 if __name__ == "__main__":
-    path = '/home/dc/Experiments/sempre/lib/lucene/4.4/inexact/'
+    path = settings.LUCENE_PATH
     db_searcher = LuceneSearcher(path)
 
     searcher = EntitySearcher(db_searcher)

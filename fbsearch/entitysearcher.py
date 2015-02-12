@@ -18,7 +18,7 @@ if __name__ == "__main__":
     import lucenesearch
     from lucenesearch import LuceneSearcher
 
-    path = '/home/dc/Experiments/sempre/lib/lucene/4.4/inexact/'
+    path = settings.LUCENE_PATH
     db_searcher = LuceneSearcher(path)
 
     searcher = EntitySearcher(db_searcher)
