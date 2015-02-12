@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+from fbsearch import settings
 from log import logger
 
 import lucene
@@ -85,7 +86,7 @@ class LuceneSearcher(object):
 
 if __name__ == '__main__':
     print 'lucene', lucene.VERSION
-    path = '/home/dc/Experiments/sempre/lib/lucene/4.4/inexact/'
+    path = settings.LUCENE_PATH
     searcher = LuceneSearcher(path)
     docs = searcher.search(sys.argv[1], 400)
     for doc in docs:

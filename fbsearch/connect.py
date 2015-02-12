@@ -18,7 +18,7 @@ import sexpdata
 class Connector(object):
     def __init__(self):
         self.related = RelatedEntities()
-        self.searcher = LuceneSearcher('/home/dc/Experiments/sempre/lib/lucene/4.4/inexact/')
+        self.searcher = LuceneSearcher(settings.LUCENE_PATH)
 
     def get_query_entities(self, query):
         return [result[1]['id'] for result in self.searcher.query_search(query)[:50]]
