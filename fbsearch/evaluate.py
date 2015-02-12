@@ -37,12 +37,12 @@ if __name__ == "__main__":
     random.shuffle(dataset)
 
     logger.info("Training")
-    train_set = dataset[:1000]
+    train_set = dataset[:2500]
     system = TensorSystem(CachedOracleSystem)
     system.train(train_set)
 
     logger.info("Testing")
-    test_set = dataset[1000:]
+    test_set = dataset[2500:3000]
     results = get_target_and_predicted_values(test_set, system)
     save(results, settings.RESULTS_PATH)    
     analyse()
