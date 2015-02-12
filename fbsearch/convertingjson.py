@@ -15,3 +15,9 @@ def dump(obj, fp, indent=None):
     json.dump(obj, fp,
               cls=ConvertingJSONEncoder,
               indent=indent)
+
+def dumps(obj, fp, indent=None):
+    encoder = ConvertingJSONEncoder()
+    return json.dumps(obj, fp,
+                      cls=ConvertingJSONEncoder,
+                      indent=indent)
