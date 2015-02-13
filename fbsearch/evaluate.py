@@ -37,7 +37,7 @@ if __name__ == "__main__":
     random.shuffle(dataset)
 
     logger.info("Training")
-    train_set = dataset[:2500]
+    train_set = dataset[:500]
     system = TensorSystem(CachedOracleSystem)
     system.train(train_set)
 
