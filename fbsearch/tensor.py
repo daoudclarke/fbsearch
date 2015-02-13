@@ -29,7 +29,6 @@ class TensorSystem(object):
         values = []
 
         oracle = self.oracle_class(train_set)
-        all_query_tokens = []
         all_connections = []
         for query, target in train_set:
             _, connection = oracle.get_best_results_and_connection(query)
@@ -37,28 +36,39 @@ class TensorSystem(object):
                 continue
 
             all_connections.append(connection)
-            query_tokens = self.get_sentence_features(query)
-            all_query_tokens.append(query_tokens)
-            logger.debug("Query tokens: %r, connection: %r", query_tokens, connection)
 
         self.possible_connections = list(set(all_connections))
         logger.info("Found %d possible connections in training set of size %d",
                     len(self.possible_connections), len(train_set))
 
-        # Positive features
-        features = self.make_features(all_query_tokens, all_connections)
+        values = []
+        all_features = []
+        for query, target in train_set:
+            query_tokens = self.get_sentence_features(query)
+            for connection in self.possible_connections:
+                result = self.connector.apply_connection(
+                    query, connection)
+                correct_results = set(result) & set(target)
+                logger.debug("Found %d correct results", len(correct_results))
+                value = 1 if len(correct_results) > 0 else 0
+                features = self.get_query_connection_features(query_tokens, connection)                
+                values.append(value)
+                all_features.append(features)
+
+        # # Positive features
+        # features = self.make_features(all_query_tokens, all_connections)
         
-        # Negative features
-        duplicates = 1
-        for i in range(duplicates):
-            random.shuffle(all_connections)
-            features += self.make_features(all_query_tokens, all_connections)
+        # # Negative features
+        # duplicates = 1
+        # for i in range(duplicates):
+        #     random.shuffle(all_connections)
+        #     features += self.make_features(all_query_tokens, all_connections)
 
-        values = [1]*len(all_query_tokens) + [0]*(len(all_query_tokens)*duplicates)
+        # values = [1]*len(all_query_tokens) + [0]*(len(all_query_tokens)*duplicates)
 
-        logger.info("Training - building vectors with %d features", len(features))
+        logger.info("Training - building vectors with %d features", len(all_features))
         self.vectorizer = DictVectorizer()
-        vectors = self.vectorizer.fit_transform(features)
+        vectors = self.vectorizer.fit_transform(all_features)
 
 
         logger.info("Training classifier")
