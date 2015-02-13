@@ -8,19 +8,24 @@ from fbsearch import settings
 from fbsearch import convertingjson
 from fbsearch.log import logger
 
+import json
+
 class CachedOracleSystem(object):
     def __init__(self, dataset):
-        self.query_targets = dict(dataset)
-        self.connector = Connector()
-        self.related = RelatedEntities()
+        with open(settings.ORACLE_CACHE_PATH) as cache_file:
+            valid_queries = set(query for query, _ in dataset)
+
+            queries = [json.loads(row) for row in cache_file]
+            self.queries = { item['query']: (item['results'], item['connection'] and tuple(item['connection']))
+                             for item in queries if item['query'] in valid_queries }
 
     def execute(self, query):
         results, _ = self.get_best_results_and_connection(
             query)
         return results
 
-    #def get_best_results_and_connection(self, query):
-
+    def get_best_results_and_connection(self, query):
+        return self.queries[query]
 
 
 def get_cache_oracle_data(dataset):

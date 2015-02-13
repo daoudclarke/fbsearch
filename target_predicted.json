@@ -1,445 +1,386 @@
 [
     {
         "target": [
-            "A King in New York"
+            "Copenhagen"
         ], 
         "predicted": [
-            "Cuckoo Schools"
+            "University of Copenhagen", 
+            "Central Denmark Region", 
+            "Nyk\u00f8bing Falster", 
+            "Brande", 
+            "Jutland", 
+            "Frederiksbjerg", 
+            "Frederiksberg", 
+            "Region Zealand", 
+            "Gentofte", 
+            "Jerup", 
+            "Gudme", 
+            "Aalborg", 
+            "Haderslevhus", 
+            "Br\u00f8ndby Strand", 
+            "Frederiksstaden", 
+            "R\u00f8dovre", 
+            "Drag\u00f8r", 
+            "Kongens Lyngby", 
+            "Albertslund Municipality", 
+            "Hj\u00f8rring Municipality", 
+            "N\u00f8rrebro", 
+            "Capital Region of Denmark", 
+            "Herlev Municipality", 
+            "Vejle Fjord Bridge", 
+            "Bispebjerg", 
+            "Center for Electron Nanoscopy", 
+            "Gr\u00e6sted-Gilleleje", 
+            "Beder, Aarhus", 
+            "Aarhus Theatre", 
+            "Rudersdal Municipality", 
+            "Viborg", 
+            "Ringk\u00f8bing", 
+            "Skjern Municipality", 
+            "IT University of Copenhagen", 
+            "Islands Brygge", 
+            "Bornholm Art Museum", 
+            "Helsing\u00f8r", 
+            "Vejle", 
+            "Copenhagen Business School", 
+            "Storstr\u00f8m Bridge", 
+            "Ish\u00f8j", 
+            "Marstal", 
+            "Ikast-Brande Municipality", 
+            "Svendborg Gymnasium", 
+            "Vordingborg Municipality", 
+            "Aller\u00f8d Municipality", 
+            "Hirtshals", 
+            "Ikast", 
+            "Thybor\u00f8n", 
+            "Kolding Fjord", 
+            "Kangersuatsiaq", 
+            "Ny Carlsberg Glyptotek", 
+            "Slagelse", 
+            "Frederiksborg County", 
+            "Christianshavn", 
+            "Lolland", 
+            "Sor\u00f8", 
+            "S\u00f8nderborg", 
+            "Nyborg Municipality", 
+            "\u00c5lb\u00e6k", 
+            "Holb\u00e6k", 
+            "Svendborg", 
+            "Odense", 
+            "The Old Town, Aarhus", 
+            "Hellerup", 
+            "Frederikshavn", 
+            "Brorfelde Observatory", 
+            "Vordingborg", 
+            "Karen Blixen Museum", 
+            "Smerup", 
+            "Farum Park", 
+            "Lemvig", 
+            "Funen", 
+            "Allinge-Sandvig", 
+            "Horsens", 
+            "Statens Museum for Kunst", 
+            "Glostrup", 
+            "Faxe Municipality", 
+            "Ringsted", 
+            "Augustenborg, Denmark", 
+            "University of Aalborg", 
+            "Br\u00f8nderslev", 
+            "Holte", 
+            "Randers", 
+            "Halsn\u00e6s Municipality", 
+            "Ikast Municipality", 
+            "Bavneh\u00f8j-Hallen", 
+            "Sorgenfri Palace", 
+            "Valby station", 
+            "Forum Copenhagen", 
+            "Upernavik", 
+            "Hiller\u00f8d", 
+            "Pr\u00e6st\u00f8", 
+            "L\u00e6s\u00f8", 
+            "Mols", 
+            "Aarhus", 
+            "Copenhagen University Observatory", 
+            "Copenhagen", 
+            "Br\u00f8rup", 
+            "Technical University of Denmark"
         ]
     }, 
     {
         "target": [
-            "Highgate"
+            "Canada"
         ], 
         "predicted": [
+            "Toronto Islands", 
+            "Amherst Island", 
+            "Simcoe Island", 
+            "Galloo Island Light", 
+            "Tibbetts Point Light", 
+            "Thirty Mile Point Light", 
+            "Association Island", 
+            "Big Island", 
+            "Garden Island", 
+            "Thousand Islands", 
+            "Grenadier Island", 
+            "Nicholson Island", 
+            "Waupoos Island, Ontario"
+        ]
+    }, 
+    {
+        "target": [
+            "CNN"
+        ], 
+        "predicted": [
+            "Biographical Dictionary of Famous Tar Heels", 
+            "Dispatches from the Edge: A Memoir of War, Disasters, and Survival", 
+            "Attacks on the Press in 2006"
+        ]
+    }, 
+    {
+        "target": [
+            "Swing music", 
+            "Jazz", 
+            "Vocal jazz", 
+            "Traditional pop music", 
+            "Ballad"
+        ], 
+        "predicted": [
+            "Songwriter", 
+            "Singer", 
             "Musician", 
-            "Cinematographer", 
+            "Guitarist", 
             "Singer-songwriter"
         ]
     }, 
     {
         "target": [
-            "Iowa", 
-            "North Dakota", 
-            "Wyoming", 
-            "Minnesota", 
-            "Nebraska", 
-            "Montana"
-        ], 
-        "predicted": [
-            "University of South Dakota", 
-            "Fall River County", 
-            "Bennett County", 
-            "Langford", 
-            "Site 39FA1639", 
-            "Pine Ridge Indian Reservation", 
-            "Lawrence County", 
-            "Custer County", 
-            "Hoven", 
-            "Brown County", 
-            "Clark County", 
-            "Erwin", 
-            "Baltic", 
-            "Stanley County", 
-            "Gordon House", 
-            "Leola", 
-            "First United Methodist Church", 
-            "Tripp", 
-            "Grant County", 
-            "University of South Dakota School of Law", 
-            "Old Riverside Hutterite Colony", 
-            "Deuel County", 
-            "Vermillion", 
-            "Huron", 
-            "Beadle County", 
-            "Fairview Heights", 
-            "Jerauld County", 
-            "Provo Township", 
-            "Fort Lookout IV", 
-            "Sioux Falls", 
-            "Rapid City", 
-            "Hamlin County", 
-            "Spearfish, SD Micropolitan Statistical Area", 
-            "Hutchinson County", 
-            "Conde", 
-            "Henry Ranch Buskala", 
-            "Wakpamani", 
-            "Hisega", 
-            "South Dakota Department of Transportation Bridge No. 06-142-190", 
-            "Faulkton", 
-            "Meade County", 
-            "Trail City", 
-            "Robert S. Vessey House", 
-            "Lake County", 
-            "Miner County", 
-            "Watertown", 
-            "Chester", 
-            "Lyons", 
-            "Ludwig Deckert House", 
-            "Oacoma", 
-            "Spink County", 
-            "Dewey County", 
-            "Aberdeen", 
-            "Plankinton", 
-            "Canton", 
-            "Hughes County", 
-            "Deevaan Villa Development", 
-            "De Smet", 
-            "Verdon", 
-            "Mission Hill", 
-            "South Dakota State University", 
-            "Wendte", 
-            "Deadwood", 
-            "Sully County", 
-            "Codington County", 
-            "Pennington County", 
-            "Fairfax", 
-            "McCook County", 
-            "Geddes", 
-            "Hetland", 
-            "Frawley Historic Ranch", 
-            "Aberdeen, SD Micropolitan Statistical Area", 
-            "Minnehaha County", 
-            "Archeological Site No. 39HN160", 
-            "Kadoka", 
-            "Little White River", 
-            "Central City", 
-            "Virgil", 
-            "Lakeport", 
-            "Site 39BE15", 
-            "Day County", 
-            "Yankton", 
-            "University of South Dakota - Springfield", 
-            "Rapid City, SD Metropolitan Statistical Area", 
-            "Colin Campbell Post", 
-            "Turner County", 
-            "G. E. Lemmon House", 
-            "Holmquist", 
-            "Worthing", 
-            "Yankton County", 
-            "Charles Mix County", 
-            "Eureka", 
-            "Pukwana", 
-            "Archeological Site No. 39MD20", 
-            "Northern State University", 
-            "Aurora County", 
-            "Garretson", 
-            "St. Martin's Catholic Church and Grotto", 
-            "Archeological Site 39JE10", 
-            "Shannon County"
-        ]
-    }, 
-    {
-        "target": [
-            "Aortic dissection"
-        ], 
-        "predicted": [
-            "Lucille Ball", 
-            "Desi Arnaz", 
-            "Gary Morton"
-        ]
-    }, 
-    {
-        "target": [
-            "Kanye West", 
-            "Reggie Bush", 
-            "Ray J"
-        ], 
-        "predicted": [
-            "Kris Jenner", 
-            "Helen Kardashian", 
-            "Arthur Kardashian", 
-            "Robert Kardashian"
-        ]
-    }, 
-    {
-        "target": [
-            "Uzbekistan"
-        ], 
-        "predicted": [
-            "New Zealand", 
-            "United States of America"
-        ]
-    }, 
-    {
-        "target": [
-            "Danity Kane"
-        ], 
-        "predicted": [
-            "Jesse Moss"
-        ]
-    }, 
-    {
-        "target": [
-            "Checotah"
-        ], 
-        "predicted": [
-            "Northeastern State University", 
-            "Checotah High School"
-        ]
-    }, 
-    {
-        "target": [
-            "Jerry Seinfeld"
-        ], 
-        "predicted": [
-            "Guitar", 
-            "Piano", 
-            "Trumpet", 
-            "Drums"
-        ]
-    }, 
-    {
-        "target": [
-            "Euro"
-        ], 
-        "predicted": [
-            "Qatar", 
-            "India"
-        ]
-    }, 
-    {
-        "target": [
-            "Yearly"
-        ], 
-        "predicted": [
-            "Canada", 
-            "Timor-Leste", 
-            "Qatar", 
-            "Transkei", 
-            "Bangladesh", 
-            "Sudan", 
-            "Turks and Caicos Islands", 
-            "Saint Lucia", 
-            "Laos", 
-            "Scotland", 
-            "Kiribati", 
-            "Malta", 
-            "Gazankulu", 
-            "Bahamas", 
-            "Ethiopia", 
-            "Bermuda", 
-            "Tanzania", 
-            "Gibraltar", 
-            "Ireland", 
-            "Vanuatu", 
-            "Wales", 
-            "Nigeria", 
-            "Cameroon", 
-            "Nauru", 
-            "Cook Islands", 
-            "Ghana", 
-            "Brunei", 
-            "Israel", 
-            "Australia", 
-            "Grenada", 
-            "Singapore", 
-            "Tuvalu", 
-            "Zambia", 
-            "Jordan", 
-            "Saint Kitts and Nevis", 
-            "Papua New Guinea", 
-            "Zimbabwe", 
-            "China", 
-            "Puerto Rico", 
-            "Marshall Islands", 
-            "Belize", 
-            "Hong Kong", 
-            "Sierra Leone", 
-            "Dominica", 
-            "Liberia", 
-            "Cayman Islands", 
-            "Gambia", 
-            "Philippines", 
-            "Indonesia", 
-            "Territory of Papua and New Guinea", 
-            "Saint Vincent and the Grenadines", 
-            "Swaziland", 
-            "Lesotho", 
-            "Bonaire", 
-            "Namibia", 
-            "Guyana", 
-            "Kenya", 
-            "Samoa", 
-            "New Zealand", 
-            "Mandatory Palestine", 
-            "Honduras", 
-            "Jersey", 
-            "Pakistan", 
-            "Isle of Man", 
-            "England", 
-            "Guam", 
-            "South Africa", 
-            "Tokelau", 
-            "Cyprus", 
-            "Vatican City", 
-            "Palestinian National Authority", 
-            "India", 
-            "Cura\u00e7ao", 
-            "Territory of New Guinea", 
-            "United Kingdom", 
-            "Malaysia", 
-            "Rwanda", 
-            "Antigua and Barbuda", 
-            "Uganda", 
-            "Sri Lanka", 
-            "Japan", 
-            "Montserrat", 
-            "Fiji", 
-            "Botswana", 
-            "Barbados"
-        ]
-    }, 
-    {
-        "target": [
-            "Santo Domingo"
-        ], 
-        "predicted": [
-            "Johnny Bravo", 
-            "West Ham United F.C.", 
-            "UC Santa Barbara Gauchos men's basketball", 
-            "Charlton Athletic F.C.", 
-            "Condors", 
-            "London Broncos", 
-            "Fulham F.C."
-        ]
-    }, 
-    {
-        "target": [
-            "United States of America"
-        ], 
-        "predicted": [
-            "Tuberculosis", 
-            "Smallpox", 
-            "Malaria"
-        ]
-    }, 
-    {
-        "target": [
-            "Chinese"
-        ], 
-        "predicted": [
-            "West Ham United F.C.", 
+            "San Francisco 49ers", 
+            "Carolina Panthers", 
             "New York Giants", 
-            "New York Mets", 
-            "CCNY Beavers men's basketball", 
-            "New York Golden Blades", 
-            "New York Knicks", 
-            "New York Rangers", 
-            "Charlton Athletic F.C.", 
-            "New York Yankees", 
-            "London Broncos", 
-            "Fulham F.C."
+            "Houston Texans", 
+            "Fresno State Bulldogs football"
+        ], 
+        "predicted": [
+            "Rodger Carr", 
+            "Sheryl Carr"
         ]
     }, 
     {
         "target": [
-            "Allegheny County"
+            "John the Evangelist"
         ], 
         "predicted": [
-            "Pittsburgh Zoo & PPG Aquarium", 
-            "Carnegie Museum of Art", 
-            "The Andy Warhol Museum", 
-            "National Aviary", 
-            "Children's Museum of Pittsburgh", 
-            "Sandcastle Waterpark", 
-            "Heinz History Center", 
-            "Phipps Conservatory & Botanical Gardens", 
-            "Mount Washington", 
-            "Carnegie Science Center"
+            "Lee Siegel", 
+            "Statistics Canada", 
+            "Thomas Farber"
         ]
     }, 
     {
         "target": [
-            "Tarsus, Mersin"
+            "Netherlands", 
+            "Czech Republic", 
+            "Salzburg", 
+            "Denmark", 
+            "Poland", 
+            "Luxembourg", 
+            "France", 
+            "Belgium", 
+            "Austria", 
+            "Switzerland"
         ], 
         "predicted": [
-            "Canada", 
+            "United Kingdom", 
+            "Germany"
+        ]
+    }, 
+    {
+        "target": [
+            "Constitutional republic", 
+            "Presidential system", 
+            "Federal republic"
+        ], 
+        "predicted": [
             "Israel", 
-            "Australia", 
-            "Portugal", 
+            "Netherlands", 
             "United States of America", 
-            "United Kingdom", 
             "Sweden", 
-            "Germany", 
-            "Earth"
+            "United Kingdom", 
+            "Austria", 
+            "Japan"
         ]
     }, 
     {
         "target": [
-            "Filipino language", 
-            "English Language"
+            "Nuclear accident", 
+            "Industrial disaster"
         ], 
         "predicted": [
-            "Filipino language", 
-            "Kapampangan language", 
-            "Cebuano language", 
-            "English Language", 
-            "Ilokano language", 
-            "Tagalog language", 
-            "Hiligaynon language", 
-            "Pangasinan Language", 
-            "Waray-Waray Language"
+            "I\u0361Uri\u012d Shcherbak", 
+            "A. V. Illesh", 
+            "Frederik Pohl", 
+            "Jim T. Smith", 
+            "Don Nardo", 
+            "Nichol Bryan"
         ]
     }, 
     {
         "target": [
-            "First Lady of the United States"
+            2012
         ], 
         "predicted": [
-            "Washington, D.C."
+            "Mame Warren", 
+            "Marion Warren", 
+            "Mark Stewart"
         ]
     }, 
     {
         "target": [
-            "Virginia Cavaliers football"
+            "South Vietnam", 
+            "Australia", 
+            "New Zealand", 
+            "North Vietnam", 
+            "Pathet Lao", 
+            "Philippines", 
+            "Khmer Republic", 
+            "United States of America", 
+            "Khmer Rouge", 
+            "North Korea", 
+            "Viet Cong", 
+            "China", 
+            "Thailand", 
+            "South Korea", 
+            "Kingdom of Laos", 
+            "Taiwan", 
+            "Soviet Union"
         ], 
         "predicted": [
-            "Jazz piano", 
-            "organ", 
-            "Vibraphone", 
-            "Bass guitar", 
-            "Keytar", 
-            "Drums", 
-            "Keyboard", 
+            "Virginia Schomp", 
+            "Andrew Mason", 
+            "Thomas Whittemore", 
+            "Maurice Isserman", 
+            "Carl Oglesby", 
+            "James S. Olson", 
+            "Ernest Barksdale Fincher", 
+            "Nextext", 
+            "Kevin Hillstrom", 
+            "Michael P. Sullivan", 
+            "George C. Scott", 
+            "Douglas Welsh", 
+            "Roger Barr", 
+            "Marilyn B. Young", 
+            "Ken Hills", 
+            "James E Westheider", 
+            "James H Willbanks", 
+            "Louise I Gerdes", 
+            "Clive Gifford", 
+            "Katie Daynes", 
+            "John Bowman", 
+            "Mitchell K. Hall", 
+            "Karen Bush Gibson", 
+            "Bernard C. Nalty", 
+            "Tai Sung An", 
+            "John Devaney", 
+            "Laurie Collier Hillstrom", 
+            "Walter Hixson", 
+            "Diane M. Sawinski", 
+            "Francis Wormuth"
+        ]
+    }, 
+    {
+        "target": [
+            "Wide Receiver"
+        ], 
+        "predicted": [
+            "Singer", 
+            "Musician", 
+            "Artist", 
+            "Writer", 
+            "Rapper", 
+            "Film Score Composer", 
+            "Actor", 
+            "Critic", 
+            "Multi Media Artist", 
+            "Electronic musician", 
+            "Record producer"
+        ]
+    }, 
+    {
+        "target": [
+            "Seth MacFarlane"
+        ], 
+        "predicted": [
+            "Seth Green", 
+            "Adam West", 
+            "Danny Smith", 
+            "Patrick Warburton", 
+            "Lacey Chabert", 
+            "Mike Henry", 
+            "Mila Kunis", 
+            "Alec Sulkin", 
+            "Seth MacFarlane", 
+            "Alex Borstein"
+        ]
+    }, 
+    {
+        "target": [
+            "College GameDay", 
+            "College Football Final", 
+            "ESPN College Football on ABC", 
+            "Saturday Night Football", 
+            "Battle of the Gridiron Stars", 
+            "College Football Live"
+        ], 
+        "predicted": [
+            "Did It"
+        ]
+    }, 
+    {
+        "target": [
+            "guitar", 
             "Piano", 
-            "Clarinet"
+            "trumpet", 
+            "Drums"
+        ], 
+        "predicted": [
+            "Songwriter", 
+            "Singer", 
+            "Guitarist", 
+            "Rapper", 
+            "Author"
         ]
     }, 
     {
         "target": [
-            "FC Barcelona"
+            "Philadelphia Phillies", 
+            "Chicago Cubs"
         ], 
         "predicted": [
-            "Jazz piano", 
-            "organ", 
-            "Vibraphone", 
-            "Bass guitar", 
-            "Keytar", 
-            "Drums", 
-            "Keyboard", 
-            "Piano", 
-            "Clarinet"
+            "Clifford Smyth", 
+            "Roland Hugins", 
+            "Allan Nevins", 
+            "William Stoddard", 
+            "Henry F Graff", 
+            "Rita J Markel", 
+            "Ann Gaines", 
+            "Robert McNutt McElroy", 
+            "Mike Venezia", 
+            "David Collins"
         ]
     }, 
     {
         "target": [
-            "Africa"
+            "Joe Flacco"
         ], 
         "predicted": [
-            "West Ham United F.C.", 
-            "New York Giants", 
-            "New York Mets", 
-            "CCNY Beavers men's basketball", 
-            "New York Golden Blades", 
-            "New York Knicks", 
-            "New York Rangers", 
-            "UC Santa Barbara Gauchos men's basketball", 
-            "Charlton Athletic F.C.", 
-            "New York Yankees", 
-            "Condors", 
-            "London Broncos", 
-            "Fulham F.C."
+            "David Scott Milton"
+        ]
+    }, 
+    {
+        "target": [
+            "Canaan"
+        ], 
+        "predicted": [
+            "Chaim Potok"
         ]
     }, 
     {
@@ -454,346 +395,1051 @@
         ], 
         "predicted": [
             "United Kingdom", 
+            "Canada", 
             "United States of America"
         ]
     }, 
     {
         "target": [
-            "Nelson Paddywack IPA", 
-            "Steam Whistle Pilsner", 
-            "Molson XXX", 
-            "Tin Whistle Coyote", 
-            "Okanagan Spring Brewery Honey Blonde Ale", 
-            "Labatt Brewing Co. John Labatt Classic Premium Lager", 
-            "Granville Island Honey Lager", 
-            "Cannery Blackberry Porter", 
-            "McAuslan Brewing St. Ambroise Pale Ale", 
-            "Mt. Begbie Brewing Company High Country K\u00f6lsch"
+            "China"
         ], 
         "predicted": [
-            "Ottawa"
+            "Film Editor", 
+            "Film Director", 
+            "Television Producer", 
+            "Voice Actor", 
+            "Artist", 
+            "Songwriter", 
+            "Film Producer", 
+            "Musician", 
+            "Singer", 
+            "Actor", 
+            "TV Editor", 
+            "Presenter", 
+            "Television Director", 
+            "Comedian", 
+            "Singer-songwriter", 
+            "Screenwriter"
         ]
     }, 
     {
         "target": [
-            "Romulus and Remus"
+            "Florida State University"
         ], 
         "predicted": [
-            "Benton Harbor"
+            "Barbara Newman", 
+            "Clayton Sedgwick Cooper", 
+            "William Heffernan", 
+            "Washington", 
+            "William Shanahan", 
+            "Margit Misangyi Watts", 
+            "Alice Freeman Palmer"
         ]
     }, 
     {
         "target": [
-            "Wales", 
-            "England", 
-            "Scotland", 
-            "Northern Ireland"
+            "Chicago", 
+            "Kansas City", 
+            "France", 
+            "Holmby Hills", 
+            "Marceline", 
+            "Hermosa"
         ], 
         "predicted": [
-            "Parliamentary system", 
+            "Singer", 
+            "Performer", 
+            "Guitarist", 
+            "Musician", 
+            "Songwriter", 
+            "Lyricist", 
+            "Film Score Composer", 
+            "Actor", 
+            "Librettist", 
+            "Composer", 
+            "Theatrical producer"
+        ]
+    }, 
+    {
+        "target": [
+            "Explorer"
+        ], 
+        "predicted": [
+            "Arthur Sturges Hildebrand", 
+            "David Aretha", 
+            "Ronald Syme", 
+            "Tim Joyner", 
+            "Colin Hynson", 
+            "Social Staff"
+        ]
+    }, 
+    {
+        "target": [
+            "United States House of Representatives", 
+            "United States Senate"
+        ], 
+        "predicted": [
+            "Suzanne Levert", 
+            "George Griffith", 
+            "Gerald W. Johnson", 
+            "Bernadette Brexel", 
+            "Steven E. Schier", 
+            "David Mayhew", 
+            "Stephen E. Frantzich", 
+            "Janice Godfrey", 
+            "Alan Clem", 
+            "Meryl Doney", 
+            "Carol Greene", 
+            "Leslie Gourse", 
+            "Mark C. Sanders", 
+            "Chris Saunderson", 
+            "Jorge Luis Borges"
+        ]
+    }, 
+    {
+        "target": [
+            "Queens"
+        ], 
+        "predicted": [
+            "Sally Wentworth"
+        ]
+    }, 
+    {
+        "target": [
+            "Belleville", 
+            "Greater Napanee"
+        ], 
+        "predicted": [
+            "Songwriter", 
+            "Rapper", 
+            "Film Score Composer", 
+            "Actor", 
+            "Businessperson", 
+            "Poet", 
+            "Record producer"
+        ]
+    }, 
+    {
+        "target": [
+            "Jasper Johns"
+        ], 
+        "predicted": [
+            "United States of America"
+        ]
+    }, 
+    {
+        "target": [
+            "Discovery Centre"
+        ], 
+        "predicted": [
+            "Greenwich Mean Time", 
+            "Eastern Time Zone", 
+            "Western European Summer Time"
+        ]
+    }, 
+    {
+        "target": [
+            "Jozef Isra\u00ebls", 
+            "Paul C\u00e9zanne", 
+            "Anton Mauve", 
+            "Peter Paul Rubens", 
+            "Jean-Fran\u00e7ois Millet", 
+            "Willem Roelofs", 
+            "Eug\u00e8ne Delacroix", 
+            "Claude Monet", 
+            "Rembrandt"
+        ], 
+        "predicted": [
+            "Heinemann", 
+            "Victor Hugo", 
+            "Carol M. Zemel", 
+            "Philip Callow", 
+            "Joan Holub", 
+            "Hans Bronkhorst", 
+            "Jen Green", 
+            "Wilfred Niels Arnold", 
+            "Stuart Morris", 
+            "Andr\u00e9 Krauss", 
+            "John Malam", 
+            "J. Green", 
+            "Jean-Jacques Leveque", 
+            "Julius Meier-Graefe", 
+            "Bogomila Welsh-Ovcharov", 
+            "Catherine Nichols", 
+            "Peter Tyson", 
+            "Horst Keller", 
+            "Florent Fels", 
+            "Pierre Cabanne", 
+            "Marc Edo Tralbaut", 
+            "Jan Hulsker"
+        ]
+    }, 
+    {
+        "target": [
+            "African American"
+        ], 
+        "predicted": [
+            "Federation", 
+            "Presidential system", 
+            "Federal republic", 
             "Constitutional monarchy", 
+            "Parliamentary system", 
             "Unitary state", 
-            "Hereditary monarchy"
+            "Hereditary monarchy", 
+            "Semi-presidential system", 
+            "Constitutional republic", 
+            "Parliamentary republic"
         ]
     }, 
     {
         "target": [
-            "Know Nothing", 
-            "Whig Party", 
-            "Democratic Party", 
-            "National Republican Party", 
-            "Democratic-Republican Party", 
-            "Constitutional Union Party"
+            "New Moon", 
+            "Eclipse", 
+            "The Twilight Saga", 
+            "Abduction", 
+            "Twilight", 
+            "The Twilight Saga: Breaking Dawn - Part 2"
         ], 
         "predicted": [
-            "Cumberland University", 
-            "Trinity College, Cambridge", 
-            "University of Alberta", 
-            "University of Nashville", 
-            "University of Georgia", 
-            "University of Sydney", 
-            "University of Oxford", 
-            "Royal Academy"
+            "Scholastic Professional Books", 
+            "Kate Waters"
         ]
     }, 
     {
         "target": [
-            "North American Eastern Time Zone"
+            "California"
         ], 
         "predicted": [
-            "Hip hop music", 
-            "Electronic music"
+            "Formal aspects of marriage", 
+            "CA Hol Which? Gde France N/E", 
+            "An ABC of motoring law", 
+            "The Good Skiing Guide", 
+            "The legal side of buying a house", 
+            "Dismissal, redundancy and job hunting", 
+            "Getting a divorce", 
+            "How to adopt", 
+            "Managing at home", 
+            "Caring for teeth", 
+            "Extending your house", 
+            "The netbook agreement", 
+            "Nationalised industries' accounting policies", 
+            "Holiday Which?", 
+            "CA Good Food Directory", 
+            "Pregnancy month by month", 
+            "What to do when someone dies", 
+            "CA Dealing with Hsehld Emergs", 
+            "Take the Hard Work Out of Gardening", 
+            "The travelling consumer", 
+            "Where to live after retirement", 
+            "CA Patients Guide to Nhs", 
+            "CA Parents Guide to Education", 
+            "160 Letters That Get Results", 
+            "The newborn baby", 
+            "Arrangements for old age", 
+            "Energy efficiency labelling", 
+            "CA Renting and Letting", 
+            "CA Legal Side Buying Hse N/E", 
+            "CA Which? Way Make Soft Furn", 
+            "CA Wrong Kind of Medicine ?", 
+            "Raising the money to buy your home", 
+            "120 Letters That Get Results", 
+            "Making the Most of Professional Services", 
+            "Treatment and care in mental illness", 
+            "How to sue in the county court", 
+            "The law for consumers", 
+            "CA What Will My Pension Be", 
+            "Buying a Second Hand Car", 
+            "Confusion in the supermarket?", 
+            "Domestic gas appliances", 
+            "Owning a car", 
+            "Which?Car", 
+            "CA Approaching Retirement N/E", 
+            "Ailments and remedies", 
+            "Coping with disablement", 
+            "Health for old age", 
+            "Having an operation", 
+            "Electricity supply and safety, Consumers' Association", 
+            "CA Living with Stress", 
+            "Renting and Letting", 
+            "Wills and probate", 
+            "CA Cooking with Wine & Spirit", 
+            "Do Your Own Conveyancing", 
+            "The Good Walks Guide", 
+            "The law for motorists", 
+            "Earning Money at Home", 
+            "CA Which? Bk Sav & Inv 1987", 
+            "Divorce, legal procedures and financial facts", 
+            "Insurance and the consumer", 
+            "Reactions of the skin to cosmetic and toiletry products", 
+            "Consumer transactions on the internet", 
+            "Radiation, part of life", 
+            "150 Letters That Get Results", 
+            "Securing Your Home", 
+            "Buying, Owning and Selling a Second Home", 
+            "CA Starting Your Own Business", 
+            "Treating medical complaints", 
+            "CA Which? Holiday Guide 1991", 
+            "Good Film and Video Gde N/ed"
         ]
     }, 
     {
         "target": [
-            "Costa Rican col\u00f3n"
+            "Never Mind the Full Stops", 
+            "Julian Fellowes Investigates: A Most Mysterious Murder", 
+            "My Son, My Son", 
+            "Sharpe", 
+            "Monarch of the Glen", 
+            "Our Friends in the North"
         ], 
         "predicted": [
-            "Spanish Language"
+            "Alice Gardner", 
+            "Gore Vidal"
         ]
     }, 
     {
         "target": [
-            "Elizabeth Taylor", 
-            "Suzy Hunt", 
-            "Sally Burton", 
-            "Sybil Williams"
+            "Chocolate Factory Universe"
         ], 
         "predicted": [
-            "Mike Todd", 
-            "Elizabeth Taylor", 
-            "Sybil Williams", 
-            "Richard Burton"
+            "Jonathan Z. Smith"
         ]
     }, 
     {
         "target": [
-            "Aruban florin"
+            "Light in my Darkness", 
+            "Die Geschichte meines Lebens", 
+            "The Frost King", 
+            "The open door", 
+            "The World I Live In", 
+            "Peace at eventide", 
+            "My religion", 
+            "Jia ru gei wo san tian guang ming", 
+            "The Story of My Life", 
+            "Helen Keller, her Socialist years"
         ], 
         "predicted": [
-            "Qatar", 
-            "India"
+            "Comedian", 
+            "Radio personality", 
+            "Disc jockey", 
+            "Record producer"
         ]
     }, 
     {
         "target": [
-            "Charlottesville"
+            "Seleucid Empire"
         ], 
         "predicted": [
-            "Washington, D.C."
+            "E. J Bickerman", 
+            "Moshe Pearlman"
         ]
     }, 
     {
         "target": [
-            "Jack Coleman"
+            "Ontario"
         ], 
         "predicted": [
-            "Alan Wheatley"
+            "Presidential system", 
+            "Federal republic", 
+            "Constitutional monarchy", 
+            "Parliamentary system", 
+            "Unitary state", 
+            "Hereditary monarchy", 
+            "Constitutional republic"
         ]
     }, 
     {
         "target": [
-            "Western Mail"
+            "The complete book of the Winter Olympics"
         ], 
         "predicted": [
-            "Kings Park, Western Australia", 
-            "Barracks Arch", 
-            "Balhousie Castle", 
-            "Fremantle Prison", 
-            "Perth Concert Hall", 
-            "Aquarium of Western Australia", 
-            "Art Gallery of Western Australia", 
-            "Perth Museum and Art Gallery", 
-            "Branklyn Garden", 
-            "Adventure World", 
-            "Kirk of St. John the Baptist", 
-            "Perth Mint", 
-            "Western Australian Museum", 
-            "Yellagonga Regional Park", 
-            "Cohunu Koala Park", 
-            "Perth Zoo", 
-            "Huntingtower Castle", 
-            "Perth Leisure Pool", 
-            "Dupplin Cross", 
-            "Elcho Castle", 
-            "Perth Theatre"
+            "John Escott", 
+            "Clarisa Bell", 
+            "David Ballheimer", 
+            "Amanda Bennett", 
+            "Bill Gutman", 
+            "Allen Guttmann", 
+            "Peter Tatlow", 
+            "Chris Oxlade", 
+            "Ross Hamilton", 
+            "David Maule", 
+            "Neil Duncanson"
         ]
     }, 
     {
         "target": [
-            "Babylonia", 
-            "Babylon"
+            "Alan Garner"
         ], 
         "predicted": [
-            "Europe", 
-            "Italy", 
+            "Frank Sargeson"
+        ]
+    }, 
+    {
+        "target": [
+            "Background to Danger", 
+            "Flesh", 
+            "The Big Sleep", 
+            "The Long, Hot Summer", 
+            "To Have and Have Not", 
+            "Land of the Pharaohs", 
+            "Mildred Pierce", 
+            "Submarine Patrol", 
+            "Gunga Din", 
+            "Drums Along the Mohawk"
+        ], 
+        "predicted": [
+            "William Faulkner", 
+            "Carolyn Porter", 
+            "Joachim Hans Seyppel", 
+            "Lothar H\u00f6nnighausen", 
+            "Cleanth Brooks", 
+            "David Rampton", 
+            "Eric Mottram", 
+            "William Van O'Connor", 
+            "Louis Daniel Brodsky", 
+            "M. Thomas Inge", 
+            "Linda Wagner-Martin", 
+            "Jack Cofield", 
+            "Hyatt Howe Waggoner", 
+            "Heinrich Straumann", 
+            "Andr\u00e9 Bleikasten", 
+            "Irving Howe", 
+            "Daniel Joseph Singal", 
+            "Harold Bloom", 
+            "Richard Godden", 
+            "John Wesley Hunt"
+        ]
+    }, 
+    {
+        "target": [
+            "Boston Redskins"
+        ], 
+        "predicted": [
+            "Bob Italia", 
+            "Julian May", 
+            "Nate Leboutillier", 
+            "Thom Loverro", 
+            "Leonard Shapiro", 
+            "David Paige"
+        ]
+    }, 
+    {
+        "target": [
+            "radioIO RNB Mix"
+        ], 
+        "predicted": [
+            "Patricia Hickey", 
+            "Alfred Roy Carey"
+        ]
+    }, 
+    {
+        "target": [
+            "Bernard"
+        ], 
+        "predicted": [
+            "Germany", 
+            "France"
+        ]
+    }, 
+    {
+        "target": [
+            "Tobias Smollett", 
+            "Washington Irving", 
+            "Miguel de Cervantes", 
+            "William Wordsworth", 
+            "Honor\u00e9 de Balzac", 
+            "Henry Fielding", 
+            "Victor Hugo", 
+            "Sheridan Le Fanu", 
+            "William Shakespeare", 
+            "Laurence Sterne"
+        ], 
+        "predicted": [
+            "John Dickens", 
+            "Elizabeth Dickens"
+        ]
+    }, 
+    {
+        "target": [
+            "Canada", 
+            "German Democratic Republic", 
+            "Luxembourg", 
+            "Switzerland", 
+            "Liechtenstein", 
+            "Germany", 
+            "West Germany", 
+            "Belgium", 
+            "Vatican City", 
+            "Second Polish Republic"
+        ], 
+        "predicted": [
+            "Official"
+        ]
+    }, 
+    {
+        "target": [
+            "Croatian kuna"
+        ], 
+        "predicted": [
+            "Patricia K. Kummer", 
+            "Calvin Colton", 
+            "Dana Teen Lomax"
+        ]
+    }, 
+    {
+        "target": [
+            "Cilicia"
+        ], 
+        "predicted": [
+            "United States of America", 
+            "Netherlands", 
+            "Germany"
+        ]
+    }, 
+    {
+        "target": [
+            "Japan"
+        ], 
+        "predicted": [
+            "Joe Joseph", 
+            "John Embree"
+        ]
+    }, 
+    {
+        "target": [
+            "Bashar al-Assad"
+        ], 
+        "predicted": [
+            "Guy Walters"
+        ]
+    }, 
+    {
+        "target": [
+            "Sarah Hill"
+        ], 
+        "predicted": [
+            "Sarah Tieck"
+        ]
+    }, 
+    {
+        "target": [
+            "Topography of Terror"
+        ], 
+        "predicted": [
+            "Rob Alcraft", 
+            "Mike Hirst", 
+            "Geoff Layton", 
+            "David Chialle", 
+            "Donald S Detwiler", 
+            "Sebastian Haffner", 
+            "Risk and Insurance Research Group", 
+            "Robin Bloksberg", 
+            "Dick Bruna", 
+            "Kurt Reinhardt", 
+            "Lynne Bradbury", 
+            "Christopher Mitten", 
+            "Nan Jeffrey", 
+            "Cath Senker"
+        ]
+    }, 
+    {
+        "target": [
+            "Czech Republic", 
+            "Estonia", 
             "Denmark", 
+            "Finland", 
+            "France", 
+            "Austria", 
+            "Germany", 
+            "Belgium", 
+            "Cyprus", 
+            "Bulgaria"
+        ], 
+        "predicted": [
+            "United Kingdom", 
+            "Brazil", 
+            "Romania", 
+            "Finland", 
+            "Canada"
+        ]
+    }, 
+    {
+        "target": [
+            "E15 4HT", 
+            "W1F 0HS", 
+            "W11 3JS", 
+            "E5 8BP", 
+            "SW1P 2PD", 
+            "NW1 3HB", 
+            "E6 6ER", 
+            "W1W5BD", 
+            "WC1X 8RA", 
+            "SE1 7JW"
+        ], 
+        "predicted": [
+            "London SW20", 
+            "TN25 5AH", 
+            "London SE12", 
+            "London SE13", 
+            "London SE10", 
+            "London SE11", 
+            "London SE16", 
+            "London SE17", 
+            "London SE14", 
+            "London SE15", 
+            "London SE18", 
+            "London SE19", 
+            "London SW6", 
+            "London SW7", 
+            "London SW4", 
+            "London SW5", 
+            "London SW2", 
+            "London SW3", 
+            "London SW1", 
+            "London SW8", 
+            "London SW9", 
+            "London SW18", 
+            "London SW19", 
+            "London SW14", 
+            "London SW15", 
+            "London SW16", 
+            "London SW17", 
+            "London SW10", 
+            "London SW11", 
+            "London SW12", 
+            "London SW13", 
+            "BS8 1HH", 
+            "London SE28", 
+            "London SE23", 
+            "London SE22", 
+            "London SE21", 
+            "London SE20", 
+            "London SE27", 
+            "London SE26", 
+            "London SE25", 
+            "London SE24", 
+            "London SE8", 
+            "London SE9", 
+            "London SE1", 
+            "London SE2", 
+            "London SE3", 
+            "London SE4", 
+            "London SE5", 
+            "London SE6", 
+            "London SE7"
+        ]
+    }, 
+    {
+        "target": [
+            "2011 T\u014dhoku earthquake and tsunami"
+        ], 
+        "predicted": [
+            "Representative democracy", 
+            "Federal republic", 
+            "Constitutional monarchy", 
+            "Parliamentary system", 
+            "Unitary state", 
+            "Hereditary monarchy", 
+            "Semi-presidential system", 
+            "Constitutional republic", 
+            "Federal monarchy", 
+            "Parliamentary republic"
+        ]
+    }, 
+    {
+        "target": [
+            "Brazilian real"
+        ], 
+        "predicted": [
+            "Currency", 
+            "To Brazill"
+        ]
+    }, 
+    {
+        "target": [
+            "Film Director", 
+            "Musician", 
+            "Comedian", 
+            "Actor"
+        ], 
+        "predicted": [
+            "United Kingdom", 
+            "United States of America"
+        ]
+    }, 
+    {
+        "target": [
+            "AT&T Park"
+        ], 
+        "predicted": [
+            "Denmark", 
+            "United States of America"
+        ]
+    }, 
+    {
+        "target": [
+            "Jamaican dollar"
+        ], 
+        "predicted": [
+            "Singer", 
+            "Artist", 
+            "Songwriter", 
+            "Musician", 
+            "Film Score Composer", 
+            "Singer-songwriter", 
+            "Disc jockey", 
+            "Saxophonist"
+        ]
+    }, 
+    {
+        "target": [
+            "Arizona State University"
+        ], 
+        "predicted": [
+            "Barbara Newman", 
+            "Clayton Sedgwick Cooper", 
+            "Washington", 
+            "William Shanahan", 
+            "Margit Misangyi Watts", 
+            "Alice Freeman Palmer"
+        ]
+    }, 
+    {
+        "target": [
+            "St. Louis", 
+            "Columbus", 
+            "New Orleans", 
+            "Clarksdale", 
+            "Mississippi"
+        ], 
+        "predicted": [
+            "Spring storm", 
+            "Let Me Listen", 
+            "The two-character play", 
+            "Notebooks", 
+            "The knightly quest", 
+            "Hard candy", 
+            "Orpheus Descending", 
+            "The mutilated", 
+            "Hard Candy: A Book of Stories", 
+            "Mister Paradise and other one-act plays", 
+            "The Rose Tattoo", 
+            "You touched me!", 
+            "The selected letters of Tennessee Williams", 
+            "A House Not Meant to Stand", 
+            "The Roman spring of Mrs. Stone", 
+            "The remarkable rooming-house of Mme. Le Monde", 
+            "Three players of a summer game and other stories", 
+            "One arm, and other stories", 
+            "Moise and the world of reason", 
+            "Grand", 
+            "Camino Real", 
+            "Plays", 
+            "Stopped rocking and other screenplays", 
+            "Where I live", 
+            "Period of Adjustment", 
+            "The Catastrophe of Success", 
+            "American blues", 
+            "Small Craft Warnings", 
+            "The Night of the Iguana", 
+            "A Streetcar Named Success", 
+            "Out cry", 
+            "Stairs to the Roof", 
+            "Cat on a Hot Tin Roof", 
+            "I rise in flame, cried the Phoenix", 
+            "Three by Tennessee", 
+            "Androgyne, mon amour", 
+            "A lovely Sunday for Creve Coeur", 
+            "The Milk Train Doesn't Stop Here Anymore", 
+            "The Gna\u0308diges Fra\u0308ulein", 
+            "Clothes for a Summer Hotel", 
+            "I Can't Imagine Tomorrow", 
+            "Kingdom of earth", 
+            "Vieux Carre\u0301", 
+            "Three plays: The rose tattoo, Camino Real, Sweet bird of youth", 
+            "Steps must be gentle", 
+            "A Streetcar Named Desire", 
+            "Eight mortal ladies possessed", 
+            "The Gnadiges Fraulein", 
+            "The Red Devil Battery Sign", 
+            "The Seven Descents of Myrtle", 
+            "Candles to the sun", 
+            "In the winter of cities", 
+            "Eight plays", 
+            "Cab chwant", 
+            "Battle of angels", 
+            "One arm", 
+            "The enemy, time", 
+            "Something Cloudy, Something Clear", 
+            "27 wagons full of cotton", 
+            "The Glass Menagerie", 
+            "Summer at the Lake", 
+            "Five o'clock angel", 
+            "Conversations with Tennessee Williams", 
+            "Not About Nightingales", 
+            "Talk to Me Like the Rain", 
+            "Memoirs", 
+            "Suddenly, Last Summer", 
+            "A perfect analysis given by a parrot", 
+            "This Property is Condemned", 
+            "Dragon Country", 
+            "Summer and Smoke", 
+            "Baby doll", 
+            "The theatre of Tennessee Williams", 
+            "The Mutilated", 
+            "Collected stories", 
+            "Sweet Bird of Youth", 
+            "Milk train doesn't stop here any more", 
+            "The collected poems of Tennessee Williams", 
+            "The Notebook of Trigorin", 
+            "Selected plays", 
+            "Fugitive kind", 
+            "The Last Day Of My Solid Gold Watches"
+        ]
+    }, 
+    {
+        "target": [
+            "Robert Griffin III"
+        ], 
+        "predicted": [
+            "Finland", 
             "United States of America", 
             "United Kingdom", 
-            "Belgium", 
-            "Earth"
+            "Germany", 
+            "Japan", 
+            "New Zealand"
         ]
     }, 
     {
         "target": [
-            "Happily Married Man", 
-            "Goin' Down Slow", 
-            "Mean Old World (feat. Duane Allman)", 
-            "Have You Ever Loved a Woman (feat. Duane Allman)", 
-            "Mean Old World", 
-            "Black Hearted Woman", 
-            "No Money Down", 
-            "Trouble No More"
+            "Paul Fusco"
         ], 
         "predicted": [
-            "Guitar", 
-            "slide guitar"
+            "Australia", 
+            "Poland", 
+            "United States of America", 
+            "France", 
+            "United Kingdom", 
+            "Germany", 
+            "Japan", 
+            "South Korea", 
+            "Spain"
         ]
     }, 
     {
         "target": [
-            "Tunisia"
+            "University of Alabama"
+        ], 
+        "predicted": [
+            "American football player", 
+            "Actor"
+        ]
+    }, 
+    {
+        "target": [
+            "Every 4 Years"
+        ], 
+        "predicted": [
+            "Israel", 
+            "Australia", 
+            "United States of America", 
+            "France", 
+            "United Kingdom", 
+            "Germany", 
+            "Belgium", 
+            "Japan"
+        ]
+    }, 
+    {
+        "target": [
+            "Springfield Elementary School", 
+            "Springfield High School"
+        ], 
+        "predicted": [
+            "Film Producer", 
+            "Film Director"
+        ]
+    }, 
+    {
+        "target": [
+            "Angola", 
+            "Sudan", 
+            "United States of America", 
+            "Wellington", 
+            "Mozambique", 
+            "Laos", 
+            "Yemen"
+        ], 
+        "predicted": [
+            "Donna Jo Napoli", 
+            "Nora Roberts", 
+            "Margaret Deland", 
+            "Lynn M. Stone", 
+            "Carol Sturm Smith", 
+            "Ronald S Brandt"
+        ]
+    }, 
+    {
+        "target": [
+            93021, 
+            93020
+        ], 
+        "predicted": [
+            "Moorpark College", 
+            "Arroyo Vista Community Park"
+        ]
+    }, 
+    {
+        "target": [
+            "The End Of Time"
         ], 
         "predicted": [
             "United Kingdom", 
             "Australia", 
-            "United States of America"
+            "United States of America", 
+            "France"
         ]
     }, 
     {
         "target": [
-            "Lojban", 
-            "Esperanto Language", 
-            "English Language"
+            "Assisted suicide"
         ], 
         "predicted": [
-            "CCNY Beavers men's basketball", 
-            "New York Giants", 
-            "New York Mets", 
-            "New York Golden Blades", 
-            "New York Knicks", 
-            "New York Rangers", 
-            "New York Yankees"
+            "Douglas kent hall"
         ]
     }, 
     {
         "target": [
-            "Argentina national football team"
+            "United Kingdom"
         ], 
         "predicted": [
-            "Film Producer", 
-            "Pornographic actor"
+            "County Tyrone", 
+            "Rhondda Cynon Taf", 
+            "fife", 
+            "Bridgend County Borough", 
+            "Outer Hebrides", 
+            "Aberdeenshire", 
+            "Flintshire", 
+            "Dundee", 
+            "Blaenau Gwent", 
+            "Renfrewshire", 
+            "Argyll and Bute", 
+            "Denbighshire", 
+            "Yorkshire and the Humber", 
+            "Midlothian", 
+            "South Lanarkshire", 
+            "Swansea", 
+            "Glasgow", 
+            "East Dunbartonshire", 
+            "Edinburgh", 
+            "East Lothian", 
+            "Perth and Kinross", 
+            "Carmarthenshire", 
+            "Clackmannanshire", 
+            "East Renfrewshire", 
+            "Neath Port Talbot", 
+            "County Armagh", 
+            "East Ayrshire", 
+            "County Antrim", 
+            "Stirling", 
+            "Merthyr Tydfil", 
+            "West Dunbartonshire", 
+            "County Down", 
+            "Torfaen", 
+            "Pembrokeshire", 
+            "South East England", 
+            "Inverclyde", 
+            "Angus", 
+            "Dumfries and Galloway", 
+            "West Lothian", 
+            "Caerphilly County Borough", 
+            "Shetland", 
+            "Ceredigion", 
+            "North East England", 
+            "Scottish Borders", 
+            "Newport", 
+            "Wrexham County Borough", 
+            "Highland", 
+            "County Fermanagh", 
+            "East Midlands", 
+            "Moray", 
+            "West Midlands", 
+            "Powys", 
+            "Monmouthshire", 
+            "North Ayrshire", 
+            "Orkney", 
+            "Falkirk", 
+            "Londonderry", 
+            "South West England", 
+            "Anglesey", 
+            "Conwy County Borough", 
+            "Gwynedd", 
+            "North Lanarkshire", 
+            "Vale of Glamorgan", 
+            "South Ayrshire", 
+            "North West England", 
+            "Cardiff", 
+            "East of England", 
+            "Aberdeen", 
+            "Greater London"
         ]
     }, 
     {
         "target": [
-            "St. Louis Rams"
+            "Metro Detroit"
         ], 
         "predicted": [
-            "Sue Bradford", 
-            "Martha Bradford", 
-            "Kent Bradford"
+            "B. L. K. Henderson", 
+            "Owen Wister"
         ]
     }, 
     {
         "target": [
-            "Seattle Pilots"
+            "Africa"
         ], 
         "predicted": [
-            "United Kingdom", 
-            "Germany", 
-            "Argentina", 
-            "United States of America"
+            "Marina Ottaway", 
+            "Jonathan Moberly", 
+            "Stuart Cloete", 
+            "Lenard J. Cohen", 
+            "Elaine Hurford", 
+            "Martin J. Murray", 
+            "Kevin Danaher", 
+            "Christina Muwanga", 
+            "John Barraclough", 
+            "David Bristow", 
+            "Fodor's", 
+            "Tony Pinchuck", 
+            "Garrett Nagle", 
+            "Lucia Raatma", 
+            "August Sycholt", 
+            "Graham Leach", 
+            "Kate Poole", 
+            "Richard Buckley", 
+            "Barbara McCrea"
         ]
     }, 
     {
         "target": [
-            "Los Angeles County"
+            "Dana Delany", 
+            "Anne Heche", 
+            "Kate Bosworth", 
+            "Amy Adams", 
+            "Margot Kidder"
         ], 
         "predicted": [
-            "City of Lancaster", 
-            "Lancaster railway station", 
-            "South Glengarry, Ontario"
+            "Scott McCloud"
         ]
     }, 
     {
         "target": [
-            "Opera", 
-            "Classical music", 
-            "Romantic music"
+            "Esperanza Andrade"
         ], 
         "predicted": [
-            "University of Leipzig"
-        ]
-    }, 
-    {
-        "target": [
-            "French Polynesia"
-        ], 
-        "predicted": [
-            "Bora Bora Airport"
-        ]
-    }, 
-    {
-        "target": [
-            "God"
-        ], 
-        "predicted": [
-            "York Lions", 
-            "Toronto Huskies", 
-            "Toronto Rock", 
-            "Toronto R.C.A.F. Hurricanes", 
-            "Toronto Toros", 
-            "Toronto Blue Ice Jets", 
-            "Ryerson Rams", 
-            "Toronto Knob Hill Farms", 
-            "Toronto Rebellion", 
-            "Toronto Blue Jays", 
-            "Toronto Beaches", 
-            "Toronto Native Sons", 
-            "Toronto Arenas", 
-            "Toronto Marlboros", 
-            "Toronto Lions", 
-            "Toronto Croatia", 
-            "Toronto Tecumsehs", 
-            "Toronto Welsh RFC", 
-            "Toronto RCAF Hurricanes", 
-            "Toronto Parkdale", 
-            "Toronto Lynx", 
-            "Toronto Rifles", 
-            "West Toronto Nationals", 
-            "Toronto FC", 
-            "Toronto St. Patricks", 
-            "Toronto Aura Lee", 
-            "Morton FC Toronto", 
-            "Toronto Jr. Canadiens", 
-            "Toronto Raptors", 
-            "Toronto Argonauts", 
-            "Toronto Irish F.C.", 
-            "Hamilton Nationals", 
-            "Toronto Awaba Stags FC", 
-            "Toronto Marlies", 
-            "Toronto Falcons", 
-            "Toronto Varsity Blues", 
-            "Toronto Granites", 
-            "Toronto Indians", 
-            "Toronto Neil McNeil Maroons", 
-            "Toronto Inferno", 
-            "Toronto Balmy Beach Beachers", 
-            "Toronto Maple Leafs", 
-            "Toronto City", 
-            "Toronto Aeros", 
-            "Toronto Young Rangers", 
-            "GOAT"
-        ]
-    }, 
-    {
-        "target": [
-            "Colorado"
-        ], 
-        "predicted": [
-            "United Kingdom", 
-            "Germany", 
-            "United States of America"
-        ]
-    }, 
-    {
-        "target": [
-            "Toy Group"
-        ], 
-        "predicted": [
-            "London", 
-            "Washington, D.C."
-        ]
-    }, 
-    {
-        "target": [
-            "\u00c9milie Heymans", 
-            "Blythe Hartley"
-        ], 
-        "predicted": [
-            "Slovakia"
+            "Federal Writers' Project", 
+            "Jim Bones", 
+            "James Killoran", 
+            "Bill Cannon", 
+            "Mary Austin Holley", 
+            "James A. Michener"
         ]
     }, 
     {
@@ -801,92 +1447,388 @@
             "Congestive Heart Failure"
         ], 
         "predicted": [
-            "University of Alabama"
+            "Television Producer", 
+            "Singer-songwriter", 
+            "Film Producer", 
+            "Musician", 
+            "Actor", 
+            "Composer", 
+            "Pianist", 
+            "Record producer"
         ]
     }, 
     {
         "target": [
-            "Major League Baseball"
+            "2012 Stanley Cup Finals"
         ], 
         "predicted": [
-            "Madagascar", 
-            "Guinea", 
-            "Vanuatu", 
-            "Qatar", 
-            "Luxembourg", 
-            "France", 
-            "Rwanda", 
-            "Laos", 
-            "Cameroon", 
-            "Burkina Faso", 
-            "Benin", 
-            "South Vietnam", 
-            "Holy Roman Empire", 
-            "Djibouti", 
-            "Martinique", 
+            "William McGuire", 
+            "John Devaney", 
+            "Don Weekes", 
+            "Jonathan Bliss", 
+            "Syd Hoff", 
+            "D'Arcy Jenish"
+        ]
+    }, 
+    {
+        "target": [
+            "Saudi Arabia"
+        ], 
+        "predicted": [
+            "Adam Robinson", 
+            "Yossef Bodansky", 
+            "Trevor Griffiths", 
+            "Tim Flannery"
+        ]
+    }, 
+    {
+        "target": [
+            "AirTran Airways", 
+            "SkyWest, Inc."
+        ], 
+        "predicted": [
+            "Ron Bunney", 
+            "Ann Casement", 
+            "Susan Scafidi", 
+            "Benjamin M. Compaine", 
+            "Jaron Lanier", 
+            "Thomas Alured Faunce", 
+            "Eyo Okon Akak", 
+            "Labour Department", 
+            "J. [video] Riffe", 
+            "Eric Foner", 
+            "John Spiers", 
+            "Stanley A. Ellisen", 
+            "Shirley Green"
+        ]
+    }, 
+    {
+        "target": [
+            "Malay Language", 
+            "Tamil Language", 
+            "Standard Mandarin", 
+            "English Language"
+        ], 
+        "predicted": [
+            "Canada", 
+            "Germany", 
+            "United States of America", 
+            "United Kingdom"
+        ]
+    }, 
+    {
+        "target": [
+            "Paris"
+        ], 
+        "predicted": [
+            "Singer", 
+            "Performer", 
+            "Songwriter", 
+            "Photographer", 
+            "Musician", 
+            "Rapper", 
+            "Actor", 
+            "Master of Ceremonies", 
+            "Multi-instrumentalist", 
+            "Singer-songwriter", 
+            "Disc jockey", 
+            "Record producer", 
+            "Teacher"
+        ]
+    }, 
+    {
+        "target": [
+            "Wolfsonian-FIU", 
+            "Lowe Art Museum", 
+            "Holocaust Memorial of the Greater Miami Jewish Federation", 
+            "Miami Art Museum", 
+            "Frost Art Museum", 
+            "Coral Castle", 
+            "Jewish Museum of Florida", 
+            "Jungle Island", 
+            "Miami Seaquarium", 
+            "Venetian Pool"
+        ], 
+        "predicted": [
+            "Miami", 
+            "Miami (South Beach mix)", 
+            "Miami (Miami mix)"
+        ]
+    }, 
+    {
+        "target": [
+            "W San Francisco", 
+            "Hostelling International, City Center", 
+            "Palace Hotel, San Francisco", 
+            "Clift"
+        ], 
+        "predicted": [
+            "San Francisco", 
+            "San Francisco (You've Got Me)"
+        ]
+    }, 
+    {
+        "target": [
+            "Funny People", 
+            "Anger Management", 
+            "Happy Gilmore", 
+            "Big Daddy", 
+            "50 First Dates", 
+            "Click", 
+            "Bulletproof", 
+            "Billy Madison", 
+            "Eight Crazy Nights", 
+            "Airheads"
+        ], 
+        "predicted": [
+            "Presidential system", 
+            "Federal republic", 
+            "Unitary state", 
+            "Representative democracy", 
+            "Liberal democracy", 
+            "Constitutional republic", 
+            "Parliamentary republic"
+        ]
+    }, 
+    {
+        "target": [
+            "Newfoundland"
+        ], 
+        "predicted": [
+            "Representative democracy", 
+            "Democracy", 
+            "Presidential system", 
+            "Monarchy", 
+            "Federal republic", 
+            "Unitary state", 
+            "Parliamentary system", 
+            "Federacy", 
+            "Constitutional monarchy", 
+            "Hereditary monarchy", 
+            "Constitutional republic", 
+            "Parliamentary republic"
+        ]
+    }, 
+    {
+        "target": [
+            "Peter Griffin", 
+            "Mickey McFinnegan", 
+            "Stewie Griffin", 
+            "Jake Tucker", 
+            "Glenn Quagmire", 
+            "Carter Pewterschmidt", 
+            "Stan Smith", 
+            "Tom Tucker", 
+            "Kevin Swanson", 
+            "Brian Griffin"
+        ], 
+        "predicted": [
+            "Rapper"
+        ]
+    }, 
+    {
+        "target": [
+            "Philippine peso"
+        ], 
+        "predicted": [
+            "Lucile Davis", 
+            "Elma Schemenauer", 
+            "William J Pomeroy", 
+            "James K. Boyce", 
+            "Frederick King Poole", 
+            "Gail Stewart", 
+            "Felix Maxwell Keesing", 
+            "Alfred Yuson", 
+            "Leonard Davis", 
+            "Colin Mason", 
+            "Campbell Dauncey", 
+            "Charlie Pye-Smith", 
+            "Joseph Collins", 
+            "Robert Baldwin", 
+            "Nelson A. Miles", 
+            "World Bank", 
+            "Walter G. Oleksy"
+        ]
+    }, 
+    {
+        "target": [
+            "Muslims"
+        ], 
+        "predicted": [
+            "Italy", 
+            "United States of America", 
+            "United Kingdom", 
+            "Germany", 
             "Belgium", 
-            "Haiti", 
-            "Dominica", 
-            "C\u00f4te d\u2019Ivoire", 
-            "Central African Republic", 
-            "Mauritius", 
-            "Morocco", 
-            "Gabon", 
-            "Cambodia", 
-            "Mali", 
-            "Switzerland", 
-            "Vatican City", 
-            "Monaco", 
-            "Jersey", 
-            "Seychelles", 
-            "Chad", 
-            "Equatorial Guinea", 
-            "Tunisia", 
-            "Lebanon", 
-            "Senegal", 
-            "Congo", 
-            "Burundi", 
-            "Niger", 
-            "Cyprus", 
-            "Comoros", 
-            "Barbados"
+            "Japan"
         ]
     }, 
     {
         "target": [
-            "139-799"
+            "Wadham College, Oxford", 
+            "Christ Church, Oxford", 
+            "University of Oxford", 
+            "Westminster School"
         ], 
         "predicted": [
-            "Busan International Film Festival", 
-            "Namsan", 
-            "Busanjinjiseong", 
-            "Haeundae Beach", 
-            "Yongdusan Park", 
-            "National Folk Museum of Korea", 
-            "Seokguram", 
-            "Gyeonggi Provincial Museum", 
-            "Deoksugung", 
-            "Chungnyeolsa", 
-            "Cheonggyecheon", 
-            "Gwangalli Beach", 
-            "Beomeosa", 
-            "Seoraksan National Park", 
-            "Changgyeonggung", 
-            "Busan Aquarium", 
-            "Ultra Architecture Museum", 
-            "Gyeongbokgung", 
-            "Gwanghwamun", 
-            "Haedong Yonggung temple", 
-            "Gyeongju National Museum", 
-            "Lotte World", 
-            "National Museum of Korea", 
-            "Cheonjiyeon Waterfall", 
-            "Seoul Museum of Art", 
-            "War Memorial of Korea", 
-            "Bulguksa", 
-            "Seodaemun Prison", 
-            "Taejongdae", 
-            "N Seoul Tower"
+            "Margaret 'Espinasse", 
+            "Bertrand Russell", 
+            "Mary Williams"
+        ]
+    }, 
+    {
+        "target": [
+            "United States of America"
+        ], 
+        "predicted": [
+            "David McCullough", 
+            "Monte Burch", 
+            "Roy Jenkins"
+        ]
+    }, 
+    {
+        "target": [
+            "Artistic gymnastics"
+        ], 
+        "predicted": [
+            "Singer"
+        ]
+    }, 
+    {
+        "target": [
+            "Orlando Magic"
+        ], 
+        "predicted": [
+            "South Africa", 
+            "United States of America", 
+            "France", 
+            "United Kingdom", 
+            "Germany", 
+            "Japan"
+        ]
+    }, 
+    {
+        "target": [
+            "North America"
+        ], 
+        "predicted": [
+            "Constitutional republic", 
+            "Presidential system", 
+            "Federal republic"
+        ]
+    }, 
+    {
+        "target": [
+            "Islamic republic", 
+            "Theocracy", 
+            "Unitary state"
+        ], 
+        "predicted": [
+            "Singer-songwriter"
+        ]
+    }, 
+    {
+        "target": [
+            "Kuwait"
+        ], 
+        "predicted": [
+            "J. C. Hurewitz", 
+            "Willem Floor", 
+            "Majid Khadduri", 
+            "Henry Holden", 
+            "Suzanne J. Murdico", 
+            "Barry Sadler", 
+            "Michael McKinley", 
+            "Edgar O'Ballance", 
+            "Andrew Santella", 
+            "Christopher C Joyner", 
+            "David Long", 
+            "Terry Manners", 
+            "Rodney P Carlisle", 
+            "Bill Berkowitz", 
+            "K. L. Chanchreek", 
+            "Herodotus", 
+            "Don Nardo", 
+            "Anthony A. Evans"
+        ]
+    }, 
+    {
+        "target": [
+            "England"
+        ], 
+        "predicted": [
+            "Pianist", 
+            "Musician"
+        ]
+    }, 
+    {
+        "target": [
+            "United States of America"
+        ], 
+        "predicted": [
+            "Constitutional republic", 
+            "Presidential system", 
+            "Federal republic"
+        ]
+    }, 
+    {
+        "target": [
+            "German Democratic Republic"
+        ], 
+        "predicted": [
+            "Rob Alcraft", 
+            "Jason Wright", 
+            "Werner Haas", 
+            "B. Donaldson", 
+            "Bruce Donaldson", 
+            "Heimy Taylor"
+        ]
+    }, 
+    {
+        "target": [
+            "isaac newton co-developed calculus with gottfried wilhelm leibniz"
+        ], 
+        "predicted": [
+            "Brandon Robshaw", 
+            "Richard Westfall", 
+            "Mario Livio", 
+            "Peter Limm", 
+            "John North", 
+            "James Gleick", 
+            "Paul Mason", 
+            "William J. Boerst", 
+            "Katie Kubesh", 
+            "Niki Mcneil", 
+            "Rochelle Scholar", 
+            "John Tiner", 
+            "Kathleen Krull", 
+            "Kimm Bellotto", 
+            "Albert Einstein", 
+            "Henry Crew"
+        ]
+    }, 
+    {
+        "target": [
+            "Limerick", 
+            "Shannon, County Clare", 
+            "Athlone"
+        ], 
+        "predicted": [
+            "Songwriter", 
+            "Singer", 
+            "Musician", 
+            "Singing"
+        ]
+    }, 
+    {
+        "target": [
+            "Saint Michael Parish", 
+            "Barbados"
+        ], 
+        "predicted": [
+            "Rihanna", 
+            "Sandy Turner", 
+            "Dana Meachen Rau"
         ]
     }
 ]

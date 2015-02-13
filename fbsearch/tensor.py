@@ -17,18 +17,18 @@ STOPWORDS = {'what', 'is', 'the', 'of', 'to'}
     
 
 class TensorSystem(object):
-    def __init__(self):
+    def __init__(self, oracle_class=OracleSystem):
         self.random = random.Random(1)
         self.connector = Connector()
         self.possible_connections = None
+        self.oracle_class = oracle_class
 
     def train(self, train_set):
         logger.info("Converting features to list")
         features = []
         values = []
 
-        oracle = OracleSystem(train_set)
-        all_query_tokens = []
+        oracle = self.oracle_class(train_set)
         all_connections = []
         for query, target in train_set:
             _, connection = oracle.get_best_results_and_connection(query)
@@ -36,33 +36,51 @@ class TensorSystem(object):
                 continue
 
             all_connections.append(connection)
-            query_tokens = self.get_sentence_features(query)
-            all_query_tokens.append(query_tokens)
-            logger.debug("Query tokens: %r, connection: %r", query_tokens, connection)
 
         self.possible_connections = list(set(all_connections))
+        logger.info("Found %d possible connections in training set of size %d",
+                    len(self.possible_connections), len(train_set))
 
-        # Positive features
-        features = self.make_features(all_query_tokens, all_connections)
+        values = []
+        all_features = []
+        for query, target in train_set:
+            query_tokens = self.get_sentence_features(query)
+            for connection in self.possible_connections:
+                result = self.connector.apply_connection(
+                    query, connection)
+                correct_results = set(result) & set(target)
+                logger.debug("Found %d correct results", len(correct_results))
+                value = 1 if len(correct_results) > 0 else 0
+                features = self.get_query_connection_features(query_tokens, connection)                
+                values.append(value)
+                all_features.append(features)
+
+        # # Positive features
+        # features = self.make_features(all_query_tokens, all_connections)
         
-        # Negative features
-        random.shuffle(all_connections)
-        features += self.make_features(all_query_tokens, all_connections)
+        # # Negative features
+        # duplicates = 1
+        # for i in range(duplicates):
+        #     random.shuffle(all_connections)
+        #     features += self.make_features(all_query_tokens, all_connections)
 
-        values = [1]*len(all_query_tokens) + [0]*len(all_query_tokens)
+        # values = [1]*len(all_query_tokens) + [0]*(len(all_query_tokens)*duplicates)
 
-        logger.info("Training - building vectors")
+        logger.info("Training - building vectors with %d features", len(all_features))
         self.vectorizer = DictVectorizer()
-        vectors = self.vectorizer.fit_transform(features)
+        vectors = self.vectorizer.fit_transform(all_features)
 
 
         logger.info("Training classifier")
-        svm = LinearSVC()
+        #svm = LinearSVC(random_state=1, tol=1e-5)
+        svm = LinearSVC(tol=1e-6)
 
         parameters = {'C': [0.1, 1.0, 10.0, 100.0]}
         self.classifier = GridSearchCV(svm, parameters, scoring='f1')
 
         self.classifier.fit(vectors, values)
+        logger.info("Best score in cross validation: %f", self.classifier.best_score_)
+
         self.classifier = self.classifier.best_estimator_
 
         logger.info("SVM classes: %r", self.classifier.classes_)
@@ -75,13 +93,14 @@ class TensorSystem(object):
         logger.info("Finished training")
         
     def make_features(self, all_query_tokens, all_connections):
-        return [self.get_tensor_features(query_tokens, connection)
+        return [self.get_query_connection_features(query_tokens, connection)
                 for query_tokens, connection in zip(all_query_tokens, all_connections)]
 
     def execute(self, query):
         logger.debug("Executing query: %r", query)
         query_features = self.get_sentence_features(query)
-        all_features = [self.get_tensor_features(query_features, connection)
+        logger.debug("Query features: %r", query_features)
+        all_features = [self.get_query_connection_features(query_features, connection)
                         for connection in self.possible_connections]
         vectors = self.vectorizer.transform(all_features)
         predictions = self.classifier.decision_function(vectors)
@@ -89,6 +108,7 @@ class TensorSystem(object):
 
         for i in best_indices:
             connection = self.possible_connections[i]
+            logger.debug("Score: %f for connection %r", predictions[i], connection)
             result = self.connector.apply_connection(
                 query, connection)
             logger.debug("Searching for best connection, index: %d, connection: %r, result: %r",
@@ -96,6 +116,9 @@ class TensorSystem(object):
             if len(result) > 0:
                 return result
         return set()
+
+    def get_query_connection_features(self, query, connection):
+        return self.get_tensor_features(query, [':'.join(connection)])
 
     def get_tensor_features(self, source_tokens, target_tokens):
         features = []
