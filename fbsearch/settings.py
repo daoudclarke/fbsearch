@@ -1,5 +1,5 @@
 
-DATASET_PATH = '/home/dc/Experiments/sempre/lib/data/webquestions/dataset_11/webquestions.examples.train.json'
+DATASET_PATH = '/home/d/dc/dc34/scratch/sempre/lib/data/webquestions/dataset_11/webquestions.examples.train.json'
 
 RESULTS_PATH = 'target_predicted.json'
 
