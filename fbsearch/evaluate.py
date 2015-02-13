@@ -32,17 +32,15 @@ if __name__ == "__main__":
     dataset_file = open(settings.DATASET_PATH)
     dataset = get_dataset(dataset_file)
     cached_oracle = CachedOracleSystem(dataset)
-    dataset = [(query, targets) for query, targets in dataset
-               if query in cached_oracle.queries]
     random.shuffle(dataset)
 
     logger.info("Training")
-    train_set = dataset[:500]
+    train_set = dataset[:2500]
     system = TensorSystem(CachedOracleSystem)
     system.train(train_set)
 
     logger.info("Testing")
-    test_set = dataset[2500:2600]
+    test_set = dataset[2500:]
     results = get_target_and_predicted_values(test_set, system)
     save(results, settings.RESULTS_PATH)
     system.connector.searcher.save_cache()
