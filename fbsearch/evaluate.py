@@ -44,5 +44,6 @@ if __name__ == "__main__":
     logger.info("Testing")
     test_set = dataset[2500:3000]
     results = get_target_and_predicted_values(test_set, system)
-    save(results, settings.RESULTS_PATH)    
+    save(results, settings.RESULTS_PATH)
+    system.connector.searcher.save_cache()
     analyse()

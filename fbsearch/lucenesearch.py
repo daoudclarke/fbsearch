@@ -14,6 +14,7 @@ from org.apache.lucene.util import Version
 
 import Levenshtein
 
+import json
 import sys
 import re
 
@@ -49,11 +50,20 @@ class LuceneSearcher(object):
         self.analyzer = StandardAnalyzer(Version.LUCENE_CURRENT)
         logger.info("Loaded DB from %s with %d documents: ",
                     db_path, reader.numDocs())
+        try:
+            with open(settings.QUERY_ENTITY_CACHE_PATH) as cache_file:
+                self.query_entity_cache = json.load(cache_file)
+        except IOError:
+            self.query_entity_cache = {}
 
     def query_search(self, query):
         """
         Find entities that are contained as substrings in the query.
         """
+        result = self.query_entity_cache.get(query)
+        if result is not None:
+            logger.debug("Found entities in query cache")
+            return result
         logger.debug("Getting query entities")
         query_terms = [term for term in query.split() if term not in STOPWORDS]
         if len(query_terms) == 1:
@@ -65,8 +75,10 @@ class LuceneSearcher(object):
             docs = self.search(subquery)
             distances = [(edit_distance(doc['text'], unicode(query)), doc) for doc in docs]
             all_entities += distances
-        logger.debug("Found %d entities", len(all_entities))
-        return sorted(all_entities)
+        logger.debug("Found %d entities, caching", len(all_entities))
+        result = sorted(all_entities)
+        self.query_entity_cache[query] = result
+        return result
         
     def search(self, query, max_matches=100):
         query = VALID_CHARS_PATTERN.sub(' ', query)
@@ -82,7 +94,10 @@ class LuceneSearcher(object):
         
     def convert_to_dict(self, doc):
         return {field: doc.get(field) for field in self.fields}
-        
+
+    def save_cache(self):
+        with open(settings.QUERY_ENTITY_CACHE_PATH, 'w') as cache_file:
+            json.dump(self.query_entity_cache, cache_file, indent=4)
 
 if __name__ == '__main__':
     print 'lucene', lucene.VERSION

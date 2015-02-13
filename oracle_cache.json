@@ -1381,8 +1381,6 @@
 {"query": "what is julia gillard famous for?", "connection": ["http://rdf.freebase.com/ns/government.politician.government_positions_held", "http://rdf.freebase.com/ns/government.government_position_held.basic_title"], "results": ["Prime minister", "Member of Parliament", "Deputy prime minister"], "target": ["Prime minister"]}
 {"query": "what did kourtney kardashian go to college for?", "connection": ["http://rdf.freebase.com/ns/people.person.education", "http://rdf.freebase.com/ns/education.education.major_field_of_study"], "results": ["Theatre"], "target": ["Theatre"]}
 {"query": "what are the four official languages of nigeria?", "connection": ["http://rdf.freebase.com/ns/music.recording.artist", "http://rdf.freebase.com/ns/people.person.languages"], "results": ["English Language"], "target": ["English Language"]}
-<<<<<<< HEAD
-=======
 {"query": "where is bergen belsen concentration camp located?", "connection": ["http://rdf.freebase.com/ns/location.location.containedby"], "results": ["Germany"], "target": ["Germany"]}
 {"query": "who was louis xvi?", "connection": ["http://rdf.freebase.com/ns/royalty.noble_person.titles", "http://rdf.freebase.com/ns/royalty.noble_title_tenure.noble_title"], "results": ["King of Navarre", "Duke of Normandy", "King of France"], "target": ["King of France"]}
 {"query": "what was the name of tecumseh brother?", "connection": ["http://rdf.freebase.com/ns/people.person.sibling_s", "http://rdf.freebase.com/ns/people.sibling_relationship.sibling"], "results": ["Tenskwatawa", "Tecumseh"], "target": ["Tenskwatawa"]}
@@ -2878,4 +2876,3 @@
 {"query": "what language do cyprus speak?", "connection": null, "results": [], "target": ["Greek Language", "Turkish Language"]}
 {"query": "where does fabio aurelio play?", "connection": null, "results": [], "target": ["Gr\u00eamio Foot-Ball Porto Alegrense", "Liverpool F.C."]}
 {"query": "what war did george washington help win?", "connection": ["http://rdf.freebase.com/ns/film.film_subject.films", "http://rdf.freebase.com/ns/film.film.subjects"], "results": ["George Washington", "American Revolutionary War", "Battle of Trenton", "George Washington's crossing of the Delaware River"], "target": ["American Revolutionary War"]}
->>>>>>> 31257d3785cf579281cf91ecf4455c60ff4ec1ad

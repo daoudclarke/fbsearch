@@ -42,6 +42,8 @@ class TensorSystem(object):
             logger.debug("Query tokens: %r, connection: %r", query_tokens, connection)
 
         self.possible_connections = list(set(all_connections))
+        logger.info("Found %d possible connections in training set of size %d",
+                    len(self.possible_connections), len(train_set))
 
         # Positive features
         features = self.make_features(all_query_tokens, all_connections)
