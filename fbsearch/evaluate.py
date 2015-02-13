@@ -46,4 +46,5 @@ if __name__ == "__main__":
     results = get_target_and_predicted_values(test_set, system)
     save(results, settings.RESULTS_PATH)
     system.connector.searcher.save_cache()
+    system.connector.save_cache()
     analyse()

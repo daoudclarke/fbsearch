@@ -19,6 +19,11 @@ class Connector(object):
     def __init__(self):
         self.related = RelatedEntities()
         self.searcher = LuceneSearcher(settings.LUCENE_PATH)
+        try:
+            with open(settings.CONNECTION_CACHE_PATH) as cache_file:
+                self.connection_cache = json.load(cache_file)
+        except IOError:
+            self.connection_cache = {}
 
     def get_query_entities(self, query):
         return [result[1]['id'] for result in self.searcher.query_search(query)[:50]]
@@ -40,17 +45,31 @@ class Connector(object):
         return all_connections
 
     def apply_connection(self, query, connection):
+        results = self.connection_cache.get(get_cache_key(query, connection))
+        if results is not None:
+            logger.debug("Found %d results in cache", len(results))
+            return set(results)
         query_entities = self.get_query_entities(query)
         if len(query_entities) == 0:
             return set()
         result_ids = self.related.apply_connection(query_entities, connection)
-        return set(self.related.get_names(result) for result in result_ids)
+        results = set(self.related.get_names(result) for result in result_ids)
+        logger.debug("Found %d results, caching", len(results))
+        self.connection_cache[get_cache_key(query, connection)] = list(results)
+        return results
+
+    def save_cache(self):
+        with open(settings.CONNECTION_CACHE_PATH, 'w') as cache_file:
+            json.dump(self.connection_cache, cache_file, indent=4)
 
 def symbol_to_string(symbol):
     try:
         return symbol.value()
     except AttributeError:
         return symbol
+
+def get_cache_key(query, connection):
+    return '___'.join([query, '|'.join(connection)])
 
 if __name__ == "__main__":
     connector = Connector()
