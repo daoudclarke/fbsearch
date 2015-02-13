@@ -48,7 +48,9 @@ class TensorSystem(object):
             for connection in self.possible_connections:
                 result = self.connector.apply_connection(
                     query, connection)
-                value = 1 if len(result) > 0 else 0
+                correct_results = set(result) & set(target)
+                logger.debug("Found %d correct results", len(correct_results))
+                value = 1 if len(correct_results) > 0 else 0
                 features = self.get_query_connection_features(query_tokens, connection)                
                 values.append(value)
                 all_features.append(features)
