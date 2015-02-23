@@ -24,25 +24,39 @@ if __name__ == "__main__":
     from fbsearch.tensor import TensorSystem
     from fbsearch.dataset import get_dataset
     from fbsearch import settings
+    from fbsearch.analyse import get_f1_score
     from random import Random
     from log import logger
+    import json
 
     random = Random(1)
 
     dataset_file = open(settings.DATASET_PATH)
     dataset = get_dataset(dataset_file)
     cached_oracle = CachedOracleSystem(dataset)
-    random.shuffle(dataset)
+    #random.shuffle(dataset)
 
     logger.info("Training")
     train_set = dataset[:2500]
-    system = TensorSystem(CachedOracleSystem)
-    system.train(train_set)
+    system = cached_oracle
+    # system = OracleSystem(dataset)
+    #system.train(train_set)
 
     logger.info("Testing")
-    test_set = dataset[2500:]
+    test_set = dataset
     results = get_target_and_predicted_values(test_set, system)
+
+    # with open(settings.DATASET_PATH) as dataset_file:
+    #     original_dataset = json.load(dataset_file)
+    # hard_dataset = []
+    # for item, result in zip(original_dataset, results):
+    #     f1_score = get_f1_score(result['target'], result['predicted'])
+    #     print f1_score
+    #     if f1_score < 0.5:
+    #         hard_dataset.append(item)
+    # save(hard_dataset, 'oracle_errors.json')
+
     save(results, settings.RESULTS_PATH)
-    system.connector.searcher.save_cache()
-    system.connector.save_cache()
+    # system.connector.searcher.save_cache()
+    # system.connector.save_cache()
     analyse()

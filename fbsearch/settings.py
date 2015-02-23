@@ -1,5 +1,7 @@
 
-DATASET_PATH = '/home/dc/Experiments/sempre/lib/data/webquestions/dataset_11/webquestions.examples.train.json'
+#DATASET_PATH = '/home/dc/Experiments/sempre/lib/data/webquestions/dataset_11/webquestions.examples.train.json'
+
+DATASET_PATH = 'oracle_errors.json'
 
 RESULTS_PATH = 'target_predicted.json'
 
