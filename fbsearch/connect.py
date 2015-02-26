@@ -26,23 +26,22 @@ class Connector(object):
             self.connection_cache = {}
 
     def get_query_entities(self, query):
-        return [result[1]['id'] for result in self.searcher.query_search(query)[:50]]
+        query_entities = [result[1]['id'] for result in self.searcher.query_search(query)[:100]]
+        logger.debug("Query entities: %r", query_entities)
+        return query_entities
 
     def search(self, query, target):
         query_entities = self.get_query_entities(query)
-        query_names = [self.related.get_names(e) for e in query_entities]
-        logger.debug("Query entities: %r", zip(query_entities, query_names))
+        # query_names = [self.related.get_names(e) for e in query_entities]
+        # logger.debug("Query entities: %r", zip(query_entities, query_names))
 
-        target_entities = self.related.search_exact(target)
-        logger.debug("Target entities: %r", target_entities)
-        return self.related.connect(query_entities, target_entities)
+        # target_entities = self.related.search_exact(target)
+        # logger.debug("Target entities: %r", target_entities)
+        return self.related.connect_names(query_entities, [target])
 
     def search_all(self, query, targets):
-        all_connections = set()
-        for target in targets:
-            connections = self.search(query, target)
-            all_connections |= set(connections)
-        return all_connections
+        query_entities = self.get_query_entities(query)
+        return self.related.connect_names(query_entities, targets)
 
     def apply_connection(self, query, connection):
         results = self.connection_cache.get(get_cache_key(query, connection))

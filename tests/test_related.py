@@ -1,14 +1,13 @@
 from fbsearch.related import RelatedEntities
 
-def test_exact_search_finds_names():
+def test_connect_names():
     related = RelatedEntities()
-    results = related.search_exact('Eastern Time Zone')
-    name = related.get_names(results[0])
-    assert name == "Eastern Time Zone"
+    results = related.connect_names(['fb:en.france'], ['Paris'])
+    print results
+    assert results
 
-
-def test_exact_search_finds_aliases():
+def test_connect_multiple_names():
     related = RelatedEntities()
-    results = related.search_exact('North American Eastern Time Zone')
-    name = related.get_names(results[0])
-    assert name == "Eastern Time Zone"
+    results = related.connect_names(['fb:en.france'], ['Pouris', 'Lille'])
+    print results
+    assert results

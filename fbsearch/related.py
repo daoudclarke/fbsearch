@@ -86,6 +86,59 @@ class RelatedEntities(object):
         #     results.append(t[0])
         # return results
 
+    def connect_names(self, query_entities, target_names):
+        name_query_string = (','.join(['"%s"@en']*len(target_names)) %
+                             tuple(target_names))
+        logger.debug("Name query string: %r", name_query_string)
+        entities = self.store.query("""
+            prefix fb: <http://rdf.freebase.com/ns/>
+            SELECT ?r1 
+            WHERE
+            {
+                {
+                    ?s ?r1 ?e .
+                    ?e fb:type.object.name ?n .
+                    FILTER(?n IN (%s)) .
+                    FILTER(?s IN (%s)) .
+                } UNION {
+                    ?s ?r1 ?e .
+                    ?e fb:common.topic.alias ?n .
+                    FILTER(?n IN (%s)) .
+                    FILTER(?s IN (%s)) .
+                }
+            }
+            """ % (name_query_string, ','.join(query_entities),
+                   name_query_string, ','.join(query_entities)))
+        if entities:
+            logger.debug("Found simple connection")
+            return entities
+        logger.debug("Performing complex search")
+        all_entities = []
+        for target_name in target_names:
+            entities = self.store.query("""
+                prefix fb: <http://rdf.freebase.com/ns/>
+                SELECT ?r1, ?r2
+                WHERE
+                {
+                    {
+                        ?s ?r1 ?o .
+                        ?o ?r2 ?e .
+                        ?e fb:type.object.name "%s"@en .
+                        FILTER(?s IN (%s)) .
+                    } UNION {
+                        ?s ?r1 ?o .
+                        ?o ?r2 ?e .
+                        ?e fb:common.topic.alias "%s"@en .
+                        FILTER(?s IN (%s)) .
+                    }
+                }
+                """ % (target_name, ','.join(query_entities),
+                       target_name, ','.join(query_entities)))
+            logger.debug("Search for complex connection: %r", entities)
+            all_entities += entities
+        return all_entities
+
+
     def connect(self, query_entities, target_entities):
         all_entities = []
         for target_entity in target_entities:
@@ -101,6 +154,7 @@ class RelatedEntities(object):
                 }
                 """ % (target_uri, ','.join(query_entities)))
             if entities:
+                logger.debug("Found simple connection: %r", entities)
                 all_entities += entities
                 continue
 
@@ -128,6 +182,8 @@ class RelatedEntities(object):
                     FILTER(?s IN (%s)) .
                 }
                 """ % (target_uri, ','.join(query_entities)))
+            if entities:
+                logger.debug("Found level 2 connection: %r", entities)
             all_entities += entities
         return all_entities
 
@@ -138,12 +194,22 @@ class RelatedEntities(object):
             WHERE
             {
                 {
-                    ?e fb:common.topic.alias "%s"@en .
-                } UNION {
                     ?e fb:type.object.name "%s"@en .
                 }
             }
-            """ % (name, name))
+            """ % (name,))
+        # entities = self.store.query("""
+        #     prefix fb: <http://rdf.freebase.com/ns/>
+        #     SELECT ?e
+        #     WHERE
+        #     {
+        #         {
+        #             ?e fb:common.topic.alias "%s"@en .
+        #         } UNION {
+        #             ?e fb:type.object.name "%s"@en .
+        #         }
+        #     }
+        #     """ % (name, name))
         return [e[0] for e in entities]
 
     def apply_connection(self, entities, connection):

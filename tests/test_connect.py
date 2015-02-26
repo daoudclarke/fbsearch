@@ -27,3 +27,9 @@ def test_apply_connections():
     print connections
     results = connector.apply_connection(query, connections[1])
     assert target in results
+
+def test_get_query_entities():
+    connector = Connector()
+    query = 'what are the major cities in france?'
+    ids = connector.get_query_entities(query)
+    assert 'fb:en.france' in ids

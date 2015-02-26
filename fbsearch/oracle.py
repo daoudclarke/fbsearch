@@ -22,6 +22,7 @@ class OracleSystem(object):
     def get_best_results_and_connection(self, query):
         targets = self.query_targets[query]
         connections = self.connector.search_all(query, targets)
+        logger.debug("Found connections: %r", connections)
 
         best_score = 0.0
         best_results = []

@@ -64,13 +64,15 @@ class LuceneSearcher(object):
         if result is not None:
             logger.debug("Found entities in query cache")
             return result
-        logger.debug("Getting query entities")
         query_terms = [term for term in query.split() if term not in STOPWORDS]
-        if len(query_terms) == 1:
-            query_terms.append('')
+        logger.debug("Getting query entities for query terms: %r", query_terms)
         all_entities = []
+        subqueries = []
         for i in range(len(query_terms) - 1):
-            subquery = ' '.join(query_terms[i:i+2])
+            subqueries.append(' '.join(query_terms[i:i+2]))
+
+        subqueries += query_terms
+        for subquery in subqueries:
             logger.debug("Applying subquery %r", subquery)
             docs = self.search(subquery)
             distances = [(edit_distance(doc['text'], unicode(query)), doc) for doc in docs]
