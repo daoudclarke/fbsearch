@@ -96,6 +96,9 @@ class RelatedEntities(object):
         # return results
 
     def connect_names(self, query_entities, target_names):
+        if len(query_entities) == 0:
+            return []
+
         name_query_string = (','.join(['"%s"@en']*len(target_names)) %
                              tuple(target_names))
         logger.debug("Name query string: %r", name_query_string)

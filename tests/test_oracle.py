@@ -33,3 +33,36 @@ def test_oracle_finds_jamaican_dollar():
     oracle.connector.related.save_cache()
     assert list(result) == target
 
+def test_oracle_finds_time_zone():
+    query = "what time zone am i in cleveland ohio?"
+    target = [u"Eastern Time Zone"]
+
+    dataset = [(query, target)]
+
+    oracle = OracleSystem(dataset)
+    result = oracle.execute(query)
+    oracle.connector.related.save_cache()
+    assert len(set(result) & set(target)) > 0
+
+def test_oracle_finds_ishmael():
+    query = "who was ishmael's mom?"
+    target = [u'Hagar']
+
+    dataset = [(query, target)]
+
+    oracle = OracleSystem(dataset)
+    result = oracle.execute(query)
+    oracle.connector.related.save_cache()
+    assert len(set(result) & set(target)) > 0
+
+
+# def test_oracle_finds_anne():
+#     query = "which wife did king henry behead?"
+#     target = [u"Anne of the Thousand Days"]
+
+#     dataset = [(query, target)]
+
+#     oracle = OracleSystem(dataset)
+#     result = oracle.execute(query)
+#     oracle.connector.related.save_cache()
+#     assert len(set(result) & set(target)) > 0
