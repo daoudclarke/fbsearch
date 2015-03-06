@@ -49,5 +49,11 @@ def test_long_query_search_finds_china():
     ids = set(result[1]['id'] for result in results)
     assert 'fb:en.china' in ids
 
+def test_query_search_with_brackets():
+    query = "which country has adopted the euro as its currency ( 1 point )?"
+    results = connector.query_search(query)
+    print results
+    assert len(results) > 0
+
 def teardown_module():
     connector.related.save_cache()

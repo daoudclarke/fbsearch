@@ -15,6 +15,7 @@ import Levenshtein
 
 import sys
 import json
+import re
 import sexpdata
 
 STOPWORDS = set("""
@@ -23,6 +24,7 @@ STOPWORDS = set("""
   they this to was will with who what where
 """.split())
 
+ALLOWED_CHARS_PATTERN = re.compile('[\W_]+', re.UNICODE)
 
 class Connector(object):
     def __init__(self):
@@ -52,7 +54,8 @@ class Connector(object):
         if result is not None:
             logger.debug("Found entities in query cache")
             return result
-        query_terms = [term for term in query.split() if term not in STOPWORDS]
+        normalised_query = ALLOWED_CHARS_PATTERN.sub(' ', query)
+        query_terms = [term for term in normalised_query.split() if term not in STOPWORDS]
         logger.debug("Getting query entities for query terms: %r", query_terms)
         all_entities = []
         subqueries = []
