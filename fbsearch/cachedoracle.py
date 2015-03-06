@@ -52,7 +52,7 @@ def get_cache_oracle_data(dataset):
 def save_oracle_data(oracle_results):
     with open(settings.ORACLE_CACHE_PATH, 'w') as cache_file:
         for result in oracle_results:
-            serialised = convertingjson.dumps(result, cache_file)
+            serialised = convertingjson.dumps(result)
             cache_file.write(serialised + '\n')
             cache_file.flush()
 
