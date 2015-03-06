@@ -43,6 +43,11 @@ def get_cache_oracle_data(dataset):
         i += 1
         logger.info("Completed: %d", i)
 
+        if i % 10 == 0:
+            logger.info("Saving caches")
+            oracle.connection.save_cache()
+            logger.info("Saving complete")
+
 
 def save_oracle_data(oracle_results):
     with open(settings.ORACLE_CACHE_PATH, 'w') as cache_file:
