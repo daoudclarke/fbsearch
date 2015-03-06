@@ -33,7 +33,11 @@ def get_cache_oracle_data(dataset):
 
     i = 0
     for query, target_entities in dataset:
-        results, connection = oracle.get_best_results_and_connection(query)
+        try:
+            logger.info("Querying oracle for query: %s", query)
+            results, connection = oracle.get_best_results_and_connection(query)
+        except Exception:
+            logger.exception("Failed to run query: %s", query)
         yield {
                 'query': query,
                 'results': results,
