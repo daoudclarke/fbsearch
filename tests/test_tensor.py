@@ -14,4 +14,7 @@ def test_tensor_system_can_learn():
     tensor.train(dataset)
 
     result = tensor.execute(query)
-    assert result == {u'Jazmyn Bieber', u'Jaxon Bieber', u'Justin Bieber'}
+    
+    tensor.connector.related.save_cache()
+
+    assert result >= {u'Jazmyn Bieber', u'Jaxon Bieber'}

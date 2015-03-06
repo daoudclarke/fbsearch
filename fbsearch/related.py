@@ -9,9 +9,12 @@ from sparql import SPARQLStore
 
 #from rdflib.plugins.stores.regexmatching import REGEXTerm
 
+from fbsearch import settings
+
 import sys
 import logging
 #import virtuoso
+import json
 
 virtuoso_logger = logging.getLogger('virtuoso.vstore')
 virtuoso_logger.setLevel(logging.DEBUG)
@@ -33,14 +36,20 @@ class RelatedEntities(object):
         # Virtuoso = plugin("Virtuoso", Store)
         # self.store = Virtuoso("DSN=VOS;UID=dba;PWD=dba;WideAsUTF16=Y;Host=localhost:13093")
         self.store = SPARQLStore()
+        try:
+            cache_file = open(settings.ENTITY_SCORE_CACHE_PATH)
+            self.entity_scores = json.load(cache_file)
+            logger.info("Loaded %d entities in cache", len(self.entity_scores))
+        except IOError:
+            self.entity_scores = {}
+
+    def save_cache(self):
+        logger.info("Saving entity score cache")
+        with open(settings.ENTITY_SCORE_CACHE_PATH, 'w') as cache_file:
+            json.dump(self.entity_scores, cache_file)
 
     def get_names(self, entity):
         entity = ensure_prefixed(entity)
-        #return [t[0][2].value for t in self.store.triples((uri, NAME_URI, None))]
-        if entity.startswith('http'):
-            uri = entity.replace('http://rdf.freebase.com/ns/', 'fb:')
-        else:
-            uri = entity
         names = self.store.query("""
             prefix fb: <http://rdf.freebase.com/ns/>
             SELECT *
@@ -48,7 +57,7 @@ class RelatedEntities(object):
             {
                 %s fb:type.object.name ?o .
             }
-            """ % uri)
+            """ % entity)
         assert len(names) <= 1
         if len(names) > 0:
             return names[0][0]
@@ -86,6 +95,59 @@ class RelatedEntities(object):
         #     results.append(t[0])
         # return results
 
+    def connect_names(self, query_entities, target_names):
+        name_query_string = (','.join(['"%s"@en']*len(target_names)) %
+                             tuple(target_names))
+        logger.debug("Name query string: %r", name_query_string)
+        entities = self.store.query("""
+            prefix fb: <http://rdf.freebase.com/ns/>
+            SELECT ?r1 
+            WHERE
+            {
+                {
+                    ?s ?r1 ?e .
+                    ?e fb:type.object.name ?n .
+                    FILTER(?n IN (%s)) .
+                    FILTER(?s IN (%s)) .
+                } UNION {
+                    ?s ?r1 ?e .
+                    ?e fb:common.topic.alias ?n .
+                    FILTER(?n IN (%s)) .
+                    FILTER(?s IN (%s)) .
+                }
+            }
+            """ % (name_query_string, ','.join(query_entities),
+                   name_query_string, ','.join(query_entities)))
+        if entities:
+            logger.debug("Found simple connection")
+            return entities
+        logger.debug("Performing complex search")
+        all_entities = []
+        for target_name in target_names:
+            entities = self.store.query("""
+                prefix fb: <http://rdf.freebase.com/ns/>
+                SELECT ?r1, ?r2
+                WHERE
+                {
+                    {
+                        ?s ?r1 ?o .
+                        ?o ?r2 ?e .
+                        ?e fb:type.object.name "%s"@en .
+                        FILTER(?s IN (%s)) .
+                    } UNION {
+                        ?s ?r1 ?o .
+                        ?o ?r2 ?e .
+                        ?e fb:common.topic.alias "%s"@en .
+                        FILTER(?s IN (%s)) .
+                    }
+                }
+                """ % (target_name, ','.join(query_entities),
+                       target_name, ','.join(query_entities)))
+            logger.debug("Search for complex connection: %r", entities)
+            all_entities += entities
+        return all_entities
+
+
     def connect(self, query_entities, target_entities):
         all_entities = []
         for target_entity in target_entities:
@@ -101,6 +163,7 @@ class RelatedEntities(object):
                 }
                 """ % (target_uri, ','.join(query_entities)))
             if entities:
+                logger.debug("Found simple connection: %r", entities)
                 all_entities += entities
                 continue
 
@@ -128,6 +191,8 @@ class RelatedEntities(object):
                     FILTER(?s IN (%s)) .
                 }
                 """ % (target_uri, ','.join(query_entities)))
+            if entities:
+                logger.debug("Found level 2 connection: %r", entities)
             all_entities += entities
         return all_entities
 
@@ -138,12 +203,22 @@ class RelatedEntities(object):
             WHERE
             {
                 {
-                    ?e fb:common.topic.alias "%s"@en .
-                } UNION {
                     ?e fb:type.object.name "%s"@en .
                 }
             }
-            """ % (name, name))
+            """ % (name,))
+        # entities = self.store.query("""
+        #     prefix fb: <http://rdf.freebase.com/ns/>
+        #     SELECT ?e
+        #     WHERE
+        #     {
+        #         {
+        #             ?e fb:common.topic.alias "%s"@en .
+        #         } UNION {
+        #             ?e fb:type.object.name "%s"@en .
+        #         }
+        #     }
+        #     """ % (name, name))
         return [e[0] for e in entities]
 
     def apply_connection(self, entities, connection):
@@ -176,6 +251,30 @@ class RelatedEntities(object):
         else:
             raise ValueError("Unexpected number of parts to connection")
         return [result[0] for result in results]
+
+    def get_entity_score(self, entity):
+        """
+        Use the number of relations as a measure of importance.
+        """
+        entity = ensure_prefixed(entity)
+
+        value = self.entity_scores.get(entity)
+        if value:
+            return value
+
+        #assert False
+        logger.debug("Entity %s not found in cache", entity)
+        score = self.store.query("""
+            prefix fb: <http://rdf.freebase.com/ns/>
+            SELECT COUNT(*)
+            WHERE
+            {
+                %s ?r ?o .
+            }
+            """ % entity)
+        score = int(score[0][0])
+        self.entity_scores[entity] = score
+        return score
 
     def recurse(self, entity, depth=1, seen_entities=None):
         logger.debug("Recursing at depth %d", depth)
