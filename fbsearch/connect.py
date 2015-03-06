@@ -64,7 +64,7 @@ class Connector(object):
             logger.debug("Applying subquery %r", subquery)
             docs = self.searcher.search(subquery)
             filtered_docs = [doc for doc in docs
-                             if Levenshtein.ratio(doc['text'].lower(), unicode(subquery)) > 0.9]
+                             if Levenshtein.ratio(doc['text'].lower(), unicode(subquery)) > 0.8]
             logger.debug("Filtered to %d of %d docs", len(filtered_docs), len(docs))
             scores_docs = [(self.related.get_entity_score(doc['id']), doc) for doc in filtered_docs]
             sorted_scores_docs = sorted(scores_docs, reverse=True)
@@ -75,10 +75,6 @@ class Connector(object):
         logger.debug("Top entities: %r", result[:10])
         self.query_entity_cache[query] = result
         return result
-
-    def score_doc(doc):
-        entity = doc['id']
-        
 
     def search(self, query, target):
         query_entities = self.get_query_entities(query)
