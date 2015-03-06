@@ -11,3 +11,5 @@ QUERY_ENTITY_CACHE_PATH = 'query_entity_cache.json'
 
 CONNECTION_CACHE_PATH = 'connection_cache.json'
 
+ENTITY_SCORE_CACHE_PATH = 'entities.json'
+
