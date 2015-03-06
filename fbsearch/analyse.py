@@ -45,8 +45,10 @@ def analyse_results(results):
         'f1_score': (mean[2], errors[2])
         }
 
-def analyse():
-    results_file = open(settings.RESULTS_PATH)
+def analyse(file_path=None):
+    if file_path is None:
+        file_path = settings.RESULTS_PATH
+    results_file = open(file_path)
     results = json.load(results_file)
     analysis = analyse_results(results)
     print analysis

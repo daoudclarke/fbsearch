@@ -4,7 +4,6 @@ bound on performance.
 """
 
 from fbsearch.connect import Connector
-from fbsearch.related import RelatedEntities
 from fbsearch.analyse import get_f1_score
 from fbsearch.log import logger
 
@@ -12,7 +11,6 @@ class OracleSystem(object):
     def __init__(self, dataset):
         self.query_targets = dict(dataset)
         self.connector = Connector()
-        self.related = RelatedEntities()
 
     def execute(self, query):
         results, _ = self.get_best_results_and_connection(

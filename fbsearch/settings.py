@@ -10,3 +10,5 @@ QUERY_ENTITY_CACHE_PATH = 'query_entity_cache.json'
 CONNECTION_CACHE_PATH = 'connection_cache.json'
 
 LUCENE_PATH = '/home/dc/Experiments/sempre/lib/lucene/4.4/inexact/'
+
+ENTITY_SCORE_CACHE_PATH = 'entities.json'

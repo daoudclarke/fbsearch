@@ -11,9 +11,18 @@ from fbsearch.analyse import get_f1_score
 
 from log import logger
 
+import Levenshtein
+
 import sys
 import json
 import sexpdata
+
+STOPWORDS = set("""
+  a an and are as at be but by for if in into is it
+  no not of on or such that the their then there these
+  they this to was will with who what where
+""".split())
+
 
 class Connector(object):
     def __init__(self):
@@ -24,19 +33,55 @@ class Connector(object):
                 self.connection_cache = json.load(cache_file)
         except IOError:
             self.connection_cache = {}
+        try:
+            with open(settings.QUERY_ENTITY_CACHE_PATH) as cache_file:
+                self.query_entity_cache = json.load(cache_file)
+        except IOError:
+            self.query_entity_cache = {}
 
     def get_query_entities(self, query):
-        query_entities = [result[1]['id'] for result in self.searcher.query_search(query)[:100]]
+        query_entities = [result[1]['id'] for result in self.query_search(query)]
         logger.debug("Query entities: %r", query_entities)
         return query_entities
 
+    def query_search(self, query):
+        """
+        Find entities that are contained as substrings in the query.
+        """
+        result = self.query_entity_cache.get(query)
+        if result is not None:
+            logger.debug("Found entities in query cache")
+            return result
+        query_terms = [term for term in query.split() if term not in STOPWORDS]
+        logger.debug("Getting query entities for query terms: %r", query_terms)
+        all_entities = []
+        subqueries = []
+        for i in range(len(query_terms) - 1):
+            subqueries.append(' '.join(query_terms[i:i+2]))
+
+        subqueries += query_terms
+        for subquery in subqueries:
+            logger.debug("Applying subquery %r", subquery)
+            docs = self.searcher.search(subquery)
+            filtered_docs = [doc for doc in docs
+                             if Levenshtein.ratio(doc['text'], unicode(subquery)) > 0.75]
+            logger.debug("Filtered to %d of %d docs", len(filtered_docs), len(docs))
+            scores_docs = [(self.related.get_entity_score(doc['id']), doc) for doc in filtered_docs]
+            sorted_scores_docs = sorted(scores_docs, reverse=True)
+            logger.debug("Sorted scores and docs: %r", sorted_scores_docs)
+            all_entities += sorted_scores_docs[:10]
+        logger.debug("Found %d entities, caching", len(all_entities))
+        result = sorted(all_entities, reverse=True)
+        logger.debug("Top entities: %r", result[:10])
+        self.query_entity_cache[query] = result
+        return result
+
+    def score_doc(doc):
+        entity = doc['id']
+        
+
     def search(self, query, target):
         query_entities = self.get_query_entities(query)
-        # query_names = [self.related.get_names(e) for e in query_entities]
-        # logger.debug("Query entities: %r", zip(query_entities, query_names))
-
-        # target_entities = self.related.search_exact(target)
-        # logger.debug("Target entities: %r", target_entities)
         return self.related.connect_names(query_entities, [target])
 
     def search_all(self, query, targets):
@@ -60,6 +105,9 @@ class Connector(object):
     def save_cache(self):
         with open(settings.CONNECTION_CACHE_PATH, 'w') as cache_file:
             json.dump(self.connection_cache, cache_file, indent=4)
+        with open(settings.QUERY_ENTITY_CACHE_PATH, 'w') as cache_file:
+            json.dump(self.query_entity_cache, cache_file, indent=4)
+        self.related.save_cache()
 
 def symbol_to_string(symbol):
     try:
