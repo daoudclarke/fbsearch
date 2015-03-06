@@ -55,14 +55,13 @@ def test_oracle_finds_ishmael():
     oracle.connector.related.save_cache()
     assert len(set(result) & set(target)) > 0
 
+def test_oracle_finds_chers_son():
+    query, target = "what is cher's son's name?", [u"Elijah Blue Allman", u"Chaz Bono"]
 
-# def test_oracle_finds_anne():
-#     query = "which wife did king henry behead?"
-#     target = [u"Anne of the Thousand Days"]
+    dataset = [(query, target)]
 
-#     dataset = [(query, target)]
+    oracle = OracleSystem(dataset)
+    result = oracle.execute(query)
+    oracle.connector.related.save_cache()
+    assert len(set(result) & set(target)) > 0
 
-#     oracle = OracleSystem(dataset)
-#     result = oracle.execute(query)
-#     oracle.connector.related.save_cache()
-#     assert len(set(result) & set(target)) > 0
