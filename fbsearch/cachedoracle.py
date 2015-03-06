@@ -45,7 +45,7 @@ def get_cache_oracle_data(dataset):
 
         if i % 10 == 0:
             logger.info("Saving caches")
-            oracle.connection.save_cache()
+            oracle.connector.save_cache()
             logger.info("Saving complete")
 
 
