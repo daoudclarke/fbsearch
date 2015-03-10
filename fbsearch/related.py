@@ -11,6 +11,7 @@ from sparql import SPARQLStore
 
 from fbsearch import settings
 
+from socket import timeout
 import sys
 import logging
 #import virtuoso
@@ -102,52 +103,59 @@ class RelatedEntities(object):
         name_query_string = (','.join(['"%s"@en']*len(target_names)) %
                              tuple(target_names))
         logger.debug("Name query string: %r", name_query_string)
-        entities = self.store.query("""
-            prefix fb: <http://rdf.freebase.com/ns/>
-            SELECT ?r1 
-            WHERE
-            {
-                {
-                    ?s ?r1 ?e .
-                    ?e fb:type.object.name ?n .
-                    FILTER(?n IN (%s)) .
-                    FILTER(?s IN (%s)) .
-                } UNION {
-                    ?s ?r1 ?e .
-                    ?e fb:common.topic.alias ?n .
-                    FILTER(?n IN (%s)) .
-                    FILTER(?s IN (%s)) .
-                }
-            }
-            """ % (name_query_string, ','.join(query_entities),
-                   name_query_string, ','.join(query_entities)))
-        if entities:
-            logger.debug("Found simple connection")
-            return entities
-        logger.debug("Performing complex search")
-        all_entities = []
-        for target_name in target_names:
+        try:
             entities = self.store.query("""
                 prefix fb: <http://rdf.freebase.com/ns/>
-                SELECT ?r1, ?r2
+                SELECT ?r1 
                 WHERE
                 {
                     {
-                        ?s ?r1 ?o .
-                        ?o ?r2 ?e .
-                        ?e fb:type.object.name "%s"@en .
+                        ?s ?r1 ?e .
+                        ?e fb:type.object.name ?n .
+                        FILTER(?n IN (%s)) .
                         FILTER(?s IN (%s)) .
                     } UNION {
-                        ?s ?r1 ?o .
-                        ?o ?r2 ?e .
-                        ?e fb:common.topic.alias "%s"@en .
+                        ?s ?r1 ?e .
+                        ?e fb:common.topic.alias ?n .
+                        FILTER(?n IN (%s)) .
                         FILTER(?s IN (%s)) .
                     }
                 }
-                """ % (target_name, ','.join(query_entities),
-                       target_name, ','.join(query_entities)))
-            logger.debug("Search for complex connection: %r", entities)
-            all_entities += entities
+                """ % (name_query_string, ','.join(query_entities),
+                       name_query_string, ','.join(query_entities)))
+            if entities:
+                logger.debug("Found simple connection")
+                return entities
+        except timeout:
+            logger.exception("Timeout looking for simple connection")
+        logger.debug("Performing complex search")
+        all_entities = []
+        for target_name in target_names:
+            try:
+                entities = self.store.query("""
+                    prefix fb: <http://rdf.freebase.com/ns/>
+                    SELECT ?r1, ?r2
+                    WHERE
+                    {
+                        {
+                            ?s ?r1 ?o .
+                            ?o ?r2 ?e .
+                            ?e fb:type.object.name "%s"@en .
+                            FILTER(?s IN (%s)) .
+                        } UNION {
+                            ?s ?r1 ?o .
+                            ?o ?r2 ?e .
+                            ?e fb:common.topic.alias "%s"@en .
+                            FILTER(?s IN (%s)) .
+                        }
+                    }
+                    """ % (target_name, ','.join(query_entities),
+                           target_name, ','.join(query_entities)))
+                logger.debug("Search for complex connection: %r", entities)
+                all_entities += entities
+            except timeout:
+                logger.exception("Timeout looking for complex connection with target: %s",
+                                 target_name)
         return all_entities
 
 
@@ -267,15 +275,19 @@ class RelatedEntities(object):
 
         #assert False
         logger.debug("Entity %s not found in cache", entity)
-        score = self.store.query("""
-            prefix fb: <http://rdf.freebase.com/ns/>
-            SELECT COUNT(*)
-            WHERE
-            {
-                %s ?r ?o .
-            }
-            """ % entity)
-        score = int(score[0][0])
+        try:
+            result = self.store.query("""
+                prefix fb: <http://rdf.freebase.com/ns/>
+                SELECT COUNT(*)
+                WHERE
+                {
+                    %s ?r ?o .
+                }
+                """ % entity)
+            score = int(result[0][0])
+        except timeout:
+            logger.exception("Timeout attempting to get count for entity: %s", entity)
+            score = 0
         self.entity_scores[entity] = score
         return score
 

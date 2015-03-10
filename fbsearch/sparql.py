@@ -5,6 +5,7 @@ from log import logger
 class SPARQLStore(object):
     def __init__(self):
         self.endpoint = SPARQLWrapper("http://localhost:3093/sparql")
+        self.endpoint.setTimeout(10)
 
     def query(self, sparql):
         self.endpoint.setQuery(sparql)
