@@ -104,7 +104,7 @@ class RelatedEntities(object):
                              tuple(target_names))
         logger.debug("Name query string: %r", name_query_string)
         try:
-            entities = self.store.query("""
+            all_entities = self.store.query("""
                 prefix fb: <http://rdf.freebase.com/ns/>
                 SELECT ?r1 
                 WHERE
@@ -123,13 +123,11 @@ class RelatedEntities(object):
                 }
                 """ % (name_query_string, ','.join(query_entities),
                        name_query_string, ','.join(query_entities)))
-            if entities:
-                logger.debug("Found simple connection")
-                return entities
         except timeout:
             logger.exception("Timeout looking for simple connection")
+            all_entities = []
         logger.debug("Performing complex search")
-        all_entities = []
+        logger.info("Found %d simple connections", len(all_entities))
         for target_name in target_names:
             try:
                 entities = self.store.query("""
@@ -156,7 +154,7 @@ class RelatedEntities(object):
             except timeout:
                 logger.exception("Timeout looking for complex connection with target: %s",
                                  target_name)
-        return all_entities
+        return set(all_entities)
 
 
     def connect(self, query_entities, target_entities):

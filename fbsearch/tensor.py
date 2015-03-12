@@ -29,42 +29,25 @@ class TensorSystem(object):
         values = []
 
         oracle = self.oracle_class(train_set)
-        all_connections = []
+        query_expressions = {}
         for query, target in train_set:
-            _, connection = oracle.get_best_results_and_connection(query)
-            if connection is None:
+            _, expressions = oracle.get_best_results_and_expressions(query)
+            if len(expressions) == 0:
                 continue
+            query_expressions[query] = expressions
 
-            all_connections.append(connection)
+        all_expressions = reduce(set.__or__, query_expressions.values())
 
-        self.possible_connections = list(set(all_connections))
-        logger.info("Found %d possible connections in training set of size %d",
-                    len(self.possible_connections), len(train_set))
-
-        values = []
         all_features = []
-        for query, target in train_set:
+        values = []
+        for query, correct_expressions in query_expressions.iteritems():
             query_tokens = self.get_sentence_features(query)
-            for connection in self.possible_connections:
-                result = self.connector.apply_connection(
-                    query, connection)
-                correct_results = set(result) & set(target)
-                logger.debug("Found %d correct results", len(correct_results))
-                value = 1 if len(correct_results) > 0 else 0
-                features = self.get_query_connection_features(query_tokens, connection)                
-                values.append(value)
+            for expression in all_expressions:
+                features = self.get_query_expression_features(query_tokens, expression)
                 all_features.append(features)
-
-        # # Positive features
-        # features = self.make_features(all_query_tokens, all_connections)
-        
-        # # Negative features
-        # duplicates = 1
-        # for i in range(duplicates):
-        #     random.shuffle(all_connections)
-        #     features += self.make_features(all_query_tokens, all_connections)
-
-        # values = [1]*len(all_query_tokens) + [0]*(len(all_query_tokens)*duplicates)
+                value = expression in correct_expressions
+                values.append(value)
+        self.all_expressions = list(all_expressions)
 
         logger.info("Training - building vectors with %d features", len(all_features))
         self.vectorizer = DictVectorizer()
@@ -93,32 +76,33 @@ class TensorSystem(object):
         logger.info("Finished training")
         
     def make_features(self, all_query_tokens, all_connections):
-        return [self.get_query_connection_features(query_tokens, connection)
+        return [self.get_query_expression_features(query_tokens, connection)
                 for query_tokens, connection in zip(all_query_tokens, all_connections)]
 
     def execute(self, query):
         logger.debug("Executing query: %r", query)
         query_features = self.get_sentence_features(query)
         logger.debug("Query features: %r", query_features)
-        all_features = [self.get_query_connection_features(query_features, connection)
-                        for connection in self.possible_connections]
+        all_features = [self.get_query_expression_features(query_features, expression)
+                        for expression in self.all_expressions]
         vectors = self.vectorizer.transform(all_features)
         predictions = self.classifier.decision_function(vectors)
         best_indices =  np.argsort(predictions)[::-1]
 
+        entities = self.connector.get_query_entities(query)
         for i in best_indices:
-            connection = self.possible_connections[i]
-            logger.debug("Score: %f for connection %r", predictions[i], connection)
-            result = self.connector.apply_connection(
-                query, connection)
-            logger.debug("Searching for best connection, index: %d, connection: %r, result: %r",
-                         i, connection, result)
+            expression = self.all_expressions[i]
+            logger.debug("Score: %f for expression %r", predictions[i], expression)
+            result_ids = expression.apply(entities, self.connector.related)
+            result = set(self.connector.related.get_names(result) for result in result_ids)
+            logger.debug("Searching for best expression, index: %d, expression: %r, result: %r",
+                         i, expression, result)
             if len(result) > 0:
                 return result
         return set()
 
-    def get_query_connection_features(self, query, connection):
-        return self.get_tensor_features(query, [':'.join(connection)])
+    def get_query_expression_features(self, query, expression):
+        return self.get_tensor_features(query, [repr(expression)])
 
     def get_tensor_features(self, source_tokens, target_tokens):
         features = []
