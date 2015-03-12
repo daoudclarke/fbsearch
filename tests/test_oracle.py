@@ -65,3 +65,25 @@ def test_oracle_finds_chers_son():
     oracle.connector.related.save_cache()
     assert len(set(result) & set(target)) > 0
 
+def test_timeout():
+    query, target = "what characters does trey parker voice?", [u"Eric Cartman", u"Fosse McDonald"]
+
+    dataset = [(query, target)]
+
+    oracle = OracleSystem(dataset)
+    result = oracle.execute(query)
+    oracle.connector.related.save_cache()
+    assert len(set(result) & set(target)) > 0
+
+def test_expression():
+    query, target = "what character did natalie portman play in star wars?", [u"Padm\u00e9 Amidala"]
+
+    dataset = [(query, target)]
+
+    oracle = OracleSystem(dataset)
+    result = oracle.execute(query)
+    oracle.connector.related.save_cache()
+    
+    print result
+    assert result == set(target)
+

@@ -52,7 +52,7 @@ class Connector(object):
         """
         result = self.query_entity_cache.get(query)
         if result is not None:
-            logger.debug("Found entities in query cache")
+            logger.info("Found %d entities in query cache", len(result))
             return result
         normalised_query = ALLOWED_CHARS_PATTERN.sub(' ', query)
         query_terms = [term for term in normalised_query.split() if term not in STOPWORDS]

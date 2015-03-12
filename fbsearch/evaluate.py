@@ -40,13 +40,14 @@ if __name__ == "__main__":
     # system = TensorSystem(CachedOracleSystem)
     # system.train(train_set)
 
-    dataset = dataset[:100]
-    system = OracleSystem(dataset)
+    system = CachedOracleSystem(dataset)
 
-    logger.info("Testing")
+    dataset = [item for item in dataset if item[0] in system.queries]
+
+    logger.info("Testing on %d items", len(dataset))
     # test_set = dataset[2500:]
     results = get_target_and_predicted_values(dataset, system)
     save(results, settings.RESULTS_PATH)
-    system.connector.searcher.save_cache()
-    system.connector.save_cache()
+    # system.connector.searcher.save_cache()
+    # system.connector.save_cache()
     analyse()
