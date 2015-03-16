@@ -24,7 +24,7 @@ class TensorSystem(object):
         self.oracle_class = oracle_class
 
     def train(self, train_set):
-        logger.info("Converting features to list")
+        logger.info("Training tensor based classifier")
         features = []
         values = []
 
@@ -35,12 +35,15 @@ class TensorSystem(object):
             if len(expressions) == 0:
                 continue
             query_expressions[query] = expressions
+        logger.info("Obtained %d items from oracle", len(query_expressions))
 
         all_expressions = reduce(set.__or__, query_expressions.values())
+        logger.info("Found %d unique expressions", len(all_expressions))
 
         all_features = []
         values = []
         for query, correct_expressions in query_expressions.iteritems():
+            logger.debug("Building features for query %r", query)
             query_tokens = self.get_sentence_features(query)
             for expression in all_expressions:
                 features = self.get_query_expression_features(query_tokens, expression)
@@ -79,8 +82,7 @@ class TensorSystem(object):
         return [self.get_query_expression_features(query_tokens, connection)
                 for query_tokens, connection in zip(all_query_tokens, all_connections)]
 
-    def execute(self, query):
-        logger.debug("Executing query: %r", query)
+    def get_best_expressions(self, query):
         query_features = self.get_sentence_features(query)
         logger.debug("Query features: %r", query_features)
         all_features = [self.get_query_expression_features(query_features, expression)
@@ -88,21 +90,39 @@ class TensorSystem(object):
         vectors = self.vectorizer.transform(all_features)
         predictions = self.classifier.decision_function(vectors)
         best_indices =  np.argsort(predictions)[::-1]
+        best_expressions = [self.all_expressions[i] for i in best_indices]
+        return best_expressions
+        
+        # random_expressions = list(self.all_expressions)
+        # random.shuffle(random_expressions)
+        # return random_expressions
+
+
+    def execute(self, query):
+        logger.debug("Executing query: %r", query)
+        best_expressions = self.get_best_expressions(query)
 
         entities = self.connector.get_query_entities(query)
-        for i in best_indices:
-            expression = self.all_expressions[i]
-            logger.debug("Score: %f for expression %r", predictions[i], expression)
-            result_ids = expression.apply(entities, self.connector.related)
+        for expression in best_expressions:
+            try:
+                result_ids = expression.apply(entities, self.connector.related)
+            except Exception:
+                logger.exception("Exception applying expression")
+                result_ids = []
             result = set(self.connector.related.get_names(result) for result in result_ids)
-            logger.debug("Searching for best expression, index: %d, expression: %r, result: %r",
-                         i, expression, result)
+            logger.debug("Searching for best expression, expression: %r, result: %r",
+                         expression, result)
             if len(result) > 0:
                 return result
         return set()
 
     def get_query_expression_features(self, query, expression):
-        return self.get_tensor_features(query, [repr(expression)])
+        try:
+            connections = [expression.connection]
+        except AttributeError:
+            connections = [expression.expression1.connection,
+                           expression.expression2.connection]
+        return self.get_tensor_features(query, [repr(connection) for connection in connections])
 
     def get_tensor_features(self, source_tokens, target_tokens):
         features = []

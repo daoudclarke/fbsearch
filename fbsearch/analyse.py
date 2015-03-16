@@ -25,7 +25,6 @@ def get_f1_score(actual, predicted):
 
 
 def analyse_results(results):
-
     scores = np.zeros((len(results), 3))
     for i, result in enumerate(results):
         precision, recall, f1_score = get_precision_recall_f1(
@@ -53,6 +52,13 @@ def analyse(file_path=None):
     analysis = analyse_results(results)
     print analysis
                
+def analyse_ranks(file_path):
+    results_file = open(file_path)
+    results = json.load(results_file)
+    ranks = [result['rank'] for result in results if result['rank'] >= 0]
+    skipped = [result['rank'] for result in results if result['rank'] == -1]
+    return {'average_rank': (get_mean(ranks), get_error_in_mean(ranks)),
+            'skipped': len(skipped)}
 
 if __name__ == "__main__":
     analyse()
