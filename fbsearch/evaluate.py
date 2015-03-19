@@ -64,6 +64,20 @@ def evaluate_tensor():
     system.connector.save_cache()
     analyse()
 
+def get_rank(system_expressions, oracle_expressions, worst_possible_rank):
+    if len(oracle_expressions) > 0:
+        if len(set(system_expressions) & oracle_expressions) == 0:
+            return worst_possible_rank
+        else:
+            rank = 0
+            found_rank = None
+            for expression in system_expressions:
+                if expression in oracle_expressions:
+                    return rank
+                rank += 1
+    else:
+        return -1
+
 def get_ranks(dataset, system):
     """
     Return the rank of the first correct answer returned by the
@@ -81,21 +95,9 @@ def get_ranks(dataset, system):
     logger.info("Number of possible expressions: %d", worst_possible_rank)
     for query, target_entities in dataset:
         logger.debug("Evaluating query %r", query)
-        expressions = system.get_best_expressions(query)
+        system_expressions = system.get_best_expressions(query)
         _, oracle_expressions = oracle.get_best_results_and_expressions(query)
-        if len(oracle_expressions) > 0 and len(results) > 0:
-            if len(set(expressions) & oracle_expressions) == 0:
-                found_rank = worst_possible_rank
-            else:
-                rank = 0
-                found_rank = None
-                for expression in expressions:
-                    if expression in oracle_expressions:
-                        found_rank = rank
-                        break
-                    rank += 1
-        else:
-            found_rank = -1
+        found_rank = get_rank(system_expressions, oracle_expressions, worst_possible_rank)
         logger.debug("Found rank: %r", found_rank)
         results.append({'query': query,
                         'target': target_entities,

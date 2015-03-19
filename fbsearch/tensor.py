@@ -2,6 +2,7 @@ from fbsearch.oracle import OracleSystem
 from fbsearch.connect import Connector
 
 from operator import itemgetter
+from collections import Counter
 import random
 
 import numpy as np
@@ -37,19 +38,37 @@ class TensorSystem(object):
             query_expressions[query] = expressions
         logger.info("Obtained %d items from oracle", len(query_expressions))
 
-        all_expressions = reduce(set.__or__, query_expressions.values())
+        all_expressions = Counter()
+        for expressions in query_expressions.values():
+            all_expressions.update(expressions)
         logger.info("Found %d unique expressions", len(all_expressions))
+        frequent = all_expressions.most_common(1500)
+        logger.info("Frequency of first and last frequent expression: %d",
+                    frequent[0][1], frequent[-1][1])
+        self.frequent_expressions = set(expression for expression, _ in frequent)
 
         all_features = []
         values = []
         for query, correct_expressions in query_expressions.iteritems():
-            logger.debug("Building features for query %r", query)
+            logger.debug("Building features for query %r, %d correct expressions",
+                         query, len(correct_expressions))
+            expression_counts = {expression: all_expressions[expression]
+                                 for expression in correct_expressions}
+            best_expressions = sorted(expression_counts.items(), key=itemgetter(1),
+                                      reverse=True)
+            logger.info("Best expressions: %r", best_expressions[:3])
+            best_expressions = set(expression for expression, _ in best_expressions)
             query_tokens = self.get_sentence_features(query)
-            for expression in all_expressions:
+
+            for expression in best_expressions & self.frequent_expressions:
                 features = self.get_query_expression_features(query_tokens, expression)
                 all_features.append(features)
-                value = expression in correct_expressions
-                values.append(value)
+                values.append(1)
+
+            for expression in self.frequent_expressions - correct_expressions:
+                features = self.get_query_expression_features(query_tokens, expression)
+                all_features.append(features)
+                values.append(0)
         self.all_expressions = list(all_expressions)
 
         logger.info("Training - building vectors with %d features", len(all_features))
@@ -86,7 +105,7 @@ class TensorSystem(object):
         query_features = self.get_sentence_features(query)
         logger.debug("Query features: %r", query_features)
         all_features = [self.get_query_expression_features(query_features, expression)
-                        for expression in self.all_expressions]
+                        for expression in self.frequent_expressions]
         vectors = self.vectorizer.transform(all_features)
         predictions = self.classifier.decision_function(vectors)
         best_indices =  np.argsort(predictions)[::-1]
