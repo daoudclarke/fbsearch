@@ -1,0 +1,43 @@
+With 10 most frequent: rank:  31933
+With 400 most frequent: rank: 30430
+With 1000:                    29350
+Using max 100 positives:      29349
+Using max 1 positive:         29349
+
+
+
+Using fixed expression set
+With 10 most frequent:        31795
+Using max 10 positives:       30427
+Using max 15 positives:       30103
+
+
+Fixing expression set on frequency:
+With 1000 most frequent:      29351
+Wtih 1500 most frequent:      28679
+
+
+Training set of 200
+With 500 most frequent:       29581
+
+
+Evaluating system best 10
+-------------------------
+
+Number correct out of 1278 total:
+
+With 5 most frequent expressions:   2
+With 10 most frequent expressions:  2, 7
+Wtih 50 most frequent:              1, 9
+With 100 most frequent:             1, 7
+With 1000 most frequent:            1 
+
+Fixed bug, used clever analysis to find best expression set:
+
+Training on 100 items: 214
+200:                   284
+300:                   308
+400:                   349
+
+Using the top 1 item from system:
+Training on 400 items: 177
