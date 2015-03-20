@@ -1,4 +1,4 @@
-from fbsearch.analyse import analyse, analyse_ranks
+from fbsearch.analyse import analyse, analyse_ranks, analyse_system_best
 from fbsearch import convertingjson
 from fbsearch.cachedoracle import CachedOracleSystem
 from fbsearch import settings
@@ -9,6 +9,7 @@ from fbsearch import settings
 from random import Random
 from log import logger
 
+import cPickle as pickle
 
 #from log import logger
 
@@ -103,28 +104,46 @@ def get_ranks(dataset, system):
                         'target': target_entities,
                         'rank': found_rank})
     return results
+
+def get_system_best(dataset, system):
+    """
+    Find the proportion of items for which the system returns a
+    correct answer in its top 10 results.
+    """
+
+    results = []
+    oracle = CachedOracleSystem(dataset)
+    for query, target_entities in dataset:
+        logger.debug("Evaluating query %r", query)
+        system_expressions = system.get_best_expressions(query)
+        _, oracle_expressions = oracle.get_best_results_and_expressions(query)
+        results.append({'query': query,
+                        'oracle': oracle_expressions,
+                        'system': system_expressions})
+    return results
     
 
 def evaluate_quickly():
-    output_path = 'ranks.json'
+    output_path = 'system-best.json'
 
-    random = Random(1)
+    random = Random(2)
 
     dataset_file = open(settings.DATASET_PATH)
     dataset = get_dataset(dataset_file)
     random.shuffle(dataset)
 
     logger.info("Training")
-    train_set = dataset[:100]
+    train_set = dataset[:400]
     system = TensorSystem(CachedOracleSystem)
     system.train(train_set)
 
     test_set = dataset[2500:]
     logger.info("Testing on %d items", len(test_set))
-    results = get_ranks(test_set, system)
-    save(results, output_path)
+    results = get_system_best(test_set, system)
+    with open(output_path, 'w') as output_file:
+        pickle.dump(results, output_file)
     system.connector.save_cache()
-    print analyse_ranks(output_path)
+    print analyse_system_best(output_path)
 
 if __name__ == "__main__":
     evaluate_quickly()
