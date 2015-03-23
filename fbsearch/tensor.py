@@ -23,7 +23,7 @@ class TensorSystem(object):
         self.connector = Connector()
         self.possible_connections = None
         self.oracle_class = oracle_class
-
+        self.expression_features = {}
 
     def set_best_expression_set(self, train_set):
         expression_counts = Counter()
@@ -156,13 +156,25 @@ class TensorSystem(object):
                 return result
         return set()
 
-    def get_query_expression_features(self, query, expression):
+    def get_expression_features(self, expression):
+        if expression in self.expression_features:
+            return self.expression_features[expression]
         try:
             connections = [expression.connection]
         except AttributeError:
             connections = [expression.expression1.connection,
                            expression.expression2.connection]
-        return self.get_tensor_features(query, [repr(connection) for connection in connections])
+        relations = reduce(list.__add__, [list(c) for c in connections])
+        connection_names= [self.connector.related.get_names(relation) for relation in relations]
+        logger.info("Connections: %r, Connection names: %s", connections, connection_names)
+        pseudo_sentence = ' '.join(connection_names)
+        features = self.get_sentence_features(pseudo_sentence)
+        self.expression_features[expression] = features
+        return features
+
+    def get_query_expression_features(self, query, expression):
+        expression_features = self.get_expression_features(expression)
+        return self.get_tensor_features(query, expression_features)
 
     def get_tensor_features(self, source_tokens, target_tokens):
         features = []

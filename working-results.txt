@@ -40,4 +40,6 @@ Training on 100 items: 214
 400:                   349
 
 Using the top 1 item from system:
-Training on 400 items: 177
+Training on 400 items:              177
+Using terms instead of expressions: 182
+Training on 2500 items:             300
