@@ -6,6 +6,7 @@ from fbsearch.oracle import OracleSystem
 from fbsearch.tensor import TensorSystem
 from fbsearch.dataset import get_dataset
 from fbsearch import settings
+from fbsearch.knn import NNSystem
 from random import Random
 from log import logger
 
@@ -134,7 +135,8 @@ def evaluate_quickly():
 
     logger.info("Training")
     train_set = dataset[:2500]
-    system = TensorSystem(CachedOracleSystem)
+    #system = TensorSystem(CachedOracleSystem)
+    system = NNSystem(CachedOracleSystem)
     system.train(train_set)
 
     test_set = dataset[2500:]

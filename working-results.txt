@@ -43,3 +43,4 @@ Using the top 1 item from system:
 Training on 400 items:              177
 Using terms instead of expressions: 182
 Training on 2500 items:             300
+Using 1NN:                          294
