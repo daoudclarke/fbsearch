@@ -2,7 +2,7 @@ from fbsearch.oracle import OracleSystem
 from fbsearch.connect import Connector
 
 from operator import itemgetter
-from collections import Counter
+from collections import Counter, defaultdict
 import random
 import math
 
@@ -76,6 +76,8 @@ class NNSystem(object):
 
         features = []
         self.expressions = []
+        self.queries = []
+        self.expression_queries = defaultdict(list)
         for query, correct_expressions in self.query_expressions.iteritems():
             query_features = self.get_sentence_features(query)
             correct_expression_counts = [(expression_counts[expression], expression)
@@ -84,15 +86,23 @@ class NNSystem(object):
             best_expression = sorted_counts[0][1]
             features.append(query_features)
             self.expressions.append(best_expression)
+            self.queries.append(query)
+            for expression in correct_expressions:
+                self.expression_queries[expression].append(query)
 
         self.vectorizer = DictVectorizer()
         self.vectors = self.vectorizer.fit_transform(features)
 
+        logger.debug("Expression queries: %r", self.expression_queries.items()[:5])
         logger.debug("Vectors: %r", self.vectors)
         logger.info("Finished precomputation")        
 
 
+    def get_queries_for_expression(self, expression):
+        return set(self.expression_queries[expression])
+
     def get_best_expressions(self, query):
+        logger.info("Getting expressions for query: %r", query)
         query_features = self.get_sentence_features(query)
         logger.debug("Query features: %r", query_features)
         query_vector = self.vectorizer.transform([query_features])[0].toarray()[0]
@@ -104,6 +114,8 @@ class NNSystem(object):
             c = cosine(query_vector, vector)
             cosines.append(c)
         best_indices = np.argsort(cosines)[::-1]
+        logger.info("Best matching queries: %r",
+                    [self.queries[i] for i in best_indices[:3]])
         return [self.expressions[i] for i in best_indices]
 
 
