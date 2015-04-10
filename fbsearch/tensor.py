@@ -24,6 +24,7 @@ class TensorSystem(object):
         self.possible_connections = None
         self.oracle_class = oracle_class
         self.expression_features = {}
+        self.entity_features = {}
 
     def set_best_expression_set(self, train_set):
         expression_counts = Counter()
@@ -79,14 +80,15 @@ class TensorSystem(object):
             logger.debug("Building features for query %r, %d correct expressions",
                          query, len(correct_expressions))
             query_tokens = self.get_sentence_features(query)
+            query_entities = self.connector.get_query_entities(query)
 
             for expression in correct_expressions & self.frequent_expressions:
-                features = self.get_query_expression_features(query_tokens, expression)
+                features = self.get_query_expression_features(query_tokens, query_entities, expression)
                 all_features.append(features)
                 values.append(1)
 
             for expression in self.frequent_expressions - correct_expressions:
-                features = self.get_query_expression_features(query_tokens, expression)
+                features = self.get_query_expression_features(query_tokens, query_entities, expression)
                 all_features.append(features)
                 values.append(0)
 
@@ -118,14 +120,11 @@ class TensorSystem(object):
 
         logger.info("Finished training")
         
-    def make_features(self, all_query_tokens, all_connections):
-        return [self.get_query_expression_features(query_tokens, connection)
-                for query_tokens, connection in zip(all_query_tokens, all_connections)]
-
     def get_best_expressions(self, query):
         query_features = self.get_sentence_features(query)
         logger.debug("Query features: %r", query_features)
-        all_features = [self.get_query_expression_features(query_features, expression)
+        query_entities = self.connector.get_query_entities(query)
+        all_features = [self.get_query_expression_features(query_features, query_entities, expression)
                         for expression in self.frequent_expressions]
         vectors = self.vectorizer.transform(all_features)
         predictions = self.classifier.decision_function(vectors)
@@ -173,9 +172,20 @@ class TensorSystem(object):
         self.expression_features[expression] = features
         return features
 
-    def get_query_expression_features(self, query, expression):
+    def get_entity_features(self, query_entities):
+        key = tuple(query_entities)
+        if key in self.entity_features:
+            return self.entity_features[key]
+        entity_names = [self.connector.related.get_names(entity) for entity in query_entities]
+        all_names = ' '.join(entity_names)
+        features = self.get_sentence_features(all_names)
+        self.entity_features[key] = features
+        return features
+
+    def get_query_expression_features(self, query, query_entities, expression):
         expression_features = self.get_expression_features(expression)
-        return self.get_tensor_features(query, expression_features)
+        entity_features = self.get_entity_features(query_entities)
+        return self.get_tensor_features(query, expression_features + entity_features)
 
     def get_tensor_features(self, source_tokens, target_tokens):
         features = []
