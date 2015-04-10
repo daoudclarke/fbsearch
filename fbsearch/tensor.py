@@ -169,6 +169,7 @@ class TensorSystem(object):
         logger.info("Connections: %r, Connection names: %s", connections, connection_names)
         pseudo_sentence = ' '.join(connection_names)
         features = self.get_sentence_features(pseudo_sentence)
+        logger.debug("Connection features: %r", features)
         self.expression_features[expression] = features
         return features
 
@@ -184,7 +185,7 @@ class TensorSystem(object):
         return {f: 1.0 for f in features}
 
     def get_sentence_features(self, sentence):
-        tokens = tokenize(sentence)
+        tokens = set(tokenize(sentence))
         return [token for token in tokens if token not in STOPWORDS]
 
     def __repr__(self):

@@ -7,6 +7,7 @@ from fbsearch.tensor import TensorSystem
 from fbsearch.dataset import get_dataset
 from fbsearch import settings
 from fbsearch.knn import NNSystem
+from fbsearch.upperbound import UpperBoundSystem
 from random import Random
 from log import logger
 
@@ -142,8 +143,9 @@ def evaluate_quickly():
 
     logger.info("Training")
     train_set = dataset[:400]
-    system = TensorSystem(CachedOracleSystem)
+    #system = TensorSystem(CachedOracleSystem)
     #system = NNSystem(CachedOracleSystem)
+    system = UpperBoundSystem(CachedOracleSystem(dataset), CachedOracleSystem)
     system.train(train_set)
 
     test_set = dataset[2500:]
@@ -151,7 +153,7 @@ def evaluate_quickly():
     results = get_system_best(test_set, system)
     with open(output_path, 'w') as output_file:
         pickle.dump(results, output_file)
-    system.connector.save_cache()
+    #system.connector.save_cache()
     print analyse_system_best(output_path)
 
 if __name__ == "__main__":

@@ -42,7 +42,7 @@ Training on 100 items: 214
 Using the top 1 item from system:
 Training on 400 items:              177
 Using terms instead of expressions: 182
-Training on 2500 items:             300
+Training on 2500 items:             300 = 23.4% -> 28.2% F1 in proper eval.
 Using 1NN:                          294
 5NN + 0.95 discount:                297
 10NN + 0.95 discount:               300
@@ -58,3 +58,6 @@ Tensor:                             182 (see above)
 10NN                                142
 
 5NN + 0.95 discount:                182
+
+
+Upper bound, training on 2500:      714
