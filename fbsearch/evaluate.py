@@ -122,11 +122,11 @@ def get_system_best(dataset, system):
                         'oracle': oracle_expressions,
                         'system': system_expressions})
 
-        matching_queries = [system.get_queries_for_expression(expression)
-                            for expression in oracle_expressions]
-        if len(matching_queries) > 0:
-            matching_queries = reduce(set.__or__, matching_queries)
-        logger.debug("Correct matching queries: %r", matching_queries)
+        # matching_queries = [system.get_queries_for_expression(expression)
+        #                     for expression in oracle_expressions]
+        # if len(matching_queries) > 0:
+        #     matching_queries = reduce(set.__or__, matching_queries)
+        # logger.debug("Correct matching queries: %r", matching_queries)
 
     return results
     
@@ -141,12 +141,12 @@ def evaluate_quickly():
     random.shuffle(dataset)
 
     logger.info("Training")
-    train_set = dataset[:2500]
-    #system = TensorSystem(CachedOracleSystem)
-    system = NNSystem(CachedOracleSystem)
+    train_set = dataset[:400]
+    system = TensorSystem(CachedOracleSystem)
+    #system = NNSystem(CachedOracleSystem)
     system.train(train_set)
 
-    test_set = dataset[2500:2550]
+    test_set = dataset[2500:]
     logger.info("Testing on %d items", len(test_set))
     results = get_system_best(test_set, system)
     with open(output_path, 'w') as output_file:

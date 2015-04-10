@@ -44,3 +44,17 @@ Training on 400 items:              177
 Using terms instead of expressions: 182
 Training on 2500 items:             300
 Using 1NN:                          294
+5NN + 0.95 discount:                297
+10NN + 0.95 discount:               300
+
+Training on 400 items:
+Tensor:                             182 (see above)
+1NN:                                169 (+ expression freq)
+1NN:                                125 (without expression freq)
+2NN:                                117
+3NN:                                136
+4NN:                                150
+5NN:                                153
+10NN                                142
+
+5NN + 0.95 discount:                182

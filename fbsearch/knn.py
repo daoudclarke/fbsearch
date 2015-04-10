@@ -22,39 +22,14 @@ def cosine(u, v):
     return np.dot(u,v)/math.sqrt(np.dot(u,u)*np.dot(v,v))
 
 class NNSystem(object):
+    k = 10
+    
     def __init__(self, oracle_class=OracleSystem):
         self.random = random.Random(1)
         self.connector = Connector()
         self.possible_connections = None
         self.oracle_class = oracle_class
         self.expression_features = {}
-
-    def set_best_expression_set(self, train_set):
-        self.frequent_expressions = set()
-        covered = 0
-        uncovered_set = train_set
-        while len(uncovered_set) > 0:
-            frequent = expression_counts.most_common(1)[0][0]
-            self.frequent_expressions.add(frequent)
-            logger.info("Most frequent expression: %r", frequent)
-
-            covered = 0
-            removed = Counter()
-            new_uncovered_set = []
-            new_expression_counts = Counter()
-            for query, target in uncovered_set:
-                _, oracle_expressions = self.oracle.get_best_results_and_expressions(query)
-                oracle_expressions = set(oracle_expressions)
-                if frequent not in oracle_expressions and len(oracle_expressions) > 0:
-                    new_uncovered_set.append((query, target))
-                    new_expression_counts.update(oracle_expressions)
-            uncovered_set = new_uncovered_set
-            expression_counts = new_expression_counts
-            logger.info("Frequent expressions: %d, uncovered: %d, expressions_remaining: %d",
-                        len(self.frequent_expressions),
-                        len(uncovered_set),
-                        len(expression_counts))
-        
 
     def train(self, train_set):
         logger.info("Performing pre-computation for KNN classifier")
@@ -69,10 +44,10 @@ class NNSystem(object):
             self.query_expressions[query] = expressions
         logger.info("Obtained %d items from oracle", len(self.query_expressions))
 
-        expression_counts = Counter()
-        for expressions in self.query_expressions.values():
-            expression_counts.update(expressions)
-        logger.info("Found %d unique expressions", len(expression_counts))        
+        # expression_counts = Counter()
+        # for expressions in self.query_expressions.values():
+        #     expression_counts.update(expressions)
+        # logger.info("Found %d unique expressions", len(expression_counts))        
 
         features = []
         self.expressions = []
@@ -80,12 +55,12 @@ class NNSystem(object):
         self.expression_queries = defaultdict(list)
         for query, correct_expressions in self.query_expressions.iteritems():
             query_features = self.get_sentence_features(query)
-            correct_expression_counts = [(expression_counts[expression], expression)
-                                         for expression in correct_expressions]
-            sorted_counts = sorted(correct_expression_counts, reverse=True)
-            best_expression = sorted_counts[0][1]
+            # correct_expression_counts = [(expression_counts[expression], expression)
+            #                              for expression in correct_expressions]
+            # sorted_counts = sorted(correct_expression_counts, reverse=True)
+            # best_expression = sorted_counts[0][1]
             features.append(query_features)
-            self.expressions.append(best_expression)
+            self.expressions.append(correct_expressions)
             self.queries.append(query)
             for expression in correct_expressions:
                 self.expression_queries[expression].append(query)
@@ -116,8 +91,16 @@ class NNSystem(object):
         best_indices = np.argsort(cosines)[::-1]
         logger.info("Best matching queries: %r",
                     [self.queries[i] for i in best_indices[:3]])
-        return [self.expressions[i] for i in best_indices]
-
+        matching_expression_sets = [self.expressions[i] for i in best_indices]
+        expression_counts = Counter()
+        discount = 1.0
+        for expression_set in matching_expression_sets[:self.k]:
+            set_counts = Counter(expression_set)
+            expression_counts.update({k:discount*v for k, v in set_counts.items()})
+            discount *= 0.95
+        best_expressions = expression_counts.most_common()
+        logger.info("Best expressions: %r", best_expressions[:10])
+        return [expression for expression, _ in best_expressions]
 
     def execute(self, query):
         logger.debug("Executing query: %r", query)
