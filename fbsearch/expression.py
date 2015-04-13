@@ -22,6 +22,12 @@ class ConnectionExpression(Expression):
         return set(related.apply_connection(
             entities, self.connection))
 
+    def get_connections(self):
+        """
+        Return the set of connections used by the expression.
+        """
+        return set([self.connection])
+
     def __repr__(self):
         return repr(self.connection)
 
@@ -34,6 +40,10 @@ class ConjunctionExpression(Expression):
         result1 = self.expression1.apply(entities, related)
         result2 = self.expression2.apply(entities, related)
         return result1 & result2
+
+
+    def get_connections(self):
+        return self.expression1.get_connections() | self.expression2.get_connections()
 
     def __repr__(self):
         return "%r & %r" % (self.expression1, self.expression2)
