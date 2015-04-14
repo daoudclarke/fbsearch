@@ -10,10 +10,13 @@ from expression import ConnectionExpression, ConjunctionExpression
 
 from itertools import combinations
 
-class OracleSystem(object):
+class SearchOracleSystem(object):
     def __init__(self, dataset):
         self.query_targets = dict(dataset)
         self.connector = Connector()
+
+    def train(self, dataset):
+        pass
 
     def execute(self, query):
         results, _ = self.get_best_results_and_expressions(
@@ -23,35 +26,44 @@ class OracleSystem(object):
     def get_best_results_and_expressions(self, query):
         logger.info("Getting best results for query: %r", query)
         targets = self.query_targets[query]
-        connections = self.connector.search_all(query, targets)
-        logger.info("Found connections: %r", connections)
-
-        # connection_results = {}
-        # for connection in connections:
-        #     logger.debug("Querying connection: %s", connection)
-        #     results = self.connector.apply_connection(query, connection)
-        #     connection_results[connection] = results
-
-        connection_expressions = [ConnectionExpression(connection)
-                                  for connection in connections]
-        conjunction_expressions = [ConjunctionExpression(connection1, connection2)
-                                   for connection1, connection2 in
-                                   combinations(connection_expressions, 2)]
-        expressions = connection_expressions + conjunction_expressions
-        logger.debug("Applying expressions: %r", expressions)
-
         query_entities = self.connector.get_query_entities(query)
-            
+        relations = self.connector.related.search(query_entities)
+
+        all_values = reduce(set.__or__, relations.values())
+        all_names = {self.connector.related.get_names(x) for x in all_values}
+        if all_names & set(targets) == set():
+            logger.info("No values in common: %r, %r", targets, all_names)
+
+        connection_expressions = {ConnectionExpression(relation): values
+                                  for relation, values in relations.items()
+                                  if values & set(targets)}
+        connection_expression_items = connection_expressions.items()
+
+        conjunction_expressions = {}
+        for i in range(len(connection_expression_items)):
+            expression1, values1 = connection_expression_items[i]
+            for j in range(i + 1, len(connection_expression_items)):
+                expression2, values2 = connection_expression_items[j]
+                values = values1 & values2
+                if not values:
+                    continue
+                expression = ConjunctionExpression(expression1, expression2)
+                conjunction_expressions[expression] = values
+
+        expressions = connection_expressions
+        expressions.update(conjunction_expressions)
+
         best_score = 0.0
         best_results = []
         best_expressions = []
-        for expression in expressions:
-            result_ids = expression.apply(query_entities, self.connector.related)
+        for expression, result_ids in expressions.items():
             result_names = set(self.connector.related.get_names(result) for result in result_ids)
 
             score = get_f1_score(targets, result_names)
             logger.debug("Target: %s, expression: %r, score: %f, result %r",
-                         targets, connection, score, result_names)
+                         targets, expression, score, result_names)
+            if score == 0.0:
+                continue
             if score > best_score:
                 logger.debug("Found new best expression: %r, results: %r", expression, result_names)
                 best_score = score
@@ -63,4 +75,7 @@ class OracleSystem(object):
 
         logger.info("Best score: %f, best expressions: %r", best_score, best_expressions)
         return best_results, set(best_expressions)
-    
+
+    def get_best_expressions(self, query):
+        expressions, results = self.get_best_results_and_expressions(query)
+        return list(expressions)

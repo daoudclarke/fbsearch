@@ -11,6 +11,7 @@ from sparql import SPARQLStore
 
 from fbsearch import settings
 
+from collections import defaultdict
 from socket import timeout
 import sys
 import logging
@@ -63,38 +64,57 @@ class RelatedEntities(object):
         if len(names) > 0:
             return names[0][0]
 
-    def search(self, entity):
+    def search(self, entities):
         """
         Find entities related to the given one
         """
-        assert type(entity) == unicode, "Expected unicode, got %r" % type(entity)
-        uri = ensure_prefixed(entity)
-        #uri = entity
-        #print entity, uri
-        #ref = URIRef(uri)
-        #print "REF: %r" % ref
-        logger.debug("Getting triples for %s", uri)
+        #assert type(entity) == unicode, "Expected unicode, got %r" % type(entity)
+        
+        #uri = ensure_prefixed(entity)
+        #logger.debug("Getting triples for %s", uri)
         triples = self.store.query("""
             prefix fb: <http://rdf.freebase.com/ns/>
-            SELECT *
+            SELECT ?r ?o ?schema
             WHERE
             {
-                %s ?r ?o .
+                ?s ?r ?o .
+                ?r fb:type.property.schema ?schema .
+                FILTER(?s IN (%s)) .
                 FILTER(isURI(?o)) .
                 FILTER(!regex(?r, ".*type.*")) .
             }
-            LIMIT 150
-            """ % uri)
+            LIMIT 10000
+            """ % ','.join(entities))
 
-        #triples = self.store.triples((ref, None, BNode()))
-        logger.debug("Got triples")
-        #print triples
-        return [(uri, r, o) for r, o in triples]
-        # results = []
-        # for t in triples:
-        #     print t
-        #     results.append(t[0])
-        # return results
+        logger.info("Got %d triples", len(triples))
+
+        relations = defaultdict(set)
+        for r, o, _ in triples:
+            relations[(r,)].add(o)
+
+        second_order = self.store.query("""
+            prefix fb: <http://rdf.freebase.com/ns/>
+            SELECT ?r1 ?r2 ?o2
+            WHERE
+            {
+                ?s ?r1 ?o1 .
+                ?o1 ?r2 ?o2 .
+                ?r1 fb:type.property.schema ?schema1 .
+                ?r2 fb:type.property.schema ?schema2 .
+                FILTER(?s IN (%s)) .
+                FILTER(isURI(?o1)) .
+                FILTER(isURI(?o2)) .
+                FILTER(!regex(?r1, ".*type.*")) .
+                FILTER(!regex(?r2, ".*type.*")) .
+            }
+            LIMIT 50000
+            """ % ','.join(entities))
+
+        logger.info("Got %d second order relations", len(second_order))
+        for r1, r2, o in second_order:
+            relations[(r1, r2)].add(o)
+
+        return relations
 
     def connect_names(self, query_entities, target_names):
         if len(query_entities) == 0:
@@ -288,6 +308,35 @@ class RelatedEntities(object):
             score = 0
         self.entity_scores[entity] = score
         return score
+
+    def get_types(self, entity):
+        entity = ensure_prefixed(entity)
+        entity_types = self.store.query("""
+            prefix fb: <http://rdf.freebase.com/ns/>
+            SELECT ?o
+            WHERE
+            {
+                %s fb:type.object.type ?o .
+            }
+            """ % entity)
+        logger.debug("Found entity type: %r", entity_types)
+        return set(x[0] for x in entity_types)
+
+
+    def get_schema(self, relation):
+        relation = ensure_prefixed(relation)
+        schema = self.store.query("""
+            prefix fb: <http://rdf.freebase.com/ns/>
+            SELECT ?o
+            WHERE
+            {
+                %s fb:type.property.schema ?o .
+            }
+            """ % relation)
+        assert len(schema) <= 1
+        logger.debug("Found schema: %r", schema)
+        return schema[0][0] if schema else None
+
 
     def recurse(self, entity, depth=1, seen_entities=None):
         logger.debug("Recursing at depth %d", depth)

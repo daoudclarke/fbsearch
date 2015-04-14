@@ -11,6 +11,7 @@ from fbsearch.cachedoracle import CachedOracleSystem
 from fbsearch.dataset import get_dataset
 from fbsearch import settings
 
+from collections import defaultdict
 from random import Random
 import json
 
@@ -27,17 +28,14 @@ def get_positive_relations(dataset):
 
 def get_neutral_relations(dataset):
     connector = Connector()
-    neutral_relations = set()
+    neutral_relations = defaultdict(int)
     random = Random(1)
     for query, target_entities in dataset[:10]:
         entities = connector.get_query_entities(query)
-        for entity in entities:
-            relations = connector.related.search(entity)
-            neutral_relations.update([obj for _, _, obj in relations])
-            random.shuffle(relations)
-            for uri, relation, obj in relations[:1]:
-                relations = connector.related.search(obj)
-                neutral_relations.update([obj for _, _, obj in relations])
+        relations = connector.related.search(entities)
+        for relation, values in relations.items():
+            for r in relation:
+                neutral_relations[r] += len(values)
     return neutral_relations
                 
 
@@ -53,16 +51,17 @@ def create_dataset():
 
     positive_relations = get_positive_relations(dataset)
     neutral_relations = get_neutral_relations(dataset)
-    negative_relations = neutral_relations - positive_relations
+    negative_relations = {relation: count for relation, count in neutral_relations.items()
+                          if relation not in positive_relations}
     dataset = [{'relation': relation, 'useful': True}
                for relation in positive_relations]
-    dataset += [{'relation': relation, 'useful': False}
-                for relation in negative_relations]
+    dataset += [{'relation': relation, 'useful': False, 'count': count}
+                for relation, count in negative_relations.items()]
     return dataset
 
 def save_dataset(dataset):
     output_file = open(settings.RELATION_DATASET_PATH, 'w')
-    json.dump(dataset, output_file)
+    json.dump(dataset, output_file, indent=4)
 
 if __name__ == "__main__":
     dataset = create_dataset()

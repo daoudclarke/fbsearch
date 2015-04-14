@@ -32,3 +32,13 @@ def test_entity_score():
     random_score = related.get_entity_score('fb:m.0hndhfh')
     print "France:", france_score, "other:", random_score
     assert france_score > random_score
+
+
+def test_search_results_have_schema():
+    related = RelatedEntities()
+    relatives = related.search([u'fb:en.france'])
+    for relative in relatives.keys():
+        schema = related.get_schema(relative)
+        assert schema is not None
+
+

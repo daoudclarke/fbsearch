@@ -4,6 +4,7 @@ from fbsearch.cachedoracle import CachedOracleSystem
 from fbsearch import settings
 from fbsearch.oracle import OracleSystem
 from fbsearch.tensor import TensorSystem
+from fbsearch.searchoracle import SearchOracleSystem
 from fbsearch.dataset import get_dataset
 from fbsearch import settings
 from fbsearch.knn import NNSystem
@@ -145,10 +146,11 @@ def evaluate_quickly():
     train_set = dataset[:400]
     #system = TensorSystem(CachedOracleSystem)
     #system = NNSystem(CachedOracleSystem)
-    system = UpperBoundSystem(CachedOracleSystem(dataset), CachedOracleSystem)
+    #system = UpperBoundSystem(CachedOracleSystem(dataset), CachedOracleSystem)
+    system = SearchOracleSystem(dataset)
     system.train(train_set)
 
-    test_set = dataset[2500:]
+    test_set = dataset[2500:2503]
     logger.info("Testing on %d items", len(test_set))
     results = get_system_best(test_set, system)
     with open(output_path, 'w') as output_file:
