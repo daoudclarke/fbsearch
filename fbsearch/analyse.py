@@ -2,6 +2,7 @@ import numpy as np
 from numpy import mean as get_mean
 from scipy.stats import sem as get_error_in_mean
 from fbsearch import settings
+from fbsearch.log import logger
 import json
 import cPickle as pickle
 
@@ -68,6 +69,8 @@ def analyse_system_best(file_path):
     num_correct = 0
     for result in results:
         system_best = set(result['system'][:1])
+        logger.debug("System best: %r, oracle: %r",
+                     system_best, result['oracle'])
         if system_best & set(result['oracle']):
             num_correct += 1
     return {'num_correct': num_correct,

@@ -38,7 +38,8 @@ def test_search_results_have_schema():
     related = RelatedEntities()
     relatives = related.search([u'fb:en.france'])
     for relative in relatives.keys():
-        schema = related.get_schema(relative)
-        assert schema is not None
+        for relation in relative:
+            schema = related.get_schema(relation)
+            assert schema is not None
 
 

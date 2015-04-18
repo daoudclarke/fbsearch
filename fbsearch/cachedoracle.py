@@ -24,6 +24,9 @@ class CachedOracleSystem(object):
             self.queries = { item['query']: (item['results'], item['expressions'])
                              for item in queries if item['query'] in valid_queries }
 
+    def train(self, dataset):
+        pass
+
     def execute(self, query):
         results, _ = self.get_best_results_and_expressions(
             query)
@@ -31,6 +34,10 @@ class CachedOracleSystem(object):
 
     def get_best_results_and_expressions(self, query):
         return self.queries[query]
+
+    def get_best_expressions(self, query):
+        results, expressions = self.get_best_results_and_expressions(query)
+        return list(expressions)
 
 
 def get_cache_oracle_data(dataset):

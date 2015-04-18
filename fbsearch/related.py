@@ -41,17 +41,29 @@ class RelatedEntities(object):
         try:
             cache_file = open(settings.ENTITY_SCORE_CACHE_PATH)
             self.entity_scores = json.load(cache_file)
-            logger.info("Loaded %d entities in cache", len(self.entity_scores))
+            logger.info("Loaded %d entity scores in cache", len(self.entity_scores))
         except IOError:
             self.entity_scores = {}
+        try:
+            cache_file = open(settings.ENTITY_NAME_CACHE_PATH)
+            self.entity_names = json.load(cache_file)
+            logger.info("Loaded %d entity names in cache", len(self.entity_scores))
+        except IOError:
+            self.entity_names = {}
+            
 
     def save_cache(self):
         logger.info("Saving entity score cache")
         with open(settings.ENTITY_SCORE_CACHE_PATH, 'w') as cache_file:
             json.dump(self.entity_scores, cache_file)
+        with open(settings.ENTITY_NAME_CACHE_PATH, 'w') as cache_file:
+            json.dump(self.entity_names, cache_file)
 
     def get_names(self, entity):
         entity = ensure_prefixed(entity)
+        if entity in self.entity_names:
+            return self.entity_names[entity]
+
         names = self.store.query("""
             prefix fb: <http://rdf.freebase.com/ns/>
             SELECT *
@@ -61,8 +73,9 @@ class RelatedEntities(object):
             }
             """ % entity)
         assert len(names) <= 1
-        if len(names) > 0:
-            return names[0][0]
+        name = names[0][0] if len(names) > 0 else None
+        self.entity_names[entity] = name
+        return name
 
     def search(self, entities):
         """
@@ -94,7 +107,7 @@ class RelatedEntities(object):
 
         second_order = self.store.query("""
             prefix fb: <http://rdf.freebase.com/ns/>
-            SELECT ?r1 ?r2 ?o2
+            SELECT DISTINCT ?r1 ?r2
             WHERE
             {
                 ?s ?r1 ?o1 .
@@ -102,7 +115,6 @@ class RelatedEntities(object):
                 ?r1 fb:type.property.schema ?schema1 .
                 ?r2 fb:type.property.schema ?schema2 .
                 FILTER(?s IN (%s)) .
-                FILTER(isURI(?o1)) .
                 FILTER(isURI(?o2)) .
                 FILTER(!regex(?r1, ".*type.*")) .
                 FILTER(!regex(?r2, ".*type.*")) .
@@ -111,8 +123,9 @@ class RelatedEntities(object):
             """ % ','.join(entities))
 
         logger.info("Got %d second order relations", len(second_order))
-        for r1, r2, o in second_order:
-            relations[(r1, r2)].add(o)
+        for r1, r2 in second_order:
+            results = self.apply_connection(entities, (r1, r2))
+            relations[(r1, r2)] = set(results)
 
         return relations
 

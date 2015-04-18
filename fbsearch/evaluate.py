@@ -148,9 +148,10 @@ def evaluate_quickly():
     #system = NNSystem(CachedOracleSystem)
     #system = UpperBoundSystem(CachedOracleSystem(dataset), CachedOracleSystem)
     system = SearchOracleSystem(dataset)
+    #system = CachedOracleSystem(dataset)
     system.train(train_set)
 
-    test_set = dataset[2500:2503]
+    test_set = dataset[2510:2513]
     logger.info("Testing on %d items", len(test_set))
     results = get_system_best(test_set, system)
     with open(output_path, 'w') as output_file:

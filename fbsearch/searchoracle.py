@@ -29,14 +29,13 @@ class SearchOracleSystem(object):
         query_entities = self.connector.get_query_entities(query)
         relations = self.connector.related.search(query_entities)
 
-        all_values = reduce(set.__or__, relations.values())
-        all_names = {self.connector.related.get_names(x) for x in all_values}
-        if all_names & set(targets) == set():
-            logger.info("No values in common: %r, %r", targets, all_names)
+        # all_values = reduce(set.__or__, relations.values())
+        # names = {self.connector.related.get_names(x) for x in all_values}
+        # if all_names & set(targets) == set():
+        #     logger.info("No values in common: %r, %r", targets, all_names)
 
         connection_expressions = {ConnectionExpression(relation): values
-                                  for relation, values in relations.items()
-                                  if values & set(targets)}
+                                  for relation, values in relations.items()}
         connection_expression_items = connection_expressions.items()
 
         conjunction_expressions = {}
@@ -77,5 +76,5 @@ class SearchOracleSystem(object):
         return best_results, set(best_expressions)
 
     def get_best_expressions(self, query):
-        expressions, results = self.get_best_results_and_expressions(query)
+        results, expressions = self.get_best_results_and_expressions(query)
         return list(expressions)
