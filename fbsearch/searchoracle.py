@@ -24,6 +24,32 @@ class SearchOracleSystem(object):
         return results
 
     def get_best_results_and_expressions(self, query):
+        logger.info("Getting best results from oracle for query: %r", query)
+        results = self.get_all_results_and_expressions(query)
+
+        best_score = 0.0
+        best_results = []
+        best_expressions = []
+        for result in results:
+            score = result['score']
+            expression = result['expression']
+            results = result['results']
+            if score == 0.0:
+                continue
+            if score > best_score:
+                logger.debug("Found new best expression: %r, results: %r", expression, results)
+                best_score = score
+                best_results = results
+                best_expressions = [expression]
+            elif score == best_score:
+                logger.debug("Found equally good expression: %r, results: %r", expression, result_names)                
+                best_expressions.append(expression)
+
+        logger.info("Best score: %f, best expressions: %r", best_score, best_expressions)
+        return best_results, set(best_expressions)
+
+
+    def get_all_results_and_expressions(self, query):
         logger.info("Getting best results for query: %r", query)
         targets = self.query_targets[query]
         query_entities = self.connector.get_query_entities(query)
@@ -52,28 +78,22 @@ class SearchOracleSystem(object):
         expressions = connection_expressions
         expressions.update(conjunction_expressions)
 
-        best_score = 0.0
-        best_results = []
-        best_expressions = []
+        results = []
         for expression, result_ids in expressions.items():
             result_names = set(self.connector.related.get_names(result) for result in result_ids)
 
             score = get_f1_score(targets, result_names)
             logger.debug("Target: %s, expression: %r, score: %f, result %r",
                          targets, expression, score, result_names)
-            if score == 0.0:
-                continue
-            if score > best_score:
-                logger.debug("Found new best expression: %r, results: %r", expression, result_names)
-                best_score = score
-                best_results = result_names
-                best_expressions = [expression]
-            elif score == best_score:
-                logger.debug("Found equally good expression: %r, results: %r", expression, result_names)                
-                best_expressions.append(expression)
+            result = {
+                'expression': expression,
+                'results': result_names,
+                'score': score,
+                'target': targets,
+                }
 
-        logger.info("Best score: %f, best expressions: %r", best_score, best_expressions)
-        return best_results, set(best_expressions)
+            results.append(result)
+        return results
 
     def get_best_expressions(self, query):
         results, expressions = self.get_best_results_and_expressions(query)

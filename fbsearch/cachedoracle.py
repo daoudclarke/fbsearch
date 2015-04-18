@@ -2,7 +2,7 @@
 Acts like an oracle but uses a file containing cached oracle analysis.
 """
 
-from fbsearch.oracle import OracleSystem
+from fbsearch.searchoracle import SearchOracleSystem
 from fbsearch.dataset import get_dataset
 from fbsearch import settings
 from fbsearch.log import logger
@@ -41,7 +41,7 @@ class CachedOracleSystem(object):
 
 
 def get_cache_oracle_data(dataset):
-    oracle = OracleSystem(dataset)
+    oracle = SearchOracleSystem(dataset)
 
     i = 0
     for query, target_entities in dataset:
