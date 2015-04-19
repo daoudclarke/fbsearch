@@ -58,7 +58,6 @@ def save_oracle_data(oracle_results):
 if __name__ == "__main__":
     dataset_file = open(settings.DATASET_PATH)
     dataset = get_dataset(dataset_file)
-    dataset = dataset[:1]
     oracle_data = get_cache_oracle_data(dataset)
     save_oracle_data(oracle_data)
     
