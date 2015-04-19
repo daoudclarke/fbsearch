@@ -85,47 +85,52 @@ class RelatedEntities(object):
         
         #uri = ensure_prefixed(entity)
         #logger.debug("Getting triples for %s", uri)
-        triples = self.store.query("""
-            prefix fb: <http://rdf.freebase.com/ns/>
-            SELECT ?r ?o ?schema
-            WHERE
-            {
-                ?s ?r ?o .
-                ?r fb:type.property.schema ?schema .
-                FILTER(?s IN (%s)) .
-                FILTER(isURI(?o)) .
-                FILTER(!regex(?r, ".*type.*")) .
-            }
-            LIMIT 10000
-            """ % ','.join(entities))
+        try:
+            connections = self.store.query("""
+                prefix fb: <http://rdf.freebase.com/ns/>
+                SELECT DISTINCT ?r
+                WHERE
+                {
+                    ?s ?r ?o .
+                    ?r fb:type.property.schema ?schema .
+                    FILTER(?s IN (%s)) .
+                    FILTER(isURI(?o)) .
+                    FILTER(!regex(?r, ".*type.*")) .
+                }
+                """ % ','.join(entities))
 
-        logger.info("Got %d triples", len(triples))
+            logger.info("Got %d results", len(connections))
+        except timeout:
+            logger.exception("Timeout getting simple connections")
+            connections = []
 
-        relations = defaultdict(set)
-        for r, o, _ in triples:
-            relations[(r,)].add(o)
-
-        second_order = self.store.query("""
-            prefix fb: <http://rdf.freebase.com/ns/>
-            SELECT DISTINCT ?r1 ?r2
-            WHERE
-            {
-                ?s ?r1 ?o1 .
-                ?o1 ?r2 ?o2 .
-                ?r1 fb:type.property.schema ?schema1 .
-                ?r2 fb:type.property.schema ?schema2 .
-                FILTER(?s IN (%s)) .
-                FILTER(isURI(?o2)) .
-                FILTER(!regex(?r1, ".*type.*")) .
-                FILTER(!regex(?r2, ".*type.*")) .
-            }
-            LIMIT 50000
-            """ % ','.join(entities))
+        try:
+            second_order = self.store.query("""
+                prefix fb: <http://rdf.freebase.com/ns/>
+                SELECT DISTINCT ?r1 ?r2
+                WHERE
+                {
+                    ?s ?r1 ?o1 .
+                    ?o1 ?r2 ?o2 .
+                    ?r1 fb:type.property.schema ?schema1 .
+                    ?r2 fb:type.property.schema ?schema2 .
+                    FILTER(?s IN (%s)) .
+                    FILTER(isURI(?o2)) .
+                    FILTER(!regex(?r1, ".*type.*")) .
+                    FILTER(!regex(?r2, ".*type.*")) .
+                }
+                """ % ','.join(entities))
+        except timeout:
+            logger.info("Timeout getting second order connections")
+            second_order = []
 
         logger.info("Got %d second order relations", len(second_order))
-        for r1, r2 in second_order:
-            results = self.apply_connection(entities, (r1, r2))
-            relations[(r1, r2)] = set(results)
+        connections += second_order
+
+        relations = {}
+        for connection in connections:
+            results = self.apply_connection(entities, connection)
+            relations[connection] = set(results)
 
         return relations
 
@@ -279,17 +284,21 @@ class RelatedEntities(object):
                 LIMIT 100
                 """ % (connection[0], ','.join(entities)))
         elif len(connection) == 2:
-            results = self.store.query("""
-                prefix fb: <http://rdf.freebase.com/ns/>
-                SELECT ?o2
-                WHERE
-                {
-                    ?s %s ?o1 .
-                    ?o1 %s ?o2
-                    FILTER(?s IN (%s)) .
-                }
-                LIMIT 100
-                """ % (connection[0], connection[1], ','.join(entities)))
+            try:
+                results = self.store.query("""
+                    prefix fb: <http://rdf.freebase.com/ns/>
+                    SELECT ?o2
+                    WHERE
+                    {
+                        ?s %s ?o1 .
+                        ?o1 %s ?o2
+                        FILTER(?s IN (%s)) .
+                    }
+                    LIMIT 100
+                    """ % (connection[0], connection[1], ','.join(entities)))
+            except timeout:
+                logger.exception("Timeout applying secondary connection.")
+                results = []
         else:
             raise ValueError("Unexpected number of parts to connection")
         return [result[0] for result in results]

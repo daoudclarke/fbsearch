@@ -2,7 +2,7 @@
 Acts like an oracle but uses a file containing cached oracle analysis.
 """
 
-from fbsearch.searchoracle import SearchOracleSystem
+from fbsearch.oracle import OracleSystem
 from fbsearch.dataset import get_dataset
 from fbsearch import settings
 from fbsearch.log import logger
