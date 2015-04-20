@@ -9,21 +9,28 @@ from fbsearch.log import logger
 
 import cPickle as pickle
 
+def get_cache():
+    with open(settings.ORACLE_CACHE_PATH) as cache_file:
+        logger.debug("Loading queries")
+        queries = []
+        while True:
+            try:
+                item = pickle.load(cache_file)
+                logger.debug("Loaded query: %r", item['query'])
+                yield item
+            except EOFError:
+                break
+    
+
 class CachedOracleSystem(OracleSystem):
     def __init__(self, dataset):
-        with open(settings.ORACLE_CACHE_PATH) as cache_file:
-            valid_queries = set(query for query, _ in dataset)
+        self.valid_queries = set(query for query, _ in dataset)        
 
-            queries = []
-            while True:
-                try:
-                    query = pickle.load(cache_file)
-                    queries.append(query)
-                except EOFError:
-                    break
-            self.queries = { item['query']: item['expressions']
-                             for item in queries if item['query'] in valid_queries }
-
+    def load_cache(self):
+        cache = get_cache()
+        self.queries = { item['query']: item['expressions']
+                         for item in cache if item['query'] in self.valid_queries }
+            
     def get_all_results_and_expressions(self, query):
         logger.info("Getting best results from cache for query: %r", query)
         return self.queries[query]

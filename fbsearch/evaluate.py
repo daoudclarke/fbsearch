@@ -19,6 +19,7 @@ import cPickle as pickle
 import pytest
 
 
+
 def get_target_and_predicted_values(dataset, system):
     target_predicted_results = []
     for query, target_entities in dataset:
@@ -40,7 +41,9 @@ def evaluate_cached_oracle():
     dataset = get_dataset(dataset_file)
     random.shuffle(dataset)
 
+    logger.info("Constructing cached oracle")
     system = CachedOracleSystem(dataset)
+    system.load_cache()
 
     dataset = [item for item in dataset if item[0] in system.queries]
 
@@ -160,4 +163,5 @@ def evaluate_quickly():
     print analyse_system_best(output_path)
 
 if __name__ == "__main__":
-    evaluate_quickly()
+    #evaluate_quickly()
+    evaluate_cached_oracle()
