@@ -20,77 +20,75 @@ STOPWORDS = {'what', 'is', 'the', 'of', 'to'}
 class TensorSystem(object):
     def __init__(self, oracle_class=OracleSystem):
         self.random = random.Random(1)
-        self.connector = Connector()
         self.possible_connections = None
         self.oracle_class = oracle_class
         self.expression_features = {}
 
-    def set_best_expression_set(self, train_set):
-        expression_counts = Counter()
-        for expressions in self.query_expressions.values():
-            expression_counts.update(expressions)
-        logger.info("Found %d unique expressions", len(expression_counts))
-        self.frequent_expressions = set()
-        covered = 0
-        uncovered_set = train_set
-        while len(uncovered_set) > 0:
-            frequent = expression_counts.most_common(1)[0][0]
-            self.frequent_expressions.add(frequent)
-            logger.info("Most frequent expression: %r", frequent)
+    # def set_best_expression_set(self, train_set):
+    #     expression_counts = Counter()
+    #     for expressions in self.query_expressions.values():
+    #         expression_counts.update(expressions)
+    #     logger.info("Found %d unique expressions", len(expression_counts))
+    #     self.frequent_expressions = set()
+    #     covered = 0
+    #     uncovered_set = train_set
+    #     while len(uncovered_set) > 0:
+    #         frequent = expression_counts.most_common(1)[0][0]
+    #         self.frequent_expressions.add(frequent)
+    #         logger.info("Most frequent expression: %r", frequent)
 
-            covered = 0
-            removed = Counter()
-            new_uncovered_set = []
-            new_expression_counts = Counter()
-            for query, target in uncovered_set:
-                _, oracle_expressions = self.oracle.get_best_results_and_expressions(query)
-                oracle_expressions = set(oracle_expressions)
-                if frequent not in oracle_expressions and len(oracle_expressions) > 0:
-                    new_uncovered_set.append((query, target))
-                    new_expression_counts.update(oracle_expressions)
-            uncovered_set = new_uncovered_set
-            expression_counts = new_expression_counts
-            logger.info("Frequent expressions: %d, uncovered: %d, expressions_remaining: %d",
-                        len(self.frequent_expressions),
-                        len(uncovered_set),
-                        len(expression_counts))
+    #         covered = 0
+    #         removed = Counter()
+    #         new_uncovered_set = []
+    #         new_expression_counts = Counter()
+    #         for query, target in uncovered_set:
+    #             _, oracle_expressions = self.oracle.get_best_results_and_expressions(query)
+    #             oracle_expressions = set(oracle_expressions)
+    #             if frequent not in oracle_expressions and len(oracle_expressions) > 0:
+    #                 new_uncovered_set.append((query, target))
+    #                 new_expression_counts.update(oracle_expressions)
+    #         uncovered_set = new_uncovered_set
+    #         expression_counts = new_expression_counts
+    #         logger.info("Frequent expressions: %d, uncovered: %d, expressions_remaining: %d",
+    #                     len(self.frequent_expressions),
+    #                     len(uncovered_set),
+    #                     len(expression_counts))
         
 
     def train(self, train_set):
         logger.info("Training tensor based classifier")
         
         self.oracle = self.oracle_class(train_set)
+        self.connector = self.oracle.connector
         self.query_expressions = {}
-        for query, target in train_set:
-            _, expressions = self.oracle.get_best_results_and_expressions(query)
-            if len(expressions) == 0:
-                continue
-            self.query_expressions[query] = expressions
-        logger.info("Obtained %d items from oracle", len(self.query_expressions))
-
-        features = []
-        values = []
-
-        self.set_best_expression_set(train_set)
 
         all_features = []
         values = []
-        for query, correct_expressions in self.query_expressions.iteritems():
+        for query, target in train_set:
+            all_results = self.connector.get_all_results_and_expressions(query)
+            all_expressions = set(result['expression'] for result in all_results)
+            if len(all_expressions) == 0:
+                continue
+
+            _, correct_expressions = self.oracle.get_best_results_and_expressions(query)
+            correct_expressions = set(correct_expressions)
+            
+            assert correct_expressions <= all_expressions
+            negative_expressions = all_expressions - correct_expressions
+
             logger.debug("Building features for query %r, %d correct expressions",
                          query, len(correct_expressions))
             query_tokens = self.get_sentence_features(query)
 
-            for expression in correct_expressions & self.frequent_expressions:
+            for expression in correct_expressions:
                 features = self.get_query_expression_features(query_tokens, expression)
                 all_features.append(features)
                 values.append(1)
 
-            for expression in self.frequent_expressions - correct_expressions:
+            for expression in negative_expressions:
                 features = self.get_query_expression_features(query_tokens, expression)
                 all_features.append(features)
                 values.append(0)
-
-        self.frequent_expressions = list(self.frequent_expressions)
 
         logger.info("Training - building vectors with %d features", len(all_features))
         self.vectorizer = DictVectorizer()
@@ -125,18 +123,24 @@ class TensorSystem(object):
     def get_best_expressions(self, query):
         query_features = self.get_sentence_features(query)
         logger.debug("Query features: %r", query_features)
-        all_features = [self.get_query_expression_features(query_features, expression)
-                        for expression in self.frequent_expressions]
+
+        all_results = self.connector.get_all_results_and_expressions(query)
+        all_features = []
+        all_expressions = []
+        for result in all_results:
+            if not result['results']:
+                continue
+            expression = result['expression']
+            all_expressions.append(expression)
+            features = self.get_query_expression_features(query_features, expression)
+            all_features.append(features)
+
         vectors = self.vectorizer.transform(all_features)
         predictions = self.classifier.decision_function(vectors)
         best_indices =  np.argsort(predictions)[::-1]
-        best_expressions = [self.frequent_expressions[i] for i in best_indices]
+        best_expressions = [all_expressions[i] for i in best_indices]
         return best_expressions
         
-        # random_expressions = list(self.all_expressions)
-        # random.shuffle(random_expressions)
-        # return random_expressions
-
 
     def execute(self, query):
         logger.debug("Executing query: %r", query)
