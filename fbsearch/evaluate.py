@@ -61,14 +61,17 @@ def evaluate_tensor():
     dataset = [(query, targets) for query, targets in dataset
                if query in connect.results_cache]
 
+    logger.info("Loaded dataset with %d items", len(dataset))
+
     random.shuffle(dataset)
 
     logger.info("Training")
     system = TensorSystem(OracleSystem)
-    train_set = dataset[:3] #2500]
+    train_size = 2*len(dataset)/3
+    train_set = dataset[:train_size] #2500]
     system.train(train_set)
 
-    test_set = dataset[3:4]
+    test_set = dataset[train_size:]
     #test_set = dataset[2500:2510]
     logger.info("Testing on %d items", len(test_set))
     results = get_target_and_predicted_values(test_set, system)

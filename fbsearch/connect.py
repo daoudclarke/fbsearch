@@ -48,10 +48,10 @@ def save_results_cache(items):
             cache_file.flush()
 
 
-results_cache = None
+results_cache = {}
 def load_results_cache():
     global results_cache
-    if results_cache is None:
+    if not results_cache:
         try:
             cache = get_results_cache()
             cache = islice(cache, 0, 10)
@@ -74,7 +74,6 @@ class Connector(object):
                 self.query_entity_cache = json.load(cache_file)
         except IOError:
             self.query_entity_cache = {}
-        self.results_cache = load_results_cache()
 
     def get_query_entities(self, query):
         query_entities = [result[1]['id'] for result in self.query_search(query)]
@@ -137,8 +136,8 @@ class Connector(object):
         return results
 
     def get_all_results_and_expressions(self, query):
-        if query in self.results_cache:
-            return self.results_cache[query]
+        if query in results_cache:
+            return results_cache[query]
 
         logger.info("Getting best results for query: %r", query)
         query_entities = self.get_query_entities(query)
@@ -177,7 +176,7 @@ class Connector(object):
                 }
 
             results.append(result)
-        self.results_cache[query] = results
+        results_cache[query] = results
         return results
 
     def save_cache(self):

@@ -154,6 +154,7 @@ class TensorSystem(object):
                 logger.exception("Exception applying expression")
                 result_ids = []
             result = set(self.connector.related.get_names(result) for result in result_ids)
+            result -= set([None])
             logger.debug("Searching for best expression, expression: %r, result: %r",
                          expression, result)
             if len(result) > 0:
@@ -170,10 +171,10 @@ class TensorSystem(object):
                            expression.expression2.connection]
         relations = reduce(list.__add__, [list(c) for c in connections])
         connection_names= [self.connector.related.get_names(relation) for relation in relations]
-        logger.info("Connections: %r, Connection names: %s", connections, connection_names)
+        #logger.info("Connections: %r, Connection names: %s", connections, connection_names)
         pseudo_sentence = ' '.join(connection_names)
         features = self.get_sentence_features(pseudo_sentence)
-        logger.debug("Connection features: %r", features)
+        #logger.debug("Connection features: %r", features)
         self.expression_features[expression] = features
         return features
 
