@@ -1,4 +1,4 @@
-1;3201;0c"""
+"""
 Acts like an oracle but uses a file containing cached oracle analysis.
 """
 
