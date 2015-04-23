@@ -7,7 +7,7 @@ LUCENE_PATH = '/home/d/dc/dc34/scratch/sempre/lib/lucene/4.4/inexact'
 
 # Caches
 
-ORACLE_CACHE_PATH = 'cache/oracle_cache.pickle'
+RESULTS_CACHE_PATH = 'cache/results_cache.pickle'
 QUERY_ENTITY_CACHE_PATH = 'cache/query_entity_cache.json'
 CONNECTION_CACHE_PATH = 'cache/connection_cache.json'
 ENTITY_SCORE_CACHE_PATH = 'cache/entities.json'

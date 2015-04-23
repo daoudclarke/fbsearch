@@ -28,7 +28,7 @@ Number correct out of 1278 total:
 
 With 5 most frequent expressions:   2
 With 10 most frequent expressions:  2, 7
-Wtih 50 most frequent:              1, 9
+With 50 most frequent:              1, 9
 With 100 most frequent:             1, 7
 With 1000 most frequent:            1 
 

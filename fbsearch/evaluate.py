@@ -1,6 +1,5 @@
 from fbsearch.analyse import analyse, analyse_ranks, analyse_system_best
 from fbsearch import convertingjson
-from fbsearch.cachedoracle import CachedOracleSystem
 from fbsearch import settings
 from fbsearch.oracle import OracleSystem
 from fbsearch.tensor import TensorSystem
@@ -9,6 +8,7 @@ from fbsearch.dataset import get_dataset
 from fbsearch import settings
 from fbsearch.knn import NNSystem
 from fbsearch.upperbound import UpperBoundSystem
+from fbsearch import connect
 from random import Random
 from log import logger
 
@@ -53,18 +53,26 @@ def evaluate_cached_oracle():
     analyse()
 
 def evaluate_tensor():
-    random = Random(1)
+    connect.load_results_cache()
 
+    random = Random(1)
     dataset_file = open(settings.DATASET_PATH)
     dataset = get_dataset(dataset_file)
+    dataset = [(query, targets) for query, targets in dataset
+               if query in connect.results_cache]
+
+    logger.info("Loaded dataset with %d items", len(dataset))
+
     random.shuffle(dataset)
 
     logger.info("Training")
-    train_set = dataset[:100] #2500]
-    system = TensorSystem(CachedOracleSystem)
+    system = TensorSystem(OracleSystem)
+    train_size = 2*len(dataset)/3
+    train_set = dataset[:train_size] #2500]
     system.train(train_set)
 
-    test_set = dataset[2500:2510]
+    test_set = dataset[train_size:]
+    #test_set = dataset[2500:2510]
     logger.info("Testing on %d items", len(test_set))
     results = get_target_and_predicted_values(test_set, system)
     save(results, settings.RESULTS_PATH)
@@ -164,4 +172,5 @@ def evaluate_quickly():
 
 if __name__ == "__main__":
     #evaluate_quickly()
-    evaluate_cached_oracle()
+    #evaluate_cached_oracle()
+    evaluate_tensor()

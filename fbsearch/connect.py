@@ -8,11 +8,14 @@ from fbsearch import settings
 from fbsearch.lucenesearch import LuceneSearcher
 from fbsearch.related import RelatedEntities
 from fbsearch.analyse import get_f1_score
+from expression import ConnectionExpression, ConjunctionExpression
 
 from log import logger
 
 import Levenshtein
 
+from itertools import islice
+import cPickle as pickle
 import sys
 import json
 import re
@@ -25,6 +28,37 @@ STOPWORDS = set("""
 """.split())
 
 ALLOWED_CHARS_PATTERN = re.compile('[\W_]+', re.UNICODE)
+
+def get_results_cache():
+    with open(settings.RESULTS_CACHE_PATH) as cache_file:
+        logger.debug("Loading queries")
+        queries = []
+        while True:
+            try:
+                query, results = pickle.load(cache_file)
+                logger.debug("Loaded query: %r", query)
+                yield query, results
+            except EOFError:
+                break
+
+def save_results_cache(items):
+    with open(settings.RESULTS_CACHE_PATH, 'w') as cache_file:
+        for query, result in items:
+            pickle.dump((query, result), cache_file)
+            cache_file.flush()
+
+
+results_cache = {}
+def load_results_cache():
+    global results_cache
+    if not results_cache:
+        try:
+            cache = get_results_cache()
+            cache = islice(cache, 0, 10)
+            results_cache = dict(cache)
+        except IOError:
+            results_cache = {}
+    return results_cache
 
 class Connector(object):
     def __init__(self):
@@ -101,12 +135,57 @@ class Connector(object):
         self.connection_cache[get_cache_key(query, connection)] = list(results)
         return results
 
+    def get_all_results_and_expressions(self, query):
+        if query in results_cache:
+            return results_cache[query]
+
+        logger.info("Getting best results for query: %r", query)
+        query_entities = self.get_query_entities(query)
+        relations = self.related.search(query_entities)
+
+        logger.info("Building expressions from %d relations", len(relations))
+
+        connection_expressions = {ConnectionExpression(relation): values
+                                  for relation, values in relations.items()}
+        connection_expression_items = connection_expressions.items()
+
+        conjunction_expressions = {}
+        for i in range(len(connection_expression_items)):
+            expression1, values1 = connection_expression_items[i]
+            for j in range(i + 1, len(connection_expression_items)):
+                expression2, values2 = connection_expression_items[j]
+                values = values1 & values2
+                if not values:
+                    continue
+                expression = ConjunctionExpression(expression1, expression2)
+                conjunction_expressions[expression] = values
+
+        expressions = connection_expressions
+        expressions.update(conjunction_expressions)
+
+        logger.info("Computing results from %d expressions", len(expressions))
+
+        results = []
+        for expression, result_ids in expressions.items():
+            result_names = set(self.related.get_names(result) for result in result_ids)
+            logger.debug("Expression: %r, result %r",
+                         expression, result_names)
+            result = {
+                'expression': expression,
+                'results': result_names,
+                }
+
+            results.append(result)
+        results_cache[query] = results
+        return results
+
     def save_cache(self):
         with open(settings.CONNECTION_CACHE_PATH, 'w') as cache_file:
             json.dump(self.connection_cache, cache_file, indent=4)
         with open(settings.QUERY_ENTITY_CACHE_PATH, 'w') as cache_file:
             json.dump(self.query_entity_cache, cache_file, indent=4)
         self.related.save_cache()
+
 
 def symbol_to_string(symbol):
     try:
