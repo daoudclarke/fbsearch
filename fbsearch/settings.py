@@ -1,9 +1,9 @@
 
-DATASET_PATH = '/home/dc/Experiments/sempre/lib/data/webquestions/dataset_11/webquestions.examples.train.json'
+DATASET_PATH = '/home/d/dc/dc34/scratch/sempre/lib/data/webquestions/dataset_11/webquestions.examples.train.json'
 RESULTS_PATH = 'working/target_predicted.json'
-LUCENE_PATH = '/home/dc/Experiments/sempre/lib/lucene/4.4/inexact/'
 RELATION_DATASET_PATH = 'working/relation_dataset.json'
 RELATION_INFO_PATH = 'working/relation_info.json'
+LUCENE_PATH = '/home/d/dc/dc34/scratch/sempre/lib/lucene/4.4/inexact'
 
 # Caches
 

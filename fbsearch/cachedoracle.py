@@ -1,4 +1,4 @@
-"""
+1;3201;0c"""
 Acts like an oracle but uses a file containing cached oracle analysis.
 """
 
@@ -41,7 +41,12 @@ def get_cache_oracle_data(dataset):
 
     i = 0
     for query, target_entities in dataset:
-        expressions = oracle.get_all_results_and_expressions(query)
+        try:
+            logger.info("Querying oracle for query: %s", query)
+            results, expressions = oracle.get_all_results_and_expressions(query)
+        except Exception:
+            logger.exception("Failed to run query: %s", query)
+            results, expressions = [], []
         yield {
                 'query': query,
                 'target': target_entities,
