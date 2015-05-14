@@ -75,7 +75,8 @@ class TensorSystem(object):
             negative_expressions = set()
             for result in all_results:
                 expression = result['expression']
-                if len(result['results']) == 0 or expression in correct_expressions:
+                results = result['results'] - {None}
+                if len(results) == 0 or expression in correct_expressions:
                     continue
                 negative_expressions.add(expression)
                 
@@ -167,19 +168,24 @@ class TensorSystem(object):
     def get_expression_features(self, expression):
         if expression in self.expression_features:
             return self.expression_features[expression]
+        pseudo_sentence = self.get_expression_sentence(expression)
+        features = self.get_sentence_features(pseudo_sentence)
+        #logger.debug("Connection features: %r", features)
+        self.expression_features[expression] = features
+        return features
+
+    def get_expression_sentence(self, expression):
         try:
             connections = [expression.connection]
         except AttributeError:
             connections = [expression.expression1.connection,
                            expression.expression2.connection]
         relations = reduce(list.__add__, [list(c) for c in connections])
-        connection_names= [self.connector.related.get_names(relation) for relation in relations]
+        connection_names = [self.connector.related.get_names(relation) for relation in relations]
         #logger.info("Connections: %r, Connection names: %s", connections, connection_names)
         pseudo_sentence = ' '.join(connection_names)
-        features = self.get_sentence_features(pseudo_sentence)
-        #logger.debug("Connection features: %r", features)
-        self.expression_features[expression] = features
-        return features
+        words = set(pseudo_sentence.lower().split())
+        return ' '.join(words)
 
     def get_query_expression_features(self, query, expression):
         expression_features = self.get_expression_features(expression)

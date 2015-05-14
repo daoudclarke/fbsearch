@@ -61,3 +61,8 @@ Tensor:                             182 (see above)
 
 
 Upper bound, training on 2500:      714
+
+
+Rerunning using sempre-baselines/kernelparse:
+Training on 130 items: {'TensorParser': (0.13492063492063491, 0.053998597340061683)}
+

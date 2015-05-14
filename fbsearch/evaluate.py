@@ -67,7 +67,7 @@ def evaluate_tensor():
 
     logger.info("Training")
     system = TensorSystem(OracleSystem)
-    train_size = 2*len(dataset)/3
+    train_size = 130 #2*len(dataset)/3
     train_set = dataset[:train_size] #2500]
     system.train(train_set)
 
