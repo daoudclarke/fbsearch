@@ -17,10 +17,10 @@ def get_cache_results(dataset):
     for query, target_entities in dataset:
         try:
             logger.info("Querying oracle for query: %s", query)
-            results, expressions = connector.get_all_results_and_expressions(query)
+            results = connector.get_all_results_and_expressions(query)
         except Exception:
             logger.exception("Failed to run query: %s", query)
-            results, expressions = [], []
+            results = [], []
         yield query, results
         i += 1
         logger.info("Completed: %d", i)
