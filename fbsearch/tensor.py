@@ -66,16 +66,20 @@ class TensorSystem(object):
         values = []
         for query, target in train_set:
             all_results = self.connector.get_all_results_and_expressions(query)
-            all_expressions = set(result['expression'] for result in all_results)
-            if len(all_expressions) == 0:
+            if len(all_results) == 0:
                 continue
 
             _, correct_expressions = self.oracle.get_best_results_and_expressions(query)
             correct_expressions = set(correct_expressions)
             
-            assert correct_expressions <= all_expressions
-            negative_expressions = all_expressions - correct_expressions
-
+            negative_expressions = set()
+            for result in all_results:
+                expression = result['expression']
+                results = result['results'] - {None}
+                if len(results) == 0 or expression in correct_expressions:
+                    continue
+                negative_expressions.add(expression)
+                
             logger.debug("Building features for query %r, %d correct expressions",
                          query, len(correct_expressions))
             query_tokens = self.get_sentence_features(query)
@@ -164,23 +168,31 @@ class TensorSystem(object):
     def get_expression_features(self, expression):
         if expression in self.expression_features:
             return self.expression_features[expression]
+        pseudo_sentence = self.get_expression_sentence(expression)
+        features = self.get_sentence_features(pseudo_sentence)
+        #logger.debug("Connection features: %r", features)
+        self.expression_features[expression] = features
+        return features
+
+    def get_expression_sentence(self, expression):
         try:
             connections = [expression.connection]
         except AttributeError:
             connections = [expression.expression1.connection,
                            expression.expression2.connection]
         relations = reduce(list.__add__, [list(c) for c in connections])
-        connection_names= [self.connector.related.get_names(relation) for relation in relations]
+        connection_names = [self.connector.related.get_names(relation) for relation in relations]
         #logger.info("Connections: %r, Connection names: %s", connections, connection_names)
         pseudo_sentence = ' '.join(connection_names)
-        features = self.get_sentence_features(pseudo_sentence)
-        #logger.debug("Connection features: %r", features)
-        self.expression_features[expression] = features
-        return features
+        words = set(pseudo_sentence.lower().split())
+        return ' '.join(words)
 
     def get_query_expression_features(self, query, expression):
         expression_features = self.get_expression_features(expression)
-        return self.get_tensor_features(query, expression_features)
+        features = self.get_tensor_features(query, expression_features)
+        # expression_repr = repr(expression)
+        # features[expression_repr] = 1.0
+        return features
 
     def get_tensor_features(self, source_tokens, target_tokens):
         features = []

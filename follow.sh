@@ -1,1 +1,1 @@
-tail -f `ls -t fbsearch.o* -1 | head -n 1`
+tail -f `ls -t fbsearch.* -1 | head -n 1`

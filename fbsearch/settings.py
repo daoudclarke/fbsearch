@@ -4,6 +4,7 @@ RESULTS_PATH = 'working/target_predicted.json'
 RELATION_DATASET_PATH = 'working/relation_dataset.json'
 RELATION_INFO_PATH = 'working/relation_info.json'
 LUCENE_PATH = '/home/d/dc/dc34/scratch/sempre/lib/lucene/4.4/inexact'
+PREPARED_DATASET = 'working/prepared.json'
 
 # Caches
 

@@ -54,7 +54,7 @@ def load_results_cache():
     if not results_cache:
         try:
             cache = get_results_cache()
-            cache = islice(cache, 0, 10)
+            #cache = islice(cache, 0, 10)
             results_cache = dict(cache)
         except IOError:
             results_cache = {}
