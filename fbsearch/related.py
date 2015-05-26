@@ -6,6 +6,7 @@
 # from rdflib import BNode
 
 from sparql import SPARQLStore
+from SPARQLWrapper.SPARQLExceptions import QueryBadFormed
 
 #from rdflib.plugins.stores.regexmatching import REGEXTerm
 
@@ -67,14 +68,19 @@ class RelatedEntities(object):
         if entity in self.entity_names:
             return self.entity_names[entity]
 
-        names = self.store.query("""
-            prefix fb: <http://rdf.freebase.com/ns/>
-            SELECT *
-            WHERE
-            {
-                %s fb:type.object.name ?o .
-            }
-            """ % entity)
+        try:
+            names = self.store.query("""
+                prefix fb: <http://rdf.freebase.com/ns/>
+                SELECT *
+                WHERE
+                {
+                    %s fb:type.object.name ?o .
+                }
+                """ % entity)
+        except QueryBadFormed:
+            logger.exception("Unable to get name for entity: %r", entity)
+            names = []
+
         assert len(names) <= 1
         name = names[0][0] if len(names) > 0 else None
         self.entity_names[entity] = name

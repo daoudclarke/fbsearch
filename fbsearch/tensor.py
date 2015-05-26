@@ -182,6 +182,7 @@ class TensorSystem(object):
                            expression.expression2.connection]
         relations = reduce(list.__add__, [list(c) for c in connections])
         connection_names = [self.connector.related.get_names(relation) for relation in relations]
+        connection_names = [name for name in connection_names if name is not None]
         #logger.info("Connections: %r, Connection names: %s", connections, connection_names)
         pseudo_sentence = ' '.join(connection_names)
         words = set(pseudo_sentence.lower().split())

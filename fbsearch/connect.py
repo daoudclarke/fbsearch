@@ -163,7 +163,7 @@ class Connector(object):
 
         logger.debug("Entity types: %r", type_entities)
 
-        type_expressions = {SetExpression(t, entities): entities
+        type_expressions = {SetExpression((t,), entities): entities
                             for t, entities in type_entities.items()}
 
         expressions = connection_expressions
