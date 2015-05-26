@@ -64,5 +64,21 @@ Upper bound, training on 2500:      714
 
 
 Rerunning using sempre-baselines/kernelparse:
-Training on 130 items: {'TensorParser': (0.13492063492063491, 0.053998597340061683)}
+Training on 130 items:  {'TensorParser': (0.13492063492063491, 0.053998597340061683)}
+                        {'OracleParser': (0.67016948193418768, 0.066040635030004777)}
+                        {'EntityParser': (0.030303030303030304, 0.029840361449535231)}
+Restricting to > 2      {'EntityParser': (0.060606060606060608, 0.041536025263172224)}
+               > 10     {'EntityParser': (0.060606060606060608, 0.041536025263172224)}
+Cost 1e-4,     > 2      {'EntityParser': (0.090909090909090912, 0.050043807505743672)}
+                        {'IntersectorParser': (0.14502164502164502, 0.054149709575457859)}
+Meta classifier         {'IntersectorParser': (0.13492063492063489, 0.050077209331703808)}
+Using f1 = 1.0 as pos   {'IntersectorParser': (0.14502164502164502, 0.054149709575457859)}
+
+
+Training on 3022 items: {'TensorParser': (0.17095961775982119, 0.012264325385544714)}
+
+
+Original sempre-paraphrase dataset:
+Training on 130 items: {'TensorParser': (0.22748039760638289, 0.013926354014912233)}
+                       {'OracleParser': (0.63865856117021347, 0.015001579563298577)}
 
