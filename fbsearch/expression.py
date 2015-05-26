@@ -31,6 +31,24 @@ class ConnectionExpression(Expression):
     def __repr__(self):
         return repr(self.connection)
 
+class SetExpression(Expression):
+    """
+    An expression together with an associated set of entities.
+    """
+    def __init__(self, connection, entities):
+        self.connection = connection
+        self.entities = entities
+
+    def apply(self, entities, related):
+        return entities & self.entities
+
+    def get_connections(self):
+        return set([self.connection])
+
+    def __repr__(self):
+        return repr(self.connection)
+
+
 class ConjunctionExpression(Expression):
     def __init__(self, expression1, expression2):
         self.expression1 = expression1

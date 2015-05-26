@@ -22,6 +22,12 @@ def convert_dataset(dataset, results_cache):
         num_added = 0
         for result_info in results_collection:
             expression = result_info['expression']
+            try:
+                connection = expression.connection
+            except AttributeError:
+                # Complex expression, ignore for now
+                continue
+
             target = tensor_system.get_expression_sentence(expression)
             value = result_info['results']
             value -= {None}
@@ -30,6 +36,7 @@ def convert_dataset(dataset, results_cache):
             f1 = get_f1_score(value, gold)
             yield {
                 "source": source,
+                "expression": connection,
                 "target": target,
                 "score": f1,
                 "value": value,
@@ -42,7 +49,9 @@ def convert_dataset(dataset, results_cache):
         if num_added == 0:
             yield {
                 "source": source,
+                "target": "",
                 "score": 0.0,
+                "value": [],
                 "gold": gold,
                 }
             
