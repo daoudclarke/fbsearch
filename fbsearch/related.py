@@ -33,24 +33,25 @@ from log import logger
 # NAME_URI = URIRef('http://rdf.freebase.com/ns/type.object.name')
 # DESCRIPTION = URIRef('http://rdf.freebase.com/ns/common.topic.description')
 
+def load_cache(filename):
+    try:
+        with open(filename) as cache_file:
+            cached_items = json.load(cache_file)
+            logger.info("Loaded %d items from cache file %r",
+                        len(cached_items), filename)
+            return cached_items
+    except IOError:
+        return {}
+
+
 class RelatedEntities(object):
     def __init__(self):
         # Virtuoso = plugin("Virtuoso", Store)
         # self.store = Virtuoso("DSN=VOS;UID=dba;PWD=dba;WideAsUTF16=Y;Host=localhost:13093")
         self.store = SPARQLStore()
-        try:
-            cache_file = open(settings.ENTITY_SCORE_CACHE_PATH)
-            self.entity_scores = json.load(cache_file)
-            logger.info("Loaded %d entity scores in cache", len(self.entity_scores))
-        except IOError:
-            self.entity_scores = {}
-        try:
-            cache_file = open(settings.ENTITY_NAME_CACHE_PATH)
-            self.entity_names = json.load(cache_file)
-            logger.info("Loaded %d entity names in cache", len(self.entity_scores))
-        except IOError:
-            self.entity_names = {}
-            
+        self.entity_scores = load_cache(settings.ENTITY_SCORE_CACHE_PATH)
+        self.entity_names = load_cache(settings.ENTITY_NAME_CACHE_PATH)
+        self.entity_types = load_cache(settings.ENTITY_TYPE_CACHE_PATH)            
 
     def save_cache(self):
         logger.info("Saving entity score cache")
@@ -58,6 +59,8 @@ class RelatedEntities(object):
             json.dump(self.entity_scores, cache_file)
         with open(settings.ENTITY_NAME_CACHE_PATH, 'w') as cache_file:
             json.dump(self.entity_names, cache_file)
+        with open(settings.ENTITY_TYPE_CACHE_PATH, 'w') as cache_file:
+            json.dump(self.entity_types, cache_file)
 
     def get_names(self, entity):
         entity = ensure_prefixed(entity)
@@ -333,6 +336,9 @@ class RelatedEntities(object):
 
     def get_types(self, entity):
         entity = ensure_prefixed(entity)
+        if entity in self.entity_types:
+            return set(self.entity_types[entity])
+
         entity_types = self.store.query("""
             prefix fb: <http://rdf.freebase.com/ns/>
             SELECT ?o
@@ -342,8 +348,9 @@ class RelatedEntities(object):
             }
             """ % entity)
         logger.debug("Found entity type: %r", entity_types)
-        return set(x[0] for x in entity_types)
-
+        entity_types = [x[0] for x in entity_types]
+        self.entity_types[entity] = entity_types
+        return set(entity_types)
 
     def get_schema(self, relation):
         relation = ensure_prefixed(relation)

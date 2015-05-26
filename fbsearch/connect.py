@@ -8,12 +8,13 @@ from fbsearch import settings
 from fbsearch.lucenesearch import LuceneSearcher
 from fbsearch.related import RelatedEntities
 from fbsearch.analyse import get_f1_score
-from expression import ConnectionExpression, ConjunctionExpression
+from expression import ConnectionExpression, ConjunctionExpression, SetExpression
 
 from log import logger
 
 import Levenshtein
 
+from collections import defaultdict
 from itertools import islice
 import cPickle as pickle
 import sys
@@ -149,19 +150,38 @@ class Connector(object):
                                   for relation, values in relations.items()}
         connection_expression_items = connection_expressions.items()
 
-        conjunction_expressions = {}
-        for i in range(len(connection_expression_items)):
-            expression1, values1 = connection_expression_items[i]
-            for j in range(i + 1, len(connection_expression_items)):
-                expression2, values2 = connection_expression_items[j]
-                values = values1 & values2
-                if not values:
-                    continue
-                expression = ConjunctionExpression(expression1, expression2)
-                conjunction_expressions[expression] = values
+        logger.info("Getting entity types")
+        all_entities = set()
+        for values in connection_expressions.values():
+            all_entities |= values
+        logger.debug("All entities: %r", all_entities)
+        type_entities = defaultdict(set)
+        for entity in all_entities:
+            entity_types = self.related.get_types(entity)
+            for t in entity_types:
+                type_entities[t].add(entity)
+
+        logger.debug("Entity types: %r", type_entities)
+
+        type_expressions = {SetExpression(t, entities): entities
+                            for t, entities in type_entities.items()}
 
         expressions = connection_expressions
-        expressions.update(conjunction_expressions)
+        expressions.update(type_expressions)
+
+        # conjunction_expressions = {}
+        # for i in range(len(connection_expression_items)):
+        #     expression1, values1 = connection_expression_items[i]
+        #     for j in range(i + 1, len(connection_expression_items)):
+        #         expression2, values2 = connection_expression_items[j]
+        #         values = values1 & values2
+        #         if not values:
+        #             continue
+        #         expression = ConjunctionExpression(expression1, expression2)
+        #         conjunction_expressions[expression] = values
+
+        # expressions = connection_expressions
+        # expressions.update(conjunction_expressions)
 
         logger.info("Computing results from %d expressions", len(expressions))
 
